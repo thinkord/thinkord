@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import WindowTitlebar from '../components/WindowTitlebar/WindowTitlebar';
+// import WindowTitlebar from '../components/WindowTitlebar/WindowTitlebar';
 import NoteCards from '../components/NoteCards/NoteCards';
 import Folders from '../components/Folders/Folders'
 import SearchButton from '../components/SearchButton/SearchButton';
@@ -24,13 +24,13 @@ function App() {
 
   return (
     <React.Fragment>
-      <WindowTitlebar docTitle="Home" />
+      {/* <WindowTitlebar docTitle="Home" /> */}
       <header className="home-header">
         <h1 className="title">Home</h1>
         <div className="controls">
           <SearchButton collections={data} onSearchChange={handleSearchClick} />
           <i className="fas fa-plus-circle fa-lg"></i>
-          <img className="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
+          <img className="user" alt="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
         </div>
       </header>
       <main>

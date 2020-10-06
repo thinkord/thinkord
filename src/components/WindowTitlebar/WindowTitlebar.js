@@ -5,7 +5,7 @@ import "./windowTitlebar.css"
 
 // const { remote } = window.require('electron').remote;
 // const win = remote.getCurrentWindow()
-const win = null;
+// const win = null;
 export class WindowTitlebar extends Component {
     // componentDidMount() {
     //     this.handleWindowControls();
