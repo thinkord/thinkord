@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root">
+        <button id="textButton">text</button>
+        <button id="sectsnipButton">sectsnip</button>
+        <button id="fullsnipButton">fullsnip</button>
+        <button id="audioButton">audio</button>
+        <button id="videoButton">video</button>
+        <button id="homeButton">home</button>
+    </div>
+
+</body>
+
+<script>
+    const { remote, ipcRenderer } = require('electron')
+    const mainProcess = remote.require('./electron')
+
+    const homeButton = document.getElementById("homeButton")
+    const fullsnipButton = document.getElementById("fullsnipButton")
+    const sectsnipButton = document.getElementById("sectsnipButton")
+    const textButton = document.getElementById("textButton")
+    const audioButton = document.getElementById("audioButton")
+    const videoButton = document.getElementById("videoButton")
+
+    const currentWindow = remote.getCurrentWindow()
+
+    homeButton.addEventListener('click', () => {
+        currentWindow.close()
+    })
+
+    fullsnipButton.addEventListener('click', () => {
+        ipcRenderer.send('snipaste')
+
+    })
+
+    sectsnipButton.addEventListener('click', () => {
+        ipcRenderer.send('snipaste')
+    })
+
+    textButton.addEventListener('click', () => {
+        ipcRenderer.send('text')
+    })
+
+    audioButton.addEventListener('click', () => {
+        ipcRenderer.send('audio')
+    })
+
+
+    videoButton.addEventListener('click', () => {
+        ipcRenderer.send('video')
+    })
+</script>
+
+</html>

@@ -1,0 +1,21 @@
+{
+    "appId": "com.3071.thinkord",
+    "productName": "Thinkord",
+    "files": [
+        "build/**/*",
+        "electron.js"
+    ],
+    "win": {
+        "icon": "public/asset/icon.png",
+        "target": [
+            "nsis",
+            "zip"
+        ]
+    },
+    "mac": {
+        "icon": "public/asset/icon.png"
+    },
+    "linux": {
+        "icon": "public/asset/icon.png"
+    }
+}

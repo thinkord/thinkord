@@ -1,0 +1,40 @@
+
+.home-header{
+    position: relative;
+    z-index: 5;
+    background-color: #fff;
+    color:#666;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    padding: 15px 30px;
+}
+.home-header h1{
+    display: inline-block;
+    color: #666;
+    font-weight: bold;
+}
+.home-header .controls{
+    display: flex;
+    align-items: center;
+}
+
+.home-header i{
+    font-size: 40px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.home-header .user{
+    width: 60px;
+    height: 60px;
+    margin: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.home-header .fa-plus-circle{
+    color: #35C189;
+}
