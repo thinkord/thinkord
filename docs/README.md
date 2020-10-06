@@ -1,4 +1,4 @@
-# Contribution guideline
+# Developing Thinkord
 These guides are intended for people working on Thinkord project.
 
 - Code of Conduct
