@@ -143,7 +143,12 @@ sketch
 .env.development.local
 .env.test.local
 .env.production.local
+/public/electron.js.map
+/public/electron.js
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# vscode
+.vscode

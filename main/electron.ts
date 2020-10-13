@@ -1,100 +1,22 @@
-import { app, BrowserWindow } from "electron";
 import * as path from "path";
-// import db from "./models/index"
-import { Sequelize } from 'sequelize';
+import { app, BrowserWindow } from "electron";
 import isDev from 'electron-is-dev'
 
+import { DBFactory } from "./models/index"
 import { IIpcChannel } from "./ipc/IIpcChannel";
 import { FileChannel } from "./ipc/FileChannel";
+import { getAllData } from "./models/test";
 
 class Main {
     private win?: BrowserWindow | null
 
     public async init(channel: IIpcChannel[]) {
-        const sequelize = new Sequelize({
-            dialect: 'sqlite',
-            storage: 'main/db.sqlite3'
-        })
-
         app.on('ready', this.createWindow)
         app.on('window-all-closed', this.onWindowAllClosed)
         app.on('activate', this.onActivate)
 
-        try {
-            await sequelize.authenticate();
-            console.log('Connection has been established successfully.');
-        } catch (error) {
-            console.error('Unable to connect to the database:', error);
-        }
-        // db.sequelize
-        //     .sync({ force: true })
-        //     .then(() => {
-        //         db.Folder.create({ name: 'Martin' })
-        //             .then(() => {
-        //                 console.log('Folder created.')
-        //             })
-        //             .catch((error) => {
-        //                 console.error(error)
-        //             })
-        //         db.Folder.create({ name: 'Tim' })
-        //             .then(() => {
-        //                 console.log('Folder created.')
-        //             })
-        //             .catch((error) => {
-        //                 console.error(error)
-        //             })
-        //     })
-        //     .then(() => {
-        //         db.Collection.create({
-        //             name: 'test',
-        //             display: true,
-        //             folderId: 1
-        //         })
-        //             .then(() => {
-        //                 console.log('Collection created.')
-        //             })
-        //             .catch((error) => {
-        //                 console.error(error)
-        //             })
-        //     })
-        //     .then(() => {
-        //         db.Collection.create({
-        //             name: 'test',
-        //             display: true,
-        //             folderId: 2
-        //         })
-        //             .then(() => {
-        //                 console.log('Collection created.')
-        //             })
-        //             .catch((error) => {
-        //                 console.error(error)
-        //             })
-        //     })
-        //     .then(() => {
-        //         db.Block.create({
-        //             title: 'test',
-        //             type: 'image',
-        //             description: 'this is test image',
-        //             bookmark: true,
-        //             collectionId: 1
-        //         })
-        //             .then(() => {
-        //                 console.log('Block created.')
-        //             })
-        //             .catch((error) => {
-        //                 console.error(error)
-        //             })
-        //     })
-        //     .then(async () => {
-        //         let query = await db.Folder.findAll({
-        //             include: { all: true, nested: true }
-        //         })
-
-        //         console.log(JSON.stringify(query, null, 2))
-        //     })
-        //     .catch((error) => {
-        //         console.error('Unable to connect to the database:', error);
-        //     })
+        const db = await DBFactory.create();
+        getAllData(db);
     }
 
     private onWindowAllClosed() {
