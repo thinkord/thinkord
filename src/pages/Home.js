@@ -11,7 +11,6 @@ import { StoreContext } from '../context'
 function App() {
   const context = useContext(StoreContext)
   const { data } = context
-  console.log(data)
   const handleSearchClick = (search_file) => {
     search_file = search_file.toLowerCase();
     var new_collections = [];
