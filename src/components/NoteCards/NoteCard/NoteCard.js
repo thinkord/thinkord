@@ -57,7 +57,6 @@ function NoteCard(props) {
                     Start Recording
                 </Link>
             </div>
-            {/* {modalDialog} */}
             <CModal id={props.id} title={props.title} modalFunc={modalFunc} modalShow={modalShow} handleModalToggle={handleModalToggle} />
         </React.Fragment>
     )

@@ -23,6 +23,8 @@ class StoreProvider extends Component {
                 data
             })
         })
+
+        /**Test Backend send whole data */
         appRuntime.send('homeprocess', 'getAllData', '')
         appRuntime.subscribe('loadData', (data) => {
             console.log('Backend send data ~ ', data)
@@ -203,11 +205,30 @@ class StoreProvider extends Component {
     }
 
 
-    addFolder() {
-        console.log("add folder")
+    addFolder = (folderName) => {
+        const { data } = this.state
+        const newFolderId = uuid()
+        const newFolder = {
+            id: newFolderId,
+            name: folderName,
+            blocks: []
+        }
+
+        const newState = {
+            ...data,
+            folderIds: [...data.folderIds, newFolderId],
+            folders: {
+                ...data.folders,
+                [newFolderId]: newFolder
+            }
+        }
+        this.setState({
+            data: newState
+        })
+
     }
 
-    deleteFolder() {
+    deleteFolder = () => {
 
     }
 

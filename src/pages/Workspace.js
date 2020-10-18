@@ -21,7 +21,7 @@ export default function Workspace({ match }) {
                     {/* <SearchButton collections={data} onSearchChange={handleSearchClick} /> */}
                     <i className="fas fa-plus-circle fa-lg"></i>
                     <img className="user" alt="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
-                </div>
+                </div> 
             </header>
             <main>
                 <Container>

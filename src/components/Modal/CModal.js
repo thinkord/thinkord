@@ -4,19 +4,30 @@ import { StoreContext } from '../../context';
 
 export default function CModal({ id, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const { updateCollectionTitle, deleteCollection } = useContext(StoreContext);
-    
-    
-    const handleTitleChange = (event)=>{
+    const { addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreContext);
+
+
+    const handleTitleChange = (event) => {
         setNewTitle(event.target.value)
     }
-    const handleNoteRename = (newTitle,noteId)=>{
-        updateCollectionTitle(newTitle,noteId)
+
+    const handleNoteRename = (newTitle, noteId) => {
+        updateCollectionTitle(newTitle, noteId)
         handleModalToggle()
     }
-    const handleNoteDelete = (noteId)=>{
+    const handleNoteDelete = (noteId) => {
         deleteCollection(noteId)
+        handleModalToggle();
     }
+
+    const handleFolderCreate = (folderName) => {
+        addFolder(newTitle)
+        handleModalToggle();
+    }
+
+    // const handleNoteCreate = (title, folderId) => {
+
+    // }
 
     var modalDialog;
     switch (modalFunc) {
@@ -38,6 +49,24 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
                 </Modal>
             );
             break;
+        case "addFolder":
+            modalDialog = (
+                <Modal show={modalShow} onHide={handleModalToggle} centered>
+                    <Modal.Header className="modal_header">
+                        <Modal.Title>Name Your New Note</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <input type="text" placeholder="untitled" onChange={handleTitleChange} />
+                    </Modal.Body>
+                    <Modal.Footer className="modal_footer">
+                        <i className="modal_icon fas fa-check-circle" onClick={() => {
+                            handleFolderCreate(newTitle)
+                        }}></i>
+                        <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
+                    </Modal.Footer>
+                </Modal>
+            )
+            break
         default:
             modalDialog = (
                 <Modal show={modalShow} onHide={handleModalToggle} centered>
@@ -48,7 +77,6 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
                     <Modal.Footer className="modal_footer">
                         <i className="modal_icon fas fa-check-circle" onClick={() => {
                             handleNoteDelete(id);
-                            handleModalToggle();
                         }}></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
                     </Modal.Footer>
