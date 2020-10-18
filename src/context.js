@@ -48,9 +48,11 @@ class StoreProvider extends Component {
     getCollections = (collectionIds) => {
         const { data } = this.state
         const collections = []
-        collectionIds.forEach(collectionsId => {
-            collections.push(data.collections[collectionsId])
-        });
+        if (collectionIds) {
+            collectionIds.forEach(collectionsId => {
+                collections.push(data.collections[collectionsId])
+            });
+        }
         return collections
     }
 
@@ -135,7 +137,6 @@ class StoreProvider extends Component {
      * @param {number} collectionId 
      */
     updateCollectionTitle = (title, collectionId) => {
-        // console.log(title);
         const { data } = this.state
         const collection = data.collections[collectionId]
         collection.title = title
