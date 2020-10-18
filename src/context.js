@@ -13,35 +13,6 @@ const StoreContext = React.createContext(null)
  */
 
 class StoreProvider extends Component {
-    // state = {
-    //     data: {
-    //         collections: {
-    //             'new-1': {
-    //                 id: 'new-1',
-    //                 title: 'create your note',
-    //                 blocks: [
-    //                     {
-    //                         id: 'block-1',
-    //                         title: 'create block',
-    //                         content: 'please enter some content'
-    //                     }
-    //                 ]
-    //             }
-    //         },
-    //         folders: {
-    //             'folder-1': {
-    //                 id: "folder-1",
-    //                 name: "f-1",
-    //                 collections: [
-    //                     "collection-1",
-    //                     "collection-2"
-    //                 ]
-    //             }
-    //         },
-    //         collectionIds: ['new-1'],
-    //         folderIds: ['folder-1']
-    //     }
-    // }
 
     // Load the user's content
     componentDidMount() {
@@ -51,6 +22,10 @@ class StoreProvider extends Component {
             this.setState({
                 data
             })
+        })
+        appRuntime.send('homeprocess', 'getAllData', '')
+        appRuntime.subscribe('loadData', (data) => {
+            console.log('Backend send data ~ ', data)
         })
     }
 
@@ -158,6 +133,7 @@ class StoreProvider extends Component {
      * @param {number} collectionId 
      */
     updateCollectionTitle = (title, collectionId) => {
+        // console.log(title);
         const { data } = this.state
         const collection = data.collections[collectionId]
         collection.title = title
@@ -228,7 +204,7 @@ class StoreProvider extends Component {
 
 
     addFolder() {
-
+        console.log("add folder")
     }
 
     deleteFolder() {
@@ -248,7 +224,8 @@ class StoreProvider extends Component {
                     getCollection: this.getCollection,
                     getCollections: this.getCollections,
                     deleteCollection: this.deleteCollection,
-                    getFolder: this.getFolder
+                    getFolder: this.getFolder,
+                    addFolder: this.addFolder
                 }}>
 
                     {this.props.children}

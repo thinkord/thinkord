@@ -22,7 +22,7 @@ export type CollectionStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): CollectionModel;
 };
 
-export function CollectionFactory(sequelize: Sequelize): CollectionStatic {
+export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
     return sequelize.define("Collection", {
         id: {
             type: DataTypes.INTEGER,

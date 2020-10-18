@@ -20,7 +20,7 @@ export type FolderStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): FolderModel;
 };
 
-export function FolderFactory(sequelize: Sequelize): FolderStatic {
+export function createFolderModel(sequelize: Sequelize): FolderStatic {
     return sequelize.define("Folder", {
         id: {
             type: DataTypes.INTEGER,

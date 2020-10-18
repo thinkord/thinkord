@@ -21,7 +21,7 @@ export type FileStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): FileModel;
 };
 
-export function FileFactory(sequelize: Sequelize): FileStatic {
+export function createFileModel(sequelize: Sequelize): FileStatic {
     return sequelize.define("File", {
         id: {
             type: DataTypes.INTEGER,

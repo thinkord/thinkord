@@ -5,7 +5,9 @@ import isDev from 'electron-is-dev'
 import { DBFactory } from "./models/index"
 import { IIpcChannel } from "./ipc/IIpcChannel";
 import { FileChannel } from "./ipc/FileChannel";
+
 import { getAllData } from "./models/test";
+import { HomeChannel } from "./ipc/HomeChannel";
 
 class Main {
     private win?: BrowserWindow | null
@@ -16,7 +18,14 @@ class Main {
         app.on('activate', this.onActivate)
 
         const db = await DBFactory.create();
-        getAllData(db);
+        // getAllData(db)
+        db.sequelize
+            .sync({ force: false })
+            .then(() => {
+                console.log('connect succesfully')
+            }).catch((err: any) => {
+                console.log(err)
+            });
     }
 
     private onWindowAllClosed() {
@@ -53,5 +62,6 @@ class Main {
 }
 
 (new Main()).init([
-    new FileChannel('fileprocess')
+    new FileChannel('fileprocess'),
+    new HomeChannel('homeprocess')
 ])

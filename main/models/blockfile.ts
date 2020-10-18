@@ -1,19 +1,3 @@
-// 'use strict';
-
-// module.exports = (sequelize, DataTypes) => {
-//   const BlockFile = sequelize.define('BlockFile', {
-//     blockId: DataTypes.INTEGER,
-//     fileId: DataTypes.INTEGER
-//   }, {});
-
-//   BlockFile.associate = function (models) {
-//     // associations can be defined here
-//     BlockFile.belongsTo(models.Block, { foreignKey: 'blockId' })
-//     BlockFile.belongsTo(models.File, { foreignKey: 'fileId' })
-//   };
-//   return BlockFile;
-// };
-
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 
 export interface BlockFileAttributes {
@@ -36,7 +20,7 @@ export type BlockFileStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): BlockFileModel;
 };
 
-export function BlockFileFactory(sequelize: Sequelize): BlockFileStatic {
+export function createBlockFileModel(sequelize: Sequelize): BlockFileStatic {
     return sequelize.define("BlockFile", {
         blockId: {
             type: DataTypes.INTEGER,
