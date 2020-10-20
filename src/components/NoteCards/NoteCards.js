@@ -10,7 +10,7 @@ const noteCards = ({data}) => (
                     <NoteCard
                         key={collectionId}
                         id={collectionId}
-                        title={data.collections[collectionId].title}
+                        title={data.collections[collectionId].name}
                         // bookmark={data.collections[collectionId].bookmarked}
                     ></NoteCard>
                 )

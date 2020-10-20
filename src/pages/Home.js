@@ -7,15 +7,15 @@ import './Home.scss';
 import Container from 'react-bootstrap/Container';
 import { StoreContext } from '../context'
 import CModal from "../components/Modal/CModal";
+
 // import InputContainer from '../components/Input/InputContainer'
 
 function App() {
   const context = useContext(StoreContext)
   const { data } = context
+  
   const [modalShow, setModalShow] = useState(false);
   const [modalFunc] = useState("addFolder");
-
-  console.log("frontend data:", data)
 
   const handleModalToggle = () => {
     setModalShow(prevState => !prevState);

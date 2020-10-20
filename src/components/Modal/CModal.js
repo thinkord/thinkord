@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react'
 import Modal from 'react-bootstrap/Modal';
-import { StoreContext } from '../../context';
+import { StoreUpdateContext } from '../../context';
 
 export default function CModal({ id, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const { addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreContext);
-
+    const { addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext)
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value)
@@ -19,7 +18,6 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
         deleteCollection(noteId)
         handleModalToggle();
     }
-
     const handleFolderCreate = (folderName) => {
         addFolder(newTitle)
         handleModalToggle();
