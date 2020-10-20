@@ -1,5 +1,5 @@
 export interface IIpcChannel {
-    channelName: string,
+    channelName: string;
     // getName(): string,
     // setName(name: string)
 }

@@ -1,37 +1,38 @@
 import { ipcMain, IpcMainEvent } from "electron";
+import log from "loglevel";
 import { IIpcChannel } from "./IIpcChannel";
 import { loadFile } from "../utils/file";
 export class FileChannel implements IIpcChannel {
-    channelName
+    channelName;
 
     constructor(channelName: string) {
-        this.channelName = channelName
+        this.channelName = channelName;
         ipcMain.on(this.channelName, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
-                case 'save':
-                case 'delete':
-                case 'load':
-                    this[command](event, args)
+                case "save":
+                case "delete":
+                case "load":
+                    this[command](event, args);
                     break;
                 default:
-                    console.log('There is no command in thic channel')
+                    log.warn("There is no command in thic channel");
                     break;
             }
-        })
+        });
     }
 
     save(event: IpcMainEvent, args: any) {
-        console.log(args)
-        event.reply('fuck', 'u bitch')
+        log.debug(args);
+        // event.reply("fuck", "u bitch");
     }
 
     async load(event: IpcMainEvent, args: any) {
-        const data = await loadFile()
-        event.reply('loadComplete', data)
+        const data = await loadFile();
+        event.reply("loadComplete", data);
     }
 
     delete(event: IpcMainEvent, args: any) {
-        console.log(args)
+        log.debug(args);
     }
 
     // getName(): string {

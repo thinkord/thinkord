@@ -1,75 +1,76 @@
 import { db } from "./index";
+import log from "loglevel";
 
 const getAllData = (db: db) => {
     db.sequelize
         .sync({ force: true })
         .then(() => {
-            db.Folder.create({ name: 'Martin' })
+            db.Folder.create({ name: "Martin" })
                 .then(() => {
-                    console.log('Folder created.')
+                    log.info("Folder created.");
                 })
                 .catch((error: any) => {
-                    console.error(error)
-                })
-            db.Folder.create({ name: 'Tim' })
+                    log.error(error);
+                });
+            db.Folder.create({ name: "Tim" })
                 .then(() => {
-                    console.log('Folder created.')
+                    log.info("Folder created.");
                 })
                 .catch((error: any) => {
-                    console.error(error)
-                })
+                    log.error(error);
+                });
         })
         .then(() => {
             db.Collection.create({
-                name: 'test',
+                name: "test",
                 display: true,
-                folderId: 1
+                folderId: 1,
             })
                 .then(() => {
-                    console.log('Collection created.')
+                    log.info("Collection created.");
                 })
                 .catch((error: any) => {
-                    console.error(error)
-                })
+                    log.error(error);
+                });
         })
         .then(() => {
             db.Collection.create({
-                name: 'test',
+                name: "test",
                 display: true,
-                folderId: 2
+                folderId: 2,
             })
                 .then(() => {
-                    console.log('Collection created.')
+                    log.info("Collection created.");
                 })
                 .catch((error: any) => {
-                    console.error(error)
-                })
+                    log.error(error);
+                });
         })
         .then(() => {
             db.Block.create({
-                title: 'test',
-                type: 'image',
-                description: 'this is test image',
+                title: "test",
+                type: "image",
+                description: "this is test image",
                 bookmark: true,
-                collectionId: 1
+                collectionId: 1,
             })
                 .then(() => {
-                    console.log('Block created.')
+                    log.info("Block created.");
                 })
                 .catch((error: any) => {
-                    console.error(error)
-                })
+                    log.error(error);
+                });
         })
         .then(async () => {
-            let query = await db.Folder.findAll({
-                include: { all: true, nested: true }
-            })
+            const query = await db.Folder.findAll({
+                include: { all: true, nested: true },
+            });
 
-            console.log(JSON.stringify(query, null, 2))
+            log.info(JSON.stringify(query, null, 2));
         })
         .catch((error: any) => {
-            console.error('Unable to connect to the database:', error);
-        })
-}
+            log.error("Unable to connect to the database:", error);
+        });
+};
 
-export { getAllData }
+export { getAllData };

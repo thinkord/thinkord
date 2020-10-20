@@ -7,7 +7,7 @@ export interface CollectionAttributes {
     bookmark: boolean;
     createdAt?: Date;
     updatedAt?: Date;
-};
+}
 
 export interface CollectionModel extends Model<CollectionAttributes>, CollectionAttributes {
     // At the moment, there's nothing more to add apart
@@ -15,11 +15,12 @@ export interface CollectionModel extends Model<CollectionAttributes>, Collection
     // `Model<CollectionAttributes>` and
     // `CollectionAttributes` give us. We'll add more here when
     //  we get on to adding associations.
-};
+}
 
-export class Collection extends Model<CollectionModel, CollectionAttributes> { }
+export class Collection extends Model<CollectionModel, CollectionAttributes> {}
 export type CollectionStatic = typeof Model & {
-    new(values?: object, options?: BuildOptions): CollectionModel;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    new (values?: object, options?: BuildOptions): CollectionModel;
 };
 
 export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
@@ -28,7 +29,7 @@ export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
@@ -37,12 +38,12 @@ export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
         display: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: true
+            defaultValue: true,
         },
         bookmark: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false
+            defaultValue: false,
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -54,5 +55,5 @@ export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    }) as CollectionStatic
+    }) as CollectionStatic;
 }

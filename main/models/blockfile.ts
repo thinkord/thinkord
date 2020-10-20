@@ -5,7 +5,7 @@ export interface BlockFileAttributes {
     fileId: number;
     createdAt?: Date;
     updatedAt?: Date;
-};
+}
 
 export interface BlockFileModel extends Model<BlockFileAttributes>, BlockFileAttributes {
     // At the moment, there's nothing more to add apart
@@ -13,11 +13,12 @@ export interface BlockFileModel extends Model<BlockFileAttributes>, BlockFileAtt
     // `Model<BlockFileAttributes>` and
     // `BlockFileAttributes` give us. We'll add more here when
     //  we get on to adding associations.
-};
+}
 
-export class BlockFile extends Model<BlockFileModel, BlockFileAttributes> { }
+export class BlockFile extends Model<BlockFileModel, BlockFileAttributes> {}
 export type BlockFileStatic = typeof Model & {
-    new(values?: object, options?: BuildOptions): BlockFileModel;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    new (values?: object, options?: BuildOptions): BlockFileModel;
 };
 
 export function createBlockFileModel(sequelize: Sequelize): BlockFileStatic {
@@ -25,12 +26,12 @@ export function createBlockFileModel(sequelize: Sequelize): BlockFileStatic {
         blockId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         fildId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -42,5 +43,5 @@ export function createBlockFileModel(sequelize: Sequelize): BlockFileStatic {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    }) as BlockFileStatic
+    }) as BlockFileStatic;
 }

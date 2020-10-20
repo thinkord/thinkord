@@ -1,3 +1,3 @@
-const appRuntime = window.appRuntime
+const appRuntime = window.appRuntime;
 
-export default appRuntime
+export default appRuntime;

@@ -8,7 +8,7 @@ export interface UserAttributes {
     passwordConfirm: string;
     createdAt?: Date;
     updatedAt?: Date;
-};
+}
 
 export interface UserModel extends Model<UserAttributes>, UserAttributes {
     // At the moment, there's nothing more to add apart
@@ -16,11 +16,12 @@ export interface UserModel extends Model<UserAttributes>, UserAttributes {
     // `Model<UserAttributes>` and
     // `UserAttributes` give us. We'll add more here when
     //  we get on to adding associations.
-};
+}
 
-export class User extends Model<UserModel, UserAttributes> { }
+export class User extends Model<UserModel, UserAttributes> {}
 export type UserStatic = typeof Model & {
-    new(values?: object, options?: BuildOptions): UserModel;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    new (values?: object, options?: BuildOptions): UserModel;
 };
 
 export function createUserModel(sequelize: Sequelize): UserStatic {
@@ -29,7 +30,7 @@ export function createUserModel(sequelize: Sequelize): UserStatic {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
@@ -57,5 +58,5 @@ export function createUserModel(sequelize: Sequelize): UserStatic {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    }) as UserStatic
+    }) as UserStatic;
 }
