@@ -21,7 +21,6 @@ const useStyle = makeStyles((theme) => ({
 
 export default function Collection({collection}) {
     const classes = useStyle()
-    console.log(collection)
     return (
         <div>
              <Paper className={classes.root}>

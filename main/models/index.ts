@@ -2,12 +2,12 @@ import { Sequelize } from 'sequelize';
 import isDev from 'electron-is-dev'
 
 import { config } from '../config/config';
-import { UserFactory } from './user'
-import { FolderFactory } from './folder'
-import { CollectionFactory } from './collection'
-import { BlockFactory } from './block'
-import { FileFactory } from './file'
-import { BlockFileFactory } from './blockfile'
+import { createUserModel } from './user'
+import { createFolderModel } from './folder'
+import { createCollectionModel } from './collection'
+import { createBlockModel } from './block'
+import { createFileModel } from './file'
+import { createBlockFileModel } from './blockfile'
 
 export type db = {
   [key: string]: any
@@ -18,12 +18,12 @@ const db: db = {};
 export const sequelize: Sequelize = isDev ? new Sequelize(config["development"]) : new Sequelize(config["production"])
 
 // Generate models
-export const User = UserFactory(sequelize)
-export const Folder = FolderFactory(sequelize)
-export const Collection = CollectionFactory(sequelize)
-export const Block = BlockFactory(sequelize)
-export const File = FileFactory(sequelize)
-export const BlockFile = BlockFileFactory(sequelize)
+export const User = createUserModel(sequelize)
+export const Folder = createFolderModel(sequelize)
+export const Collection = createCollectionModel(sequelize)
+export const Block = createBlockModel(sequelize)
+export const File = createFileModel(sequelize)
+export const BlockFile = createBlockFileModel(sequelize)
 
 // Define associations between models
 Folder.hasMany(Collection, { foreignKey: 'folderId', as: 'collections' })

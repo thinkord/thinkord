@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { v4 as uuid } from 'uuid'
 import appRuntime from './appRuntime'
 const StoreContext = React.createContext(null)
-
+const StoreUpdateContext = React.createContext(null)
 
 /*
  * [Please notice]
@@ -13,35 +13,6 @@ const StoreContext = React.createContext(null)
  */
 
 class StoreProvider extends Component {
-    // state = {
-    //     data: {
-    //         collections: {
-    //             'new-1': {
-    //                 id: 'new-1',
-    //                 title: 'create your note',
-    //                 blocks: [
-    //                     {
-    //                         id: 'block-1',
-    //                         title: 'create block',
-    //                         content: 'please enter some content'
-    //                     }
-    //                 ]
-    //             }
-    //         },
-    //         folders: {
-    //             'folder-1': {
-    //                 id: "folder-1",
-    //                 name: "f-1",
-    //                 collections: [
-    //                     "collection-1",
-    //                     "collection-2"
-    //                 ]
-    //             }
-    //         },
-    //         collectionIds: ['new-1'],
-    //         folderIds: ['folder-1']
-    //     }
-    // }
 
     // Load the user's content
     componentDidMount() {
@@ -52,6 +23,52 @@ class StoreProvider extends Component {
                 data
             })
         })
+
+        /**Test Backend send whole data */
+        appRuntime.send('homeprocess', 'getAllData', '')
+        appRuntime.subscribe('loadData', (data) => {
+            this.loadData(JSON.parse(data))
+        })
+    }
+
+    loadData = (unprocessedData) => {
+        const initState = {
+            folders: [],
+            folderIds: [],
+            collections: [],
+            collectionIds: []
+        }
+        unprocessedData.map((folder) => {
+            initState.folderIds.push(folder.id)
+            initState.folders.push(folder)
+            folder.cs = []
+            return folder.collections.map((collection) => {
+                folder['cs'].push(collection.id)
+                initState.collections.push(collection)
+                delete folder.collections
+                return initState.collectionIds.push(collection.id)
+            })
+        })
+        initState.collections = this.convertArrayToObject(initState.collections, 'id')
+        initState.folders = this.convertArrayToObject(initState.folders, 'id')
+
+        let data = initState
+        this.setState({
+            data
+        }, () => {
+            console.log(this.state)
+        })
+    }
+
+    /** Util */
+    convertArrayToObject = (array, key) => {
+        const initialValue = {}
+        return array.reduce((obj, item) => {
+            return {
+                ...obj,
+                [item[key]]: item,
+            };
+        }, initialValue);
     }
 
     getFolder = (id) => {
@@ -71,9 +88,11 @@ class StoreProvider extends Component {
     getCollections = (collectionIds) => {
         const { data } = this.state
         const collections = []
-        collectionIds.forEach(collectionsId => {
-            collections.push(data.collections[collectionsId])
-        });
+        if (collectionIds) {
+            collectionIds.forEach(collectionsId => {
+                collections.push(data.collections[collectionsId])
+            });
+        }
         return collections
     }
 
@@ -180,6 +199,17 @@ class StoreProvider extends Component {
         const { data } = this.state
         let collections = { ...data.collections }
         let collectionIds = [...data.collectionIds]
+        let folders = { ...data.folders }
+
+        Object.values(folders).map((folder) => {
+
+            if (folder.cs.includes(collectionId)) {
+                let index = folder.cs.indexOf(collectionId)
+                folder.cs.splice(index, 1)
+            }
+            return folders
+        })
+
 
         Object.keys(collections).map((cId) => {
             if (cId === collectionId) {
@@ -187,12 +217,18 @@ class StoreProvider extends Component {
             }
             return collections
         })
+
         collectionIds.map((cId, index) => {
             if (cId === collectionId) {
                 collectionIds.splice(index, 1)
             }
             return collectionIds
         })
+
+
+
+
+
         const newState = { ...data, collections, collectionIds }
         this.setState({
             data: newState
@@ -227,38 +263,64 @@ class StoreProvider extends Component {
     }
 
 
-    addFolder() {
+    addFolder = (folderName) => {
+        const { data } = this.state
+        const newFolderId = uuid()
+        const newFolder = {
+            id: newFolderId,
+            name: folderName,
+            blocks: []
+        }
+
+        const newState = {
+            ...data,
+            folderIds: [...data.folderIds, newFolderId],
+            folders: {
+                ...data.folders,
+                [newFolderId]: newFolder
+            }
+        }
+        this.setState({
+            data: newState
+        })
 
     }
 
-    deleteFolder() {
+    deleteFolder = () => {
 
     }
 
     render() {
         return (
             <>
-                {this.state ? <StoreContext.Provider value={{
-                    ...this.state,
-                    addBlock: this.addBlock,
-                    deleteBlock: this.deleteBlock,
-                    updateCollectionTitle: this.updateCollectionTitle,
-                    updateBlockTitle: this.updateBlockTitle,
-                    addCollection: this.addCollection,
-                    getCollection: this.getCollection,
-                    getCollections: this.getCollections,
-                    deleteCollection: this.deleteCollection,
-                    getFolder: this.getFolder
-                }}>
+                {this.state ?
+                    <StoreContext.Provider value={{
+                        ...this.state,
+                        addBlock: this.addBlock,
+                        deleteBlock: this.deleteBlock,
+                        updateBlockTitle: this.updateBlockTitle,
 
-                    {this.props.children}
-                </StoreContext.Provider> : "Loading"}
+                    }}>
+                        <StoreUpdateContext.Provider value={{
+                            addFolder: this.addFolder,
+                            getFolder: this.getFolder,
+                            addCollection: this.addCollection,
+                            getCollection: this.getCollection,
+                            getCollections: this.getCollections,
+                            updateCollectionTitle: this.updateCollectionTitle,
+                            deleteCollection: this.deleteCollection
+                        }}>
+                            {this.props.children}
+                        </StoreUpdateContext.Provider>
+
+
+                    </StoreContext.Provider> : "Loading"}
 
             </>
         )
     }
 }
 
-const StoreConsumer = StoreContext.Consumer
+// const StoreConsumer = StoreContext.Consumer
 
-export { StoreProvider, StoreConsumer, StoreContext }
+export { StoreProvider, StoreUpdateContext, StoreContext }

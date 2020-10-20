@@ -14,13 +14,13 @@ export interface FolderModel extends Model<FolderAttributes>, FolderAttributes {
     // `FolderAttributes` give us. We'll add more here when
     //  we get on to adding associations.
 };
-
+ 
 export class Folder extends Model<FolderModel, FolderAttributes> { }
 export type FolderStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): FolderModel;
 };
 
-export function FolderFactory(sequelize: Sequelize): FolderStatic {
+export function createFolderModel(sequelize: Sequelize): FolderStatic {
     return sequelize.define("Folder", {
         id: {
             type: DataTypes.INTEGER,

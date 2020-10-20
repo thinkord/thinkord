@@ -1,20 +1,21 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'
-import WindowTitlebar from '../components/WindowTitlebar/WindowTitlebar';
+// import WindowTitlebar from '../components/WindowTitlebar/WindowTitlebar';
 import NoteCard from '../components/NoteCards/NoteCard/NoteCard';
 // import SearchButton from '../components/SearchButton/SearchButton';
-import { StoreContext } from '../context'
+import { StoreUpdateContext } from '../context'
 import Container from 'react-bootstrap/Container';
 
 export default function Workspace({ match }) {
-    const context = useContext(StoreContext)
+    const { getFolder, getCollections } = useContext(StoreUpdateContext)
+
     const [folderId] = useState(match.params.id)
-    const { getFolder, getCollections } = context
+
     const folder = getFolder(folderId)
-    const collections = getCollections(folder.collections)
+    const collections = getCollections(folder.cs)
+
     return (
         <React.Fragment>
-            <WindowTitlebar docTitle="Home" />
             <header className="home-header">
                 <h1 className="title">Home</h1>
                 <div className="controls">
@@ -26,7 +27,7 @@ export default function Workspace({ match }) {
             <main>
                 <Container>
                     <Link to="/">Back to Home</Link>
-                    {collections.map(collection => {
+                    {collections && collections.map(collection => {
                         return <NoteCard
                             key={collection.id}
                             id={collection.id}

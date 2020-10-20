@@ -22,7 +22,7 @@ export class FileChannel implements IIpcChannel {
 
     save(event: IpcMainEvent, args: any) {
         console.log(args)
-        event.reply('fuck', 'u')
+        event.reply('fuck', 'u bitch')
     }
 
     async load(event: IpcMainEvent, args: any) {

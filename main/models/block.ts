@@ -1,39 +1,3 @@
-// Block.updateTitle = async (id, title) => {
-//   try {
-//     await Block.update({
-//       title: title
-//     }, {
-//       where: { id: id }
-//     })
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
-// Block.updateDescription = async (id, des) => {
-//   try {
-//     await Block.update({
-//       description: des
-//     }, {
-//       where: { id: id }
-//     })
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
-// Block.updateBookmark = async (id, bookmark) => {
-//   try {
-//     await Block.update({
-//       bookmark: bookmark
-//     }, {
-//       where: { id: id }
-//     })
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 
 export interface BlockAttributes {
@@ -59,7 +23,7 @@ export type BlockStatic = typeof Model & {
     new(values?: object, options?: BuildOptions): BlockModel;
 };
 
-export function BlockFactory(sequelize: Sequelize): BlockStatic {
+export function createBlockModel(sequelize: Sequelize): BlockStatic {
     return sequelize.define("Block", {
         id: {
             type: DataTypes.INTEGER,
