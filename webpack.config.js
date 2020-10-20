@@ -1,31 +1,31 @@
 // require("@babel/polyfill");
 module.exports = [
     {
-        mode: 'development',
+        mode: "development",
         resolve: {
-            extensions: ['.tsx', '.ts', '.js'],
+            extensions: [".tsx", ".ts", ".js"],
         },
-        devtool: 'source-map',
-        entry: ['./main/electron.ts'],
-        target: 'electron-main',
+        devtool: "source-map",
+        entry: ["./main/electron.ts"],
+        target: "electron-main",
         module: {
             rules: [
                 {
                     test: /\.ts$/,
                     exclude: /node_modules/,
-                    use: [{ loader: 'ts-loader' }]
-                }
-            ]
+                    use: [{ loader: "ts-loader" }],
+                },
+            ],
         },
         node: {
-            __dirname: false
+            __dirname: false,
         },
         externals: {
-            "sequelize": "require('sequelize')",
+            sequelize: "require('sequelize')",
         },
         output: {
-            path: __dirname + '/public',
-            filename: 'electron.js'
-        }
-    }
+            path: __dirname + "/public",
+            filename: "electron.js",
+        },
+    },
 ];

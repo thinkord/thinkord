@@ -8,7 +8,7 @@ export interface BlockAttributes {
     bookmark: boolean;
     createdAt?: Date;
     updatedAt?: Date;
-};
+}
 
 export interface BlockModel extends Model<BlockAttributes>, BlockAttributes {
     // At the moment, there's nothing more to add apart
@@ -16,11 +16,12 @@ export interface BlockModel extends Model<BlockAttributes>, BlockAttributes {
     // `Model<BlockAttributes>` and
     // `BlockAttributes` give us. We'll add more here when
     //  we get on to adding associations.
-};
+}
 
-export class Block extends Model<BlockModel, BlockAttributes> { }
+export class Block extends Model<BlockModel, BlockAttributes> {}
 export type BlockStatic = typeof Model & {
-    new(values?: object, options?: BuildOptions): BlockModel;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    new (values?: object, options?: BuildOptions): BlockModel;
 };
 
 export function createBlockModel(sequelize: Sequelize): BlockStatic {
@@ -29,7 +30,7 @@ export function createBlockModel(sequelize: Sequelize): BlockStatic {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         title: {
             type: DataTypes.STRING,
@@ -37,7 +38,7 @@ export function createBlockModel(sequelize: Sequelize): BlockStatic {
         },
         type: {
             type: DataTypes.ENUM,
-            values: ['text', 'image', 'audio', 'video'],
+            values: ["text", "image", "audio", "video"],
             allowNull: false,
         },
         description: {
@@ -46,7 +47,7 @@ export function createBlockModel(sequelize: Sequelize): BlockStatic {
         bookmark: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false
+            defaultValue: false,
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -58,5 +59,5 @@ export function createBlockModel(sequelize: Sequelize): BlockStatic {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    }) as BlockStatic
+    }) as BlockStatic;
 }

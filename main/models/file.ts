@@ -6,7 +6,7 @@ export interface FileAttributes {
     path: string;
     createdAt?: Date;
     updatedAt?: Date;
-};
+}
 
 export interface FileModel extends Model<FileAttributes>, FileAttributes {
     // At the moment, there's nothing more to add apart
@@ -14,11 +14,12 @@ export interface FileModel extends Model<FileAttributes>, FileAttributes {
     // `Model<FileAttributes>` and
     // `FileAttributes` give us. We'll add more here when
     //  we get on to adding associations.
-};
+}
 
-export class File extends Model<FileModel, FileAttributes> { }
+export class File extends Model<FileModel, FileAttributes> {}
 export type FileStatic = typeof Model & {
-    new(values?: object, options?: BuildOptions): FileModel;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    new (values?: object, options?: BuildOptions): FileModel;
 };
 
 export function createFileModel(sequelize: Sequelize): FileStatic {
@@ -27,7 +28,7 @@ export function createFileModel(sequelize: Sequelize): FileStatic {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
@@ -47,5 +48,5 @@ export function createFileModel(sequelize: Sequelize): FileStatic {
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
-    }) as FileStatic
+    }) as FileStatic;
 }

@@ -1,52 +1,52 @@
-import React, { useState, useContext } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React, { useState, useContext } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { InputBase, Typography } from "@material-ui/core";
-import { StoreContext } from '../../context'
-
-
+import { StoreContext } from "../../context";
 
 /**
  * If you don't know hoc, check this out:
- * https://zh-hant.reactjs.org/docs/higher-order-components.html 
+ * https://zh-hant.reactjs.org/docs/higher-order-components.html
  */
 
 const useStyles = makeStyles((theme) => ({
     editableTitle: {
         flexGrow: 1,
         fontSize: "1.2rem",
-        fontWeight: "bold"
+        fontWeight: "bold",
     },
     editableTitleContainer: {
         margin: theme.spacing(1),
-        display: 'flex'
+        display: "flex",
     },
     input: {
         margin: theme.spacing(1),
         "&:focus": {
-            background: "#ddd"
-        }
-    }
-}))
+            background: "#ddd",
+        },
+    },
+}));
 export default function withTitle(WrappedComponent, update) {
-
     return function (props) {
-        const classes = useStyles()
-        const [open, setOpen] = useState(false)
-        const [newTitle, setNewTitle] = useState('')
-        const { title, collectionId, index } = props
-        const context = useContext(StoreContext)
+        const classes = useStyles();
+        const [open, setOpen] = useState(false);
+        const [newTitle, setNewTitle] = useState("");
+        const { title, collectionId, index } = props;
+        const context = useContext(StoreContext);
         const handleOnChange = (e) => {
-            setNewTitle(e.target.value)
-        }
+            setNewTitle(e.target.value);
+        };
 
         const handleOnBlur = () => {
-            context[update](newTitle, collectionId, index)
-            setOpen(false)
-        }
+            context[update](newTitle, collectionId, index);
+            setOpen(false);
+        };
 
         return (
             <div>
-                {open ?
+                {open ? (
                     <div>
                         <InputBase
                             onChange={handleOnChange}
@@ -56,17 +56,16 @@ export default function withTitle(WrappedComponent, update) {
                             onBlur={handleOnBlur}
                             placeholder="Please fill the title"
                         />
-                    </div> :
+                    </div>
+                ) : (
                     <div className={classes.editableTitleContainer}>
-                        <Typography
-                            onClick={() => setOpen(!open)}
-                            className={classes.editableTitle}>
+                        <Typography onClick={() => setOpen(!open)} className={classes.editableTitle}>
                             {title}
                         </Typography>
-                    </div>}
+                    </div>
+                )}
                 <WrappedComponent {...props} />
             </div>
-
-        )
-    }
+        );
+    };
 }

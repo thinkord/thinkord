@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import appRuntime from '../../../appRuntime';
-import './NoteCard.scss';
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import appRuntime from "../../../appRuntime";
+import "./NoteCard.scss";
 
-import CModal from '../../Modal/CModal';
+import CModal from "../../Modal/CModal";
 
 function NoteCard(props) {
-
     const [menuShow, setMenuShow] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [modalFunc, setModalFunc] = useState("rename");
 
     const handleMenuToggle = () => {
-        setMenuShow(prevState => !prevState);
-    }
+        setMenuShow((prevState) => !prevState);
+    };
 
     const handleModalToggle = () => {
-        setModalShow(prevState => !prevState);
-    }
+        setModalShow((prevState) => !prevState);
+    };
 
     const handleModalChange = (func) => {
         setModalFunc(func);
         handleModalToggle();
-    }
+    };
 
     // const handleBookmarkChanged = (noteId) => {
     // }
@@ -31,13 +31,27 @@ function NoteCard(props) {
         <React.Fragment>
             <div className="note-block">
                 <Link to={`/work/${props.id}`} className="card-anchor"></Link>
-                <div className="bookmark" onClick={props.bookmarked}><i className={(props.bookmark ? 'fas' : 'far') + " fa-bookmark"}></i></div>
-                <button id="note-block-more" onClick={handleMenuToggle} onBlur={handleMenuToggle}><i className="fas fa-ellipsis-h"></i></button>
-                <div className={(menuShow ? 'show' : null) + " note-card-menu"}>
-                    <div className="menu-item" onClick={() => { handleModalChange("rename"); }}>
+                <div className="bookmark" onClick={props.bookmarked}>
+                    <i className={(props.bookmark ? "fas" : "far") + " fa-bookmark"}></i>
+                </div>
+                <button id="note-block-more" onClick={handleMenuToggle} onBlur={handleMenuToggle}>
+                    <i className="fas fa-ellipsis-h"></i>
+                </button>
+                <div className={(menuShow ? "show" : null) + " note-card-menu"}>
+                    <div
+                        className="menu-item"
+                        onClick={() => {
+                            handleModalChange("rename");
+                        }}
+                    >
                         <i className="fas fa-pen-square"></i> Rename
                     </div>
-                    <div className="menu-item" onClick={() => { handleModalChange("delete"); }}>
+                    <div
+                        className="menu-item"
+                        onClick={() => {
+                            handleModalChange("delete");
+                        }}
+                    >
                         <i className="fas fa-trash-alt"></i> Delete
                     </div>
                 </div>
@@ -52,14 +66,26 @@ function NoteCard(props) {
                         <span>statistics</span>
                     </div> */}
                 </div>
-                <Link className="card-record-anchor" to={`/work/${props.id}`} onClick={() => { appRuntime.send('controlbar', 'hello') }}>
+                <Link
+                    className="card-record-anchor"
+                    to={`/work/${props.id}`}
+                    onClick={() => {
+                        appRuntime.send("controlbar", "hello");
+                    }}
+                >
                     <i className="far fa-dot-circle"></i>
                     Start Recording
                 </Link>
             </div>
-            <CModal id={props.id} title={props.title} modalFunc={modalFunc} modalShow={modalShow} handleModalToggle={handleModalToggle} />
+            <CModal
+                id={props.id}
+                title={props.title}
+                modalFunc={modalFunc}
+                modalShow={modalShow}
+                handleModalToggle={handleModalToggle}
+            />
         </React.Fragment>
-    )
+    );
 }
 
 export default NoteCard;
