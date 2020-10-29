@@ -16,19 +16,11 @@ const StoreUpdateContext = React.createContext(null);
 class StoreProvider extends Component {
     // Load the user's content
     componentDidMount() {
-        appRuntime.send("fileprocess", "load", "");
-        appRuntime.subscribe("loadComplete", (data) => {
-            data = JSON.parse(data);
-            this.setState({
-                data,
-            });
-        });
-
-        /**Test Backend send whole data */
         appRuntime.send("homeprocess", "getAllData", "");
         appRuntime.subscribe("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
+
     }
 
     loadData = (unprocessedData) => {
@@ -124,26 +116,33 @@ class StoreProvider extends Component {
      *
      * @param {string} title
      */
-    addCollection = (title) => {
+    addCollection = (title, id) => {
         const { data } = this.state;
-        const newCollectionId = uuid();
+        const folderId = parseInt(id)
         const newCollection = {
-            id: newCollectionId,
             title,
-            blocks: [],
+            folderId
         };
 
-        const newState = {
-            collectionIds: [...data.collectionIds, newCollectionId],
-            collections: {
-                ...data.collections,
-                [newCollectionId]: newCollection,
-            },
-        };
+        appRuntime.send('homeprocess', 'addCollection', newCollection)
+        appRuntime.subscribeOnce('updateData', (d) => {
 
-        this.setState({
-            data: newState,
-        });
+            d = JSON.parse(d)
+            d.blocks = []
+            const newState = {
+                ...data,
+                collectionIds: [...data.collectionIds, d.id],
+                collections: {
+                    ...data.collections,
+                    [d.id]: d,
+                }
+            };
+
+            this.setState({
+                data: newState,
+            });
+        })
+
     };
 
     /**
@@ -256,20 +255,26 @@ class StoreProvider extends Component {
         const newFolder = {
             id: newFolderId,
             name: folderName,
-            blocks: [],
+            cs: [],
         };
 
-        const newState = {
-            ...data,
-            folderIds: [...data.folderIds, newFolderId],
-            folders: {
-                ...data.folders,
-                [newFolderId]: newFolder,
-            },
-        };
-        this.setState({
-            data: newState,
-        });
+        appRuntime.send('homeprocess', 'addFolder', newFolder)
+        appRuntime.subscribeOnce('updateData', (d) => {
+            d = JSON.parse(d)
+            d.cs = []
+            const newState = {
+                ...data,
+                folderIds: [...data.folderIds, d.id],
+                folders: {
+                    ...data.folders,
+                    [d.id]: d
+                },
+            };
+
+            this.setState({
+                data: newState,
+            });
+        })
     };
 
     render() {
@@ -278,14 +283,14 @@ class StoreProvider extends Component {
                 {this.state ? (
                     <StoreContext.Provider
                         value={{
-                            ...this.state,
-                            addBlock: this.addBlock,
-                            deleteBlock: this.deleteBlock,
-                            updateBlockTitle: this.updateBlockTitle,
+                            ...this.state
                         }}
                     >
                         <StoreUpdateContext.Provider
                             value={{
+                                addBlock: this.addBlock,
+                                deleteBlock: this.deleteBlock,
+                                updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
                                 getFolder: this.getFolder,
                                 addCollection: this.addCollection,
@@ -299,8 +304,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                    <h1>Loading</h1>
-                )}
+                        <h1>Loading</h1>
+                    )}
             </>
         );
     }

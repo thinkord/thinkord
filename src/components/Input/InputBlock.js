@@ -4,7 +4,7 @@ import React, { useState, useContext } from "react";
 import { Paper, InputBase, Button, IconButton } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import { fade, makeStyles } from "@material-ui/core";
-import { StoreContext } from "../../context";
+import { StoreUpdateContext } from "../../context";
 import appRuntime from "../../appRuntime";
 
 const useStyle = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ export default function InputBlock({ setOpen, collectionId, type }) {
     const classes = useStyle();
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
-    const { addBlock, addCollection } = useContext(StoreContext);
+    const { addBlock, addCollection } = useContext(StoreUpdateContext);
     const handleOnChange = (e) => {
         setTitle(e.target.value);
     };

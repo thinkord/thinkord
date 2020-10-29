@@ -1,10 +1,11 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 
 export interface CollectionAttributes {
-    id: number;
+    id?: number;
     name: string;
-    display: boolean;
-    bookmark: boolean;
+    display?: boolean;
+    bookmark?: boolean;
+    folderId?: number,
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -17,10 +18,10 @@ export interface CollectionModel extends Model<CollectionAttributes>, Collection
     //  we get on to adding associations.
 }
 
-export class Collection extends Model<CollectionModel, CollectionAttributes> {}
+export class Collection extends Model<CollectionModel, CollectionAttributes> { }
 export type CollectionStatic = typeof Model & {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): CollectionModel;
+    new(values?: object, options?: BuildOptions): CollectionModel;
 };
 
 export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
@@ -37,12 +38,12 @@ export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
         },
         display: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
+            allowNull: true,
             defaultValue: true,
         },
         bookmark: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
+            allowNull: true,
             defaultValue: false,
         },
         createdAt: {
