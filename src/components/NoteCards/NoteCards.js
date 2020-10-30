@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react";
 import NoteCard from "./NoteCard/NoteCard";
 

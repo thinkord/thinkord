@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
@@ -14,26 +16,14 @@ function App({ match }) {
     const { data } = useContext(StoreContext);
     const { getFolder, getCollections } = useContext(StoreUpdateContext);
 
-    const [position] = useState(match.params.id ? match.params.id : "home")
+    const [position] = useState(match.params.id ? match.params.id : "home");
     const [modalShow, setModalShow] = useState(false);
-
 
     const handleModalToggle = () => {
         setModalShow((prevState) => !prevState);
     };
 
-    const folder = getFolder(position)
-
-  
-    // const handleSearchClick = (search_file) => {
-    //     search_file = search_file.toLowerCase();
-    //     var new_collections = [];
-    //     for (var i = 0; i < this.state.collections.length; i++) {
-    //         if (this.state.collections[i].path.split("\\").pop().toLowerCase().includes(search_file)) {
-    //             new_collections.push(this.state.collections[i]);
-    //         }
-    //     }
-    // };
+    const folder = getFolder(position);
 
     return (
         <React.Fragment>
@@ -49,7 +39,7 @@ function App({ match }) {
                     />
                 </div>
             </header>
-            {position === "home" ?
+            {position === "home" ? (
                 <>
                     <main>
                         <Container>
@@ -60,7 +50,8 @@ function App({ match }) {
                         </Container>
                     </main>
                     <CModal modalFunc="addFolder" modalShow={modalShow} handleModalToggle={handleModalToggle} />
-                </> :
+                </>
+            ) : (
                 <>
                     <main>
                         <Container>
@@ -71,10 +62,14 @@ function App({ match }) {
                                 })}
                         </Container>
                     </main>
-                    <CModal folderId={position} modalFunc="addCollection" modalShow={modalShow} handleModalToggle={handleModalToggle} />
+                    <CModal
+                        folderId={position}
+                        modalFunc="addCollection"
+                        modalShow={modalShow}
+                        handleModalToggle={handleModalToggle}
+                    />
                 </>
-            }
-
+            )}
         </React.Fragment>
     );
 }

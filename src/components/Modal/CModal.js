@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import { StoreUpdateContext } from "../../context";
@@ -19,14 +20,14 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
         deleteCollection(noteId);
         handleModalToggle();
     };
-    const handleFolderCreate = (folderName) => {
+    const handleFolderCreate = () => {
         addFolder(newTitle);
         handleModalToggle();
     };
     const handleNoteCreate = (title, folderId) => {
-        addCollection(title, folderId)
+        addCollection(title, folderId);
         handleModalToggle();
-    }
+    };
 
     var modalDialog;
     switch (modalFunc) {
@@ -85,7 +86,7 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
-                                handleNoteCreate(newTitle, folderId)
+                                handleNoteCreate(newTitle, folderId);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>

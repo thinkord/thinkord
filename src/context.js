@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { v4 as uuid } from "uuid";
@@ -20,7 +21,6 @@ class StoreProvider extends Component {
         appRuntime.subscribe("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
-
     }
 
     loadData = (unprocessedData) => {
@@ -118,31 +118,29 @@ class StoreProvider extends Component {
      */
     addCollection = (title, id) => {
         const { data } = this.state;
-        const folderId = parseInt(id)
+        const folderId = parseInt(id);
         const newCollection = {
             title,
-            folderId
+            folderId,
         };
 
-        appRuntime.send('homeprocess', 'addCollection', newCollection)
-        appRuntime.subscribeOnce('updateData', (d) => {
-
-            d = JSON.parse(d)
-            d.blocks = []
+        appRuntime.send("homeprocess", "addCollection", newCollection);
+        appRuntime.subscribeOnce("updateData", (d) => {
+            d = JSON.parse(d);
+            d.blocks = [];
             const newState = {
                 ...data,
                 collectionIds: [...data.collectionIds, d.id],
                 collections: {
                     ...data.collections,
                     [d.id]: d,
-                }
+                },
             };
 
             this.setState({
                 data: newState,
             });
-        })
-
+        });
     };
 
     /**
@@ -194,6 +192,8 @@ class StoreProvider extends Component {
         let collectionIds = [...data.collectionIds];
         let folders = { ...data.folders };
 
+        appRuntime.send("homeprocess", "deleteCollection", collectionId);
+        appRuntime.subscribeOnce("updateData");
         Object.values(folders).map((folder) => {
             if (folder.cs.includes(collectionId)) {
                 let index = folder.cs.indexOf(collectionId);
@@ -258,23 +258,23 @@ class StoreProvider extends Component {
             cs: [],
         };
 
-        appRuntime.send('homeprocess', 'addFolder', newFolder)
-        appRuntime.subscribeOnce('updateData', (d) => {
-            d = JSON.parse(d)
-            d.cs = []
+        appRuntime.send("homeprocess", "addFolder", newFolder);
+        appRuntime.subscribeOnce("updateData", (d) => {
+            d = JSON.parse(d);
+            d.cs = [];
             const newState = {
                 ...data,
                 folderIds: [...data.folderIds, d.id],
                 folders: {
                     ...data.folders,
-                    [d.id]: d
+                    [d.id]: d,
                 },
             };
 
             this.setState({
                 data: newState,
             });
-        })
+        });
     };
 
     render() {
@@ -283,7 +283,7 @@ class StoreProvider extends Component {
                 {this.state ? (
                     <StoreContext.Provider
                         value={{
-                            ...this.state
+                            ...this.state,
                         }}
                     >
                         <StoreUpdateContext.Provider
@@ -304,8 +304,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                        <h1>Loading</h1>
-                    )}
+                    <h1>Loading</h1>
+                )}
             </>
         );
     }
