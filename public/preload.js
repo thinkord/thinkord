@@ -16,8 +16,8 @@ contextBridge.exposeInMainWorld("appRuntime", {
         };
     },
 
-    subscribeOnce: (channel,listener)=>{
-        const subscription = (event,...args)=>listener(...args)
-        ipcRenderer.once(channel,subscription)
-    }
+    subscribeOnce: (channel, listener) => {
+        const subscription = (event, ...args) => listener(...args);
+        ipcRenderer.once(channel, subscription);
+    },
 });
