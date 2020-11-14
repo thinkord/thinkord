@@ -5,7 +5,7 @@ export interface CollectionAttributes {
     name: string;
     display?: boolean;
     bookmark?: boolean;
-    folderId?: number,
+    folderId?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -18,10 +18,10 @@ export interface CollectionModel extends Model<CollectionAttributes>, Collection
     //  we get on to adding associations.
 }
 
-export class Collection extends Model<CollectionModel, CollectionAttributes> { }
+export class Collection extends Model<CollectionModel, CollectionAttributes> {}
 export type CollectionStatic = typeof Model & {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    new(values?: object, options?: BuildOptions): CollectionModel;
+    new (values?: object, options?: BuildOptions): CollectionModel;
 };
 
 export function createCollectionModel(sequelize: Sequelize): CollectionStatic {

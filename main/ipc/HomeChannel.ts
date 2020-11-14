@@ -25,7 +25,7 @@ export class HomeChannel implements IIpcChannel {
         });
     }
 
-    async getAllData(event: IpcMainEvent, args: any) {
+    private async getAllData(event: IpcMainEvent, args: any) {
         const query = await Folder.findAll({
             include: { all: true, nested: true },
         });

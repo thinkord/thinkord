@@ -7,8 +7,8 @@ const noteCards = ({ data }) => (
     <div className="note-cards" style={{ padding: "40px 0" }}>
         <h2>Files</h2>
         <div className="card-deck" style={{ display: "flex" }}>
-            {data.collectionIds &&
-                data.collectionIds.map((collectionId) => {
+            {Object.keys(data.collections) &&
+                Object.keys(data.collections).map((collectionId) => {
                     return (
                         <NoteCard
                             key={collectionId}

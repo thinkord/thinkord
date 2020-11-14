@@ -18,7 +18,7 @@ class StoreProvider extends Component {
     // Load the user's content
     componentDidMount() {
         appRuntime.send("homeprocess", "getAllData", "");
-        appRuntime.subscribe("loadData", (data) => {
+        appRuntime.subscribeOnce("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
     }
@@ -28,7 +28,6 @@ class StoreProvider extends Component {
             folders: [],
             folderIds: [],
             collections: [],
-            collectionIds: [],
         };
         unprocessedData.map((folder) => {
             initState.folderIds.push(folder.id);
@@ -38,7 +37,7 @@ class StoreProvider extends Component {
                 folder["cs"].push(collection.id);
                 initState.collections.push(collection);
                 delete folder.collections;
-                return initState.collectionIds.push(collection.id);
+                return folder;
             });
         });
         initState.collections = this.convertArrayToObject(initState.collections, "id");
@@ -130,7 +129,6 @@ class StoreProvider extends Component {
             d.blocks = [];
             const newState = {
                 ...data,
-                collectionIds: [...data.collectionIds, d.id],
                 collections: {
                     ...data.collections,
                     [d.id]: d,
@@ -189,7 +187,6 @@ class StoreProvider extends Component {
     deleteCollection = (collectionId) => {
         const { data } = this.state;
         let collections = { ...data.collections };
-        let collectionIds = [...data.collectionIds];
         let folders = { ...data.folders };
 
         appRuntime.send("homeprocess", "deleteCollection", collectionId);
@@ -209,14 +206,10 @@ class StoreProvider extends Component {
             return collections;
         });
 
-        collectionIds.map((cId, index) => {
-            if (cId === collectionId) {
-                collectionIds.splice(index, 1);
-            }
-            return collectionIds;
-        });
-
-        const newState = { ...data, collections, collectionIds };
+        const newState = {
+            ...data,
+            collections,
+        };
         this.setState({
             data: newState,
         });
@@ -251,9 +244,7 @@ class StoreProvider extends Component {
 
     addFolder = (folderName) => {
         const { data } = this.state;
-        const newFolderId = uuid();
         const newFolder = {
-            id: newFolderId,
             name: folderName,
             cs: [],
         };
@@ -277,6 +268,35 @@ class StoreProvider extends Component {
         });
     };
 
+    deletFolder = (folderId) => {
+        const { data } = this.state;
+        const newState = {
+            collections: { ...data.collections },
+            folderIds: [...data.folderIds],
+            folders: { ...data.folders },
+        };
+        newState.folderIds.map((id, index) => {
+            if (id === folderId) {
+                newState.folderIds.splice(index, 1);
+            }
+            return newState;
+        });
+        Object.values(newState.folders).map((folder) => {
+            if (folder.id === folderId) {
+                delete newState.folders[folderId];
+                folder.cs.map((collection) => {
+                    delete newState.collections[collection];
+                    return folder;
+                });
+            }
+            return newState;
+        });
+
+        this.setState({
+            data: newState,
+        });
+    };
+
     render() {
         return (
             <>
@@ -293,6 +313,7 @@ class StoreProvider extends Component {
                                 updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
                                 getFolder: this.getFolder,
+                                deleteFolder: this.deletFolder,
                                 addCollection: this.addCollection,
                                 getCollection: this.getCollection,
                                 getCollections: this.getCollections,

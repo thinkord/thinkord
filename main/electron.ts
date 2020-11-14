@@ -6,6 +6,7 @@ import { DBFactory } from "./models/index";
 import { IIpcChannel } from "./ipc/IIpcChannel";
 import { FileChannel } from "./ipc/FileChannel";
 import { HomeChannel } from "./ipc/HomeChannel";
+import { SystemChannel } from "./ipc/SystemChannel";
 
 log.setLevel("info");
 
@@ -46,7 +47,7 @@ class Main {
             height: 600,
             webPreferences: {
                 nodeIntegration: true,
-                // enableRemoteModule: true,
+                enableRemoteModule: false,
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
             },
@@ -61,4 +62,4 @@ class Main {
     }
 }
 
-new Main().init([new FileChannel("fileprocess"), new HomeChannel("homeprocess")]);
+new Main().init([new FileChannel("fileprocess"), new HomeChannel("homeprocess"), new SystemChannel("systemprocess")]);
