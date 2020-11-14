@@ -129,7 +129,7 @@ class StoreProvider extends Component {
         const newCollectionId = uuid();
         const newCollection = {
             id: newCollectionId,
-            title,
+            name: title,
             blocks: [],
         };
 
@@ -144,6 +144,8 @@ class StoreProvider extends Component {
         this.setState({
             data: newState,
         });
+
+        return newCollectionId;
     };
 
     /**

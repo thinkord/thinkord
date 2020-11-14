@@ -1,4 +1,12 @@
-
+.Content{
+    height: calc(100vh - 180px);
+    padding: 40px 0;
+    overflow: auto;
+}
+body{
+    overflow: hidden;
+    background-color: #f3f3f3;
+}
 .home-header{
     position: relative;
     z-index: 5;

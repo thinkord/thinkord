@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
+import {TabsContext} from '../../tabContext';
 import { StoreUpdateContext } from "../../context";
 
-export default function CModal({ id, title, modalShow, modalFunc, handleModalToggle }) {
+export default function CModal({ id, title, modalShow, modalFunc, handleModalToggle, history }) {
     const [newTitle, setNewTitle] = useState(title);
-    const { addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
+    const addTab = useContext(TabsContext).addTab;
+    const { addCollection, addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value);
@@ -24,9 +26,13 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
         handleModalToggle();
     };
 
-    // const handleNoteCreate = (title, folderId) => {
-
-    // }
+    const handleNoteCreate = (title, folderId) => {
+        var newCollectionId = addCollection(newTitle);
+        console.log(newTitle)
+        addTab(newTitle, newCollectionId);
+        handleModalToggle();
+        history.push('/work/' + newCollectionId);
+    }
 
     var modalDialog;
     switch (modalFunc) {
@@ -55,7 +61,7 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
             modalDialog = (
                 <Modal show={modalShow} onHide={handleModalToggle} centered>
                     <Modal.Header className="modal_header">
-                        <Modal.Title>Name Your New Note</Modal.Title>
+                        <Modal.Title>Name your folder</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <input type="text" placeholder="untitled" onChange={handleTitleChange} />
@@ -65,6 +71,27 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleFolderCreate(newTitle);
+                            }}
+                        ></i>
+                        <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
+                    </Modal.Footer>
+                </Modal>
+            );
+            break;
+        case "addCollection":
+            modalDialog = (
+                <Modal show={modalShow} onHide={handleModalToggle} centered>
+                    <Modal.Header className="modal_header">
+                        <Modal.Title>Name Your New Note</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <input type="text" placeholder="untitled" onChange={handleTitleChange} />
+                    </Modal.Body>
+                    <Modal.Footer className="modal_footer">
+                        <i
+                            className="modal_icon fas fa-check-circle"
+                            onClick={() => {
+                                handleNoteCreate(newTitle);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 // import { remote } from 'electron'
-import logo from "../../logo.svg";
+import logo from "../../../logo.svg";
 import "./windowTitlebar.css";
 
 // const { remote } = window.require('electron').remote;

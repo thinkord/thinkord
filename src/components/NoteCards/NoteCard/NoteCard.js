@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, withRouter } from "react-router-dom";
+import {TabsContext} from '../../../tabContext';
 import appRuntime from "../../../appRuntime";
 import "./NoteCard.scss";
 
@@ -24,13 +25,18 @@ function NoteCard(props) {
         handleModalToggle();
     };
 
+    const tabAdd = useContext(TabsContext).addTab;
+    const handleTabAdd = () => {
+        tabAdd(props.title, props.id);
+    }
+    
     // const handleBookmarkChanged = (noteId) => {
     // }
 
     return (
         <React.Fragment>
             <div className="note-block">
-                <Link to={`/work/${props.id}`} className="card-anchor"></Link>
+                <Link to={`/work/${props.id}`} className="card-anchor" onClick={handleTabAdd}></Link>
                 <div className="bookmark" onClick={props.bookmarked}>
                     <i className={(props.bookmark ? "fas" : "far") + " fa-bookmark"}></i>
                 </div>
@@ -88,4 +94,4 @@ function NoteCard(props) {
     );
 }
 
-export default NoteCard;
+export default withRouter(NoteCard);
