@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import appRuntime from "../../../appRuntime";

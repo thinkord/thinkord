@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { v4 as uuid } from "uuid";
@@ -16,17 +17,8 @@ const StoreUpdateContext = React.createContext(null);
 class StoreProvider extends Component {
     // Load the user's content
     componentDidMount() {
-        appRuntime.send("fileprocess", "load", "");
-        appRuntime.subscribe("loadComplete", (data) => {
-            data = JSON.parse(data);
-            this.setState({
-                data,
-            });
-        });
-
-        /**Test Backend send whole data */
         appRuntime.send("homeprocess", "getAllData", "");
-        appRuntime.subscribe("loadData", (data) => {
+        appRuntime.subscribeOnce("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
     }
@@ -36,7 +28,6 @@ class StoreProvider extends Component {
             folders: [],
             folderIds: [],
             collections: [],
-            collectionIds: [],
         };
         unprocessedData.map((folder) => {
             initState.folderIds.push(folder.id);
@@ -46,7 +37,7 @@ class StoreProvider extends Component {
                 folder["cs"].push(collection.id);
                 initState.collections.push(collection);
                 delete folder.collections;
-                return initState.collectionIds.push(collection.id);
+                return folder;
             });
         });
         initState.collections = this.convertArrayToObject(initState.collections, "id");
@@ -124,25 +115,29 @@ class StoreProvider extends Component {
      *
      * @param {string} title
      */
-    addCollection = (title) => {
+    addCollection = (title, id) => {
         const { data } = this.state;
-        const newCollectionId = uuid();
+        const folderId = parseInt(id);
         const newCollection = {
-            id: newCollectionId,
             title,
-            blocks: [],
+            folderId,
         };
 
-        const newState = {
-            collectionIds: [...data.collectionIds, newCollectionId],
-            collections: {
-                ...data.collections,
-                [newCollectionId]: newCollection,
-            },
-        };
+        appRuntime.send("homeprocess", "addCollection", newCollection);
+        appRuntime.subscribeOnce("updateData", (d) => {
+            d = JSON.parse(d);
+            d.blocks = [];
+            const newState = {
+                ...data,
+                collections: {
+                    ...data.collections,
+                    [d.id]: d,
+                },
+            };
 
-        this.setState({
-            data: newState,
+            this.setState({
+                data: newState,
+            });
         });
     };
 
@@ -192,9 +187,10 @@ class StoreProvider extends Component {
     deleteCollection = (collectionId) => {
         const { data } = this.state;
         let collections = { ...data.collections };
-        let collectionIds = [...data.collectionIds];
         let folders = { ...data.folders };
 
+        appRuntime.send("homeprocess", "deleteCollection", collectionId);
+        appRuntime.subscribeOnce("updateData");
         Object.values(folders).map((folder) => {
             if (folder.cs.includes(collectionId)) {
                 let index = folder.cs.indexOf(collectionId);
@@ -210,14 +206,10 @@ class StoreProvider extends Component {
             return collections;
         });
 
-        collectionIds.map((cId, index) => {
-            if (cId === collectionId) {
-                collectionIds.splice(index, 1);
-            }
-            return collectionIds;
-        });
-
-        const newState = { ...data, collections, collectionIds };
+        const newState = {
+            ...data,
+            collections,
+        };
         this.setState({
             data: newState,
         });
@@ -252,21 +244,54 @@ class StoreProvider extends Component {
 
     addFolder = (folderName) => {
         const { data } = this.state;
-        const newFolderId = uuid();
         const newFolder = {
-            id: newFolderId,
             name: folderName,
-            blocks: [],
+            cs: [],
         };
 
+        appRuntime.send("homeprocess", "addFolder", newFolder);
+        appRuntime.subscribeOnce("updateData", (d) => {
+            d = JSON.parse(d);
+            d.cs = [];
+            const newState = {
+                ...data,
+                folderIds: [...data.folderIds, d.id],
+                folders: {
+                    ...data.folders,
+                    [d.id]: d,
+                },
+            };
+
+            this.setState({
+                data: newState,
+            });
+        });
+    };
+
+    deletFolder = (folderId) => {
+        const { data } = this.state;
         const newState = {
-            ...data,
-            folderIds: [...data.folderIds, newFolderId],
-            folders: {
-                ...data.folders,
-                [newFolderId]: newFolder,
-            },
+            collections: { ...data.collections },
+            folderIds: [...data.folderIds],
+            folders: { ...data.folders },
         };
+        newState.folderIds.map((id, index) => {
+            if (id === folderId) {
+                newState.folderIds.splice(index, 1);
+            }
+            return newState;
+        });
+        Object.values(newState.folders).map((folder) => {
+            if (folder.id === folderId) {
+                delete newState.folders[folderId];
+                folder.cs.map((collection) => {
+                    delete newState.collections[collection];
+                    return folder;
+                });
+            }
+            return newState;
+        });
+
         this.setState({
             data: newState,
         });
@@ -279,15 +304,16 @@ class StoreProvider extends Component {
                     <StoreContext.Provider
                         value={{
                             ...this.state,
-                            addBlock: this.addBlock,
-                            deleteBlock: this.deleteBlock,
-                            updateBlockTitle: this.updateBlockTitle,
                         }}
                     >
                         <StoreUpdateContext.Provider
                             value={{
+                                addBlock: this.addBlock,
+                                deleteBlock: this.deleteBlock,
+                                updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
                                 getFolder: this.getFolder,
+                                deleteFolder: this.deletFolder,
                                 addCollection: this.addCollection,
                                 getCollection: this.getCollection,
                                 getCollections: this.getCollections,

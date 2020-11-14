@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -6,7 +7,7 @@ import { StoreUpdateContext } from "../context";
 import Collection from "../components/Collection/Collection";
 import { Button } from "@material-ui/core";
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles(() => ({
     root: {
         display: "flex",
         minHeight: "100vh",

@@ -18,12 +18,12 @@ const db: db = {};
 export const sequelize: Sequelize = isDev ? new Sequelize(config["development"]) : new Sequelize(config["production"]);
 
 // Generate models
-export const User = createUserModel(sequelize);
-export const Folder = createFolderModel(sequelize);
-export const Collection = createCollectionModel(sequelize);
-export const Block = createBlockModel(sequelize);
-export const File = createFileModel(sequelize);
-export const BlockFile = createBlockFileModel(sequelize);
+const User = createUserModel(sequelize);
+const Folder = createFolderModel(sequelize);
+const Collection = createCollectionModel(sequelize);
+const Block = createBlockModel(sequelize);
+const File = createFileModel(sequelize);
+const BlockFile = createBlockFileModel(sequelize);
 
 // Define associations between models
 Folder.hasMany(Collection, { foreignKey: "folderId", as: "collections" });
@@ -56,3 +56,5 @@ export class DBFactory {
         db["BlockFile"] = BlockFile;
     }
 }
+
+export { User, Folder, Collection, Block, File, BlockFile };
