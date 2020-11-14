@@ -10,24 +10,15 @@ import CModal from "../components/Modal/CModal";
 
 // import InputContainer from '../components/Input/InputContainer'
 
-function App() {
+function App(props) {
     const context = useContext(StoreContext);
     const { data } = context;
 
     const [modalShow, setModalShow] = useState(false);
-    const [modalFunc] = useState("addFolder");
+    const [modalFunc] = useState("addCollection");
 
     const handleModalToggle = () => {
         setModalShow((prevState) => !prevState);
-    };
-    const handleSearchClick = (search_file) => {
-        search_file = search_file.toLowerCase();
-        var new_collections = [];
-        for (var i = 0; i < this.state.collections.length; i++) {
-            if (this.state.collections[i].path.split("\\").pop().toLowerCase().includes(search_file)) {
-                new_collections.push(this.state.collections[i]);
-            }
-        }
     };
 
     return (
@@ -35,24 +26,18 @@ function App() {
             <header className="home-header">
                 <h1 className="title">Home</h1>
                 <div className="controls">
-                    <SearchButton collections={data} onSearchChange={handleSearchClick} />
+                    <SearchButton collections={data}  />
                     <i className="fas fa-plus-circle fa-lg" onClick={handleModalToggle}></i>
-                    <img
-                        className="user"
-                        alt="user"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU"
-                    />
+                    <img className="user" alt="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
                 </div>
             </header>
-            <main>
-                <Container>
+            <div className="Content">
+                <Container className="container">
+                    <Folders data={data}/>
                     <NoteCards data={data} />
                 </Container>
-                <Container>
-                    <Folders data={data} />
-                </Container>
-            </main>
-            <CModal modalFunc={modalFunc} modalShow={modalShow} handleModalToggle={handleModalToggle} />
+            </div>
+            <CModal modalFunc={modalFunc} modalShow={modalShow} handleModalToggle={handleModalToggle} history={props.history}/>
         </React.Fragment>
     );
 }

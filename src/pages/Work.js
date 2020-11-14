@@ -10,23 +10,25 @@ const useStyle = makeStyles((theme) => ({
     root: {
         display: "flex",
         minHeight: "100vh",
-        background: "grey",
+        //background: "grey",
     },
 }));
 const Work = ({ match }) => {
     const { getCollection, saveCollection } = useContext(StoreUpdateContext);
 
     const classes = useStyle();
-    const [collectionId] = useState(match.params.id);
+    //const [collectionId] = useState(match.params.id);
 
-    const collection = getCollection(collectionId);
+    // const collection = getCollection(collectionId);
+    const collection = getCollection(match.params.id);
 
     return (
         <div className={classes.root}>
-            <Link className="App-link" to="/">
+            {/* <Link className="App-link" to="/">
                 Link to Home
             </Link>
-            <Collection collection={collection} key={collectionId} />
+            <Collection collection={collection} key={collectionId} /> */}
+            <Collection collection={collection} key={match.params.id} />
             <Button onClick={() => saveCollection()}>Save File</Button>
         </div>
     );

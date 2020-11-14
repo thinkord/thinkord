@@ -1,0 +1,50 @@
+.Tab{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 100px;
+    color: #999;
+    padding: 3.5px 8px 2px 8px;
+    box-sizing: border-box;
+    border-left: #eee solid 1.5px;
+    border-top: none;
+    border-bottom: transparent solid 1.5px;
+    font-weight: normal;
+    font-family: sans-serif;
+    font-size: 1rem;
+    p{
+        margin: 0 6px;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .TabTitle{
+        display: flex;
+        align-items: center;
+    }
+    .TabClose{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        i{
+            color: #333;
+        }
+    }
+    &:last-child{
+        border-right: #eee solid 1.5px;
+    }
+    &.active, &:hover{
+        border-bottom: #35C189 solid 1.5px;
+        color: #35C189;
+        text-decoration: none;
+        .TabClose{
+            visibility: visible;
+            i{
+                color: #35C189;
+            }
+        }
+    }
+} 
