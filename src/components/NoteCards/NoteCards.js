@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react";
 import NoteCard from "./NoteCard/NoteCard";
 
@@ -5,8 +7,8 @@ const noteCards = ({ data }) => (
     <div className="note-cards">
         <h2>Files</h2>
         <div className="card-deck" style={{ display: "flex" }}>
-            {data.collectionIds &&
-                data.collectionIds.map((collectionId) => {
+            {Object.keys(data.collections) &&
+                Object.keys(data.collections).map((collectionId) => {
                     return (
                         <NoteCard
                             key={collectionId}

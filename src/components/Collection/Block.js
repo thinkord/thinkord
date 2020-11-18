@@ -6,7 +6,7 @@ import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { BlockTitle } from "./Title";
 // import storeAPI from '../../data/storeAPI';
-import { StoreContext } from "../../context";
+import { StoreUpdateContext } from "../../context";
 
 const useStyles = makeStyles((theme) => ({
     block: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Block({ block, index, collectionId }) {
     const classes = useStyles();
-    const { deleteBlock } = useContext(StoreContext);
+    const { deleteBlock } = useContext(StoreUpdateContext);
 
     const handleBlockChange = () => {
         deleteBlock(collectionId, index);
