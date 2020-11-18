@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import { StoreUpdateContext } from "../context";
 import Collection from "../components/Collection/Collection";
 import { Button } from "@material-ui/core";
