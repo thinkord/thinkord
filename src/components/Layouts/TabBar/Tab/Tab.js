@@ -11,16 +11,16 @@ const Tab = (props) => {
         e.preventDefault();
         setClosed(true);
     }
-    
+
     useEffect(() => {
         console.log(props.location.pathname)
         if(closed === true){
             closeTab(props.id);
             if( props.location.pathname === "/work/" + props.cId){
-                props.history.goBack();
+                props.history.replace("/");
             }
         }
-    }, [closed])
+    })
 
     return (
         <NavLink to={`/work/${props.cId}`} className={classes.Tab} activeClassName={classes.active}>
