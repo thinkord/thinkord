@@ -1,7 +1,7 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
 
 export interface FolderAttributes {
-    id: number;
+    id?: number;
     name: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -15,10 +15,10 @@ export interface FolderModel extends Model<FolderAttributes>, FolderAttributes {
     //  we get on to adding associations.
 }
 
-export class Folder extends Model<FolderModel, FolderAttributes> {}
+export class Folder extends Model<FolderModel, FolderAttributes> { }
 export type FolderStatic = typeof Model & {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): FolderModel;
+    new(values?: object, options?: BuildOptions): FolderModel;
 };
 
 export function createFolderModel(sequelize: Sequelize): FolderStatic {

@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
-import {TabsContext} from '../../tabContext';
 import { StoreUpdateContext } from "../../context";
 
-export default function CModal({ id, title, modalShow, modalFunc, handleModalToggle, history }) {
+export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const addTab = useContext(TabsContext).addTab;
     const { addCollection, addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
 
     const handleTitleChange = (event) => {
@@ -21,18 +20,14 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
         deleteCollection(noteId);
         handleModalToggle();
     };
-    const handleFolderCreate = (folderName) => {
+    const handleFolderCreate = () => {
         addFolder(newTitle);
         handleModalToggle();
     };
-
     const handleNoteCreate = (title, folderId) => {
-        var newCollectionId = addCollection(newTitle);
-        console.log(newTitle)
-        addTab(newTitle, newCollectionId);
+        addCollection(title, folderId);
         handleModalToggle();
-        history.push('/work/' + newCollectionId);
-    }
+    };
 
     var modalDialog;
     switch (modalFunc) {
@@ -61,7 +56,7 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
             modalDialog = (
                 <Modal show={modalShow} onHide={handleModalToggle} centered>
                     <Modal.Header className="modal_header">
-                        <Modal.Title>Name your folder</Modal.Title>
+                        <Modal.Title>Name Your New Folder</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <input type="text" placeholder="untitled" onChange={handleTitleChange} />
@@ -70,7 +65,7 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
-                                handleFolderCreate(newTitle);
+                                handleFolderCreate();
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
@@ -91,7 +86,7 @@ export default function CModal({ id, title, modalShow, modalFunc, handleModalTog
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
-                                handleNoteCreate(newTitle);
+                                handleNoteCreate(newTitle, folderId);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>

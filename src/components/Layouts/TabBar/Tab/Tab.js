@@ -6,14 +6,12 @@ import classes from './Tab.module.scss';
 const Tab = (props) => {
     const closeTab = useContext(TabsContext).closeTab;
     const [closed, setClosed] = useState(false);
-
     const handleTabClosed = (e) => {
         e.preventDefault();
         setClosed(true);
     }
 
     useEffect(() => {
-        console.log(props.location.pathname)
         if(closed === true){
             closeTab(props.id);
             if( props.location.pathname === "/work/" + props.cId){

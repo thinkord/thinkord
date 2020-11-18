@@ -5,7 +5,7 @@ import { StoreUpdateContext } from "../context";
 import Collection from "../components/Collection/Collection";
 import { Button } from "@material-ui/core";
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles(() => ({
     root: {
         display: "flex",
         minHeight: "100vh",
