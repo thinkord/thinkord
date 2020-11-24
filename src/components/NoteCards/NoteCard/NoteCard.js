@@ -28,7 +28,7 @@ function NoteCard(props) {
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
         tabAdd(props.title, props.id);
-        appRuntime.send("windprocess", "create");
+        appRuntime.send("window-channel", "create");
     };
 
     // const handleBookmarkChanged = (noteId) => {
@@ -73,8 +73,15 @@ function NoteCard(props) {
                         <span>statistics</span>
                     </div> */}
                 </div>
-                <Link className="card-record-anchor" to={`/work/${props.id}`}>
-                    <i className="far fa-dot-circle">Start Recording</i>
+                <Link
+                    className="card-record-anchor"
+                    to={`/work/${props.id}`}
+                    onClick={() => {
+                        appRuntime.send("window-channel", "create");
+                    }}
+                >
+                    <i className="far fa-dot-circle"></i>
+                    Start Recording
                 </Link>
             </div>
             <CModal

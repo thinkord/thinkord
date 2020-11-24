@@ -25,7 +25,7 @@ class StoreProvider extends Component {
     };
     // Load the user's content
     componentDidMount() {
-        appRuntime.send("homeprocess", "getAllData", "");
+        appRuntime.send("home-channel", "getAllData", "");
         appRuntime.subscribeOnce("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
@@ -33,7 +33,7 @@ class StoreProvider extends Component {
 
     componentDidUpdate() {
         if (this.state.changed) {
-            appRuntime.send("homeprocess", "getAllData", "");
+            appRuntime.send("home-channel", "getAllData", "");
             appRuntime.subscribeOnce("loadData", (data) => {
                 this.loadData(JSON.parse(data));
                 this.setState({ changed: false });
@@ -141,7 +141,7 @@ class StoreProvider extends Component {
             folderId,
         };
 
-        appRuntime.send("homeprocess", "addCollection", newCollection);
+        appRuntime.send("home-channel", "addCollection", newCollection);
         appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
 
@@ -211,7 +211,7 @@ class StoreProvider extends Component {
         // let collections = { ...data.collections };
         // let folders = { ...data.folders };
 
-        appRuntime.send("homeprocess", "deleteCollection", collectionId);
+        appRuntime.send("home-channel", "deleteCollection", collectionId);
         appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
         // Object.values(folders).map((folder) => {
@@ -271,7 +271,7 @@ class StoreProvider extends Component {
             cs: [],
         };
 
-        appRuntime.send("homeprocess", "addFolder", newFolder);
+        appRuntime.send("home-channel", "addFolder", newFolder);
         appRuntime.subscribeOnce("updateData", () => {
             this.setState({ changed: true });
             // d = JSON.parse(d);

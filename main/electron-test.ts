@@ -2,11 +2,10 @@ import * as path from "path";
 import { app, BrowserWindow } from "electron";
 import isDev from "electron-is-dev";
 import log from "loglevel";
-import { DBFactory } from "./models/index";
-import { IIpcChannel } from "./ipc/IIpcChannel";
-import { FileChannel } from "./ipc/FileChannel";
-import { HomeChannel } from "./ipc/HomeChannel";
-import { SystemChannel } from "./ipc/SystemChannel";
+// import { DBFactory } from "./models/index";
+import { IIpcChannel } from "./ipc/i-ipc-channel";
+import { HomeChannel } from "./ipc/home-channel";
+import { SystemChannel } from "./ipc/system-channel";
 
 log.setLevel("info");
 
@@ -18,16 +17,16 @@ class Main {
         app.on("window-all-closed", this.onWindowAllClosed);
         app.on("activate", this.onActivate);
 
-        const db = await DBFactory.create();
+        // const db = await DBFactory.create();
 
-        db.sequelize
-            .sync({ force: false })
-            .then(() => {
-                log.info(`Connect to sqlite succesfully`);
-            })
-            .catch((err: any) => {
-                log.error(err);
-            });
+        // db.sequelize
+        //     .sync({ force: false })
+        //     .then(() => {
+        //         log.info(`Connect to sqlite succesfully`);
+        //     })
+        //     .catch((err: any) => {
+        //         log.error(err);
+        //     });
     }
 
     private onWindowAllClosed() {
@@ -62,4 +61,4 @@ class Main {
     }
 }
 
-new Main().init([new FileChannel("fileprocess"), new HomeChannel("homeprocess"), new SystemChannel("systemprocess")]);
+new Main().init([new HomeChannel("home-channel"), new SystemChannel("systemprocess")]);

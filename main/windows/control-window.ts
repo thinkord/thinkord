@@ -1,9 +1,9 @@
 import { BrowserWindow, ipcMain } from "electron";
-import { BaseWindow } from "./BaseWindow";
+import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import path from "path";
-import { Factory } from "../ipc-manager/usage/Factory";
-import { UsageChannel } from "../ipc-manager/usage/UsageChannel";
+import { Factory } from "../ipc-manager/usage/factory";
+import { UsageChannel } from "../ipc-manager/usage/usage-channel";
 
 export class ControlWindow extends BaseWindow {
     private static win?: BrowserWindow | null;
@@ -14,8 +14,8 @@ export class ControlWindow extends BaseWindow {
             width: 400,
             height: 100,
             webPreferences: {
-                enableRemoteModule: true,
-                nodeIntegration: true,
+                contextIsolation: true,
+                preload: path.resolve(__dirname, "preload.js"),
             },
         });
 
@@ -39,6 +39,7 @@ export class ControlWindow extends BaseWindow {
     public closeWindow(): void {
         ControlWindow.win?.close();
     }
+
     public register(): void {
         /**Solve repeat ipcMain register */
         // if (ControlWindow.count < 1) {

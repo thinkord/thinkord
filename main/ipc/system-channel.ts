@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ipcMain, IpcMainEvent, Menu } from "electron";
 import log from "loglevel";
-import { IIpcChannel } from "./IIpcChannel";
+import { IIpcChannel } from "./i-ipc-channel";
 import { Folder } from "../models";
 export class SystemChannel implements IIpcChannel {
     channelName;

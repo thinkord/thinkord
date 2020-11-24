@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
-import { IIpcChannel } from "./IIpcChannel";
+
+import { IIpcChannel } from "./i-ipc-channel";
 import { Folder, Collection } from "../models";
-// import { Collection } from "../models/collection";
 
 export class HomeChannel implements IIpcChannel {
     channelName;

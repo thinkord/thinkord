@@ -29,7 +29,7 @@ const Work = ({ match }) => {
                         className="App-link"
                         to="/"
                         onClick={() => {
-                            appRuntime.send("windprocess", "close");
+                            appRuntime.send("window-channel", "close");
                         }}
                     >
                         Link to Home

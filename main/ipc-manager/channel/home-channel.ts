@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
-import { BaseChannel } from "./BaseChannel";
+import { BaseChannel } from "./base-channel";
 import { Folder, Collection } from "../../models";
 
 export class HomeChannel extends BaseChannel {
@@ -39,6 +39,7 @@ export class HomeChannel extends BaseChannel {
         const data = JSON.stringify(query, null, 2);
         event.reply("loadData", data);
     }
+
     async addFolder(event: IpcMainEvent, args: any): Promise<void> {
         const name = args.name.toString();
         const data = await Folder.create({ name });
@@ -49,6 +50,7 @@ export class HomeChannel extends BaseChannel {
         const data = await Collection.create({ name: args.title.toString(), folderId: args.folderId });
         event.reply("updateData", JSON.stringify(data, null, 2));
     }
+
     async deleteCollection(event: IpcMainEvent, args: any): Promise<void> {
         Collection.destroy({
             where: {

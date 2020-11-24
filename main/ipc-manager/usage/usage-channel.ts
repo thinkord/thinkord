@@ -1,8 +1,9 @@
-import { HomeChannel } from "../channel/HomeChannel";
-import { BaseChannel } from "../channel/BaseChannel";
-import { WindChannel } from "../channel/WindChannel";
-import { TestChannel } from "../channel/TestChannel";
-import { IFactory } from "./IFactory";
+import { BaseChannel } from "../channel/base-channel";
+import { HomeChannel } from "../channel/home-channel";
+import { WindowChannel } from "../channel/window-channel";
+import { MediaChannel } from "../channel/media-channel";
+import { TestChannel } from "../channel/test-channel";
+import { IFactory } from "./i-factory";
 
 export class UsageChannel {
     factory?: IFactory;
@@ -14,17 +15,20 @@ export class UsageChannel {
     setHomeFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            this.factory.setIPC(new WindChannel("windprocess"));
+            this.factory.setIPC(new WindowChannel("window-channel"));
             t.push(this.factory.getIPC());
-            this.factory.setIPC(new HomeChannel("homeprocess"));
+            this.factory.setIPC(new HomeChannel("home-channel"));
+            t.push(this.factory.getIPC());
+            this.factory.setIPC(new MediaChannel("media-channel"));
             t.push(this.factory.getIPC());
         }
         return t;
     }
+
     setControlFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            this.factory.setIPC(new TestChannel("testprocess"));
+            this.factory.setIPC(new TestChannel("test-channel"));
             t.push(this.factory.getIPC());
         }
         return t;
