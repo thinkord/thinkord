@@ -4,7 +4,7 @@ import React from "react";
 import NoteCard from "./NoteCard/NoteCard";
 
 const noteCards = ({ data }) => (
-    <div className="note-cards" style={{ padding: "40px 0" }}>
+    <div className="note-cards">
         <h2>Files</h2>
         <div className="card-deck" style={{ display: "flex" }}>
             {Object.keys(data.collections) &&

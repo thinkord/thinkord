@@ -15,12 +15,30 @@ const StoreUpdateContext = React.createContext(null);
  */
 
 class StoreProvider extends Component {
+    state = {
+        data :{
+            folders: [],
+            folderIds: [],
+            collections: [],
+        },
+        changed: false
+    };
     // Load the user's content
     componentDidMount() {
         appRuntime.send("homeprocess", "getAllData", "");
         appRuntime.subscribeOnce("loadData", (data) => {
             this.loadData(JSON.parse(data));
         });
+    }
+
+    componentDidUpdate() {
+        if(this.state.changed){
+            appRuntime.send("homeprocess", "getAllData", "");
+            appRuntime.subscribeOnce("loadData", (data) => {
+                this.loadData(JSON.parse(data));
+                this.setState({changed: false})
+            });
+        }
     }
 
     loadData = (unprocessedData) => {
@@ -44,7 +62,9 @@ class StoreProvider extends Component {
         initState.folders = this.convertArrayToObject(initState.folders, "id");
 
         let data = initState;
+        console.log("loaded")
         this.setState({ data });
+        console.log(this.state)
     };
 
     /** Util */
@@ -116,7 +136,7 @@ class StoreProvider extends Component {
      * @param {string} title
      */
     addCollection = (title, id) => {
-        const { data } = this.state;
+        // const { data } = this.state;
         const folderId = parseInt(id);
         const newCollection = {
             title,
@@ -124,21 +144,25 @@ class StoreProvider extends Component {
         };
 
         appRuntime.send("homeprocess", "addCollection", newCollection);
-        appRuntime.subscribeOnce("updateData", (d) => {
-            d = JSON.parse(d);
-            d.blocks = [];
-            const newState = {
-                ...data,
-                collections: {
-                    ...data.collections,
-                    [d.id]: d,
-                },
-            };
+        appRuntime.subscribeOnce("updateData")
+        this.setState({changed: true})
 
-            this.setState({
-                data: newState,
-            });
-        });
+        // appRuntime.subscribeOnce("updateData", (d) => {
+        //     d = JSON.parse(d);
+        //     d.blocks = [];
+
+        //     const newState = {
+        //         ...data,
+        //         collections: {
+        //             ...data.collections,
+        //             [d.id]: d,
+        //         },
+        //     };
+
+        //     this.setState({
+        //         data: newState,
+        //     });
+        // }); 
     };
 
     /**
@@ -185,34 +209,34 @@ class StoreProvider extends Component {
     };
 
     deleteCollection = (collectionId) => {
-        const { data } = this.state;
-        let collections = { ...data.collections };
-        let folders = { ...data.folders };
+        // const { data } = this.state;
+        // let collections = { ...data.collections };
+        // let folders = { ...data.folders };
 
         appRuntime.send("homeprocess", "deleteCollection", collectionId);
         appRuntime.subscribeOnce("updateData");
-        Object.values(folders).map((folder) => {
-            if (folder.cs.includes(collectionId)) {
-                let index = folder.cs.indexOf(collectionId);
-                folder.cs.splice(index, 1);
-            }
-            return folders;
-        });
-
-        Object.keys(collections).map((cId) => {
-            if (cId === collectionId) {
-                delete collections[collectionId];
-            }
-            return collections;
-        });
-
-        const newState = {
-            ...data,
-            collections,
-        };
-        this.setState({
-            data: newState,
-        });
+        this.setState({changed: true})
+        // Object.values(folders).map((folder) => {
+        //     if (folder.cs.includes(targetCId)) {
+        //         let index = folder.cs.indexOf(collectionId);
+        //         folder.cs.splice(index, 1);
+        //     }
+        //     return folders;
+        // });
+        // Object.keys(collections).map((cId) => {
+        //     if (parseInt(cId) === targetCId) {
+        //         delete collections[collectionId];
+        //     }
+        //     return collections;
+        // });
+        // const newState = {
+        //     ...data,
+        //     collections,
+        //     folders
+        // };
+        // this.setState({
+        //     data: newState,
+        // });
     };
 
     /**
@@ -243,7 +267,7 @@ class StoreProvider extends Component {
     };
 
     addFolder = (folderName) => {
-        const { data } = this.state;
+        // const { data } = this.state;
         const newFolder = {
             name: folderName,
             cs: [],
@@ -251,20 +275,21 @@ class StoreProvider extends Component {
 
         appRuntime.send("homeprocess", "addFolder", newFolder);
         appRuntime.subscribeOnce("updateData", (d) => {
-            d = JSON.parse(d);
-            d.cs = [];
-            const newState = {
-                ...data,
-                folderIds: [...data.folderIds, d.id],
-                folders: {
-                    ...data.folders,
-                    [d.id]: d,
-                },
-            };
+            this.setState({changed: true})
+            // d = JSON.parse(d);
+            // d.cs = [];
+            // const newState = {
+            //     ...data,
+            //     folderIds: [...data.folderIds, d.id],
+            //     folders: {
+            //         ...data.folders,
+            //         [d.id]: d,
+            //     },
+            // };
 
-            this.setState({
-                data: newState,
-            });
+            // this.setState({
+            //     data: newState,
+            // });
         });
     };
 

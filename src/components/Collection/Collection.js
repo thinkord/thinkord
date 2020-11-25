@@ -25,7 +25,7 @@ export default function Collection({ collection }) {
         <div>
             <Paper className={classes.root}>
                 <CssBaseline />
-                <CollectionTitle title={collection.title} collectionId={collection.id} />
+                <CollectionTitle title={collection.name} collectionId={collection.id} />
                 <div className={classes.blockContainer}>
                     {collection.blocks.map((block, index) => {
                         return <Block key={block.id} collectionId={collection.id} block={block} index={index} />;
