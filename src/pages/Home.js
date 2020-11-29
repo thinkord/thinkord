@@ -25,7 +25,6 @@ function App({ match }) {
 
     const folder = getFolder(position);
 
-    console.log(data)
     return (
         <React.Fragment>
             <header className="home-header">
@@ -33,14 +32,18 @@ function App({ match }) {
                 <div className="controls">
                     {/* <SearchButton collections={data} onSearchChange={handleSearchClick} /> */}
                     <i className="fas fa-plus-circle fa-lg" onClick={handleModalToggle}></i>
-                    <img className="user" alt="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
+                    <img
+                        className="user"
+                        alt="user"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU"
+                    />
                 </div>
             </header>
             {position === "home" ? (
                 <>
                     <div className="Content">
                         <Container className="container">
-                            <Folders data={data}/>
+                            <Folders data={data} />
                             <NoteCards data={data} />
                         </Container>
                     </div>

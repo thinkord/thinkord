@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
-import {TabsContext} from '../../../tabContext';
+import { TabsContext } from "../../../tabContext";
 import appRuntime from "../../../appRuntime";
 import "./NoteCard.scss";
 
@@ -28,8 +28,9 @@ function NoteCard(props) {
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
         tabAdd(props.title, props.id);
-    }
-    
+        appRuntime.send("windprocess", "create");
+    };
+
     // const handleBookmarkChanged = (noteId) => {
     // }
 
@@ -72,15 +73,8 @@ function NoteCard(props) {
                         <span>statistics</span>
                     </div> */}
                 </div>
-                <Link
-                    className="card-record-anchor"
-                    to={`/work/${props.id}`}
-                    onClick={() => {
-                        appRuntime.send("controlbar", "hello");
-                    }}
-                >
-                    <i className="far fa-dot-circle"></i>
-                    Start Recording
+                <Link className="card-record-anchor" to={`/work/${props.id}`}>
+                    <i className="far fa-dot-circle">Start Recording</i>
                 </Link>
             </div>
             <CModal
