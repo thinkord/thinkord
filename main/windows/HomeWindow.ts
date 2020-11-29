@@ -3,7 +3,7 @@ import { BaseWindow } from "./BaseWindow";
 import * as path from "path";
 import isDev from "electron-is-dev";
 import { IIpcChannel } from "../ipc/IIpcChannel";
-import { HomeFactory } from "../ipc-manager/usage/HomeFactory";
+import { Factory } from "../ipc-manager/usage/Factory";
 import { UsageChannel } from "../ipc-manager/usage/UsageChannel";
 export class HomeWindow extends BaseWindow {
     private static win?: BrowserWindow | null;
@@ -34,7 +34,7 @@ export class HomeWindow extends BaseWindow {
     }
 
     public register(): void {
-        new UsageChannel(new HomeFactory()).setHomeChannel().map((obj) => {
+        new UsageChannel(new Factory()).setHomeFactory().map((obj) => {
             obj.handleRequest();
             obj.handleRequestOnce();
             return obj;

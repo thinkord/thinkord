@@ -3,16 +3,12 @@
 import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./BaseChannel";
-import { ControlWindow } from "../../windows/ControlWindow";
 
-export class WindChannel extends BaseChannel {
-    controlWindow: ControlWindow | undefined;
-
+export class TestChannel extends BaseChannel {
     public handleRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
-                case "create":
-                case "close":
+                case "test":
                     this[command](event, args);
                     break;
                 default:
@@ -28,19 +24,9 @@ export class WindChannel extends BaseChannel {
             // Should add something
         });
     }
-    public create(event: IpcMainEvent, args: any): void {
-        if (!this.controlWindow) {
-            this.controlWindow = new ControlWindow();
-            this.controlWindow.createWindow([]);
-            this.controlWindow.register();
-        }
-    }
 
-    public close(event: IpcMainEvent, args: any): void {
-        if (this.controlWindow) {
-            this.controlWindow.closeWindow();
-            this.controlWindow = undefined;
-        }
-        // ControlWindow.closeWindow();
+    private test(event: IpcMainEvent, args: any): void {
+        // eslint-disable-next-line no-console
+        console.log(args);
     }
 }
