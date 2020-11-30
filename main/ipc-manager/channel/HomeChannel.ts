@@ -6,6 +6,9 @@ import { BaseChannel } from "./BaseChannel";
 import { Folder, Collection } from "../../models";
 
 export class HomeChannel extends BaseChannel {
+    // public deleteRequest(channelName: string): void {
+    //     ipcMain.removeAllListeners(channelName);
+    // }
     public handleRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
@@ -28,6 +31,7 @@ export class HomeChannel extends BaseChannel {
         });
     }
 
+    /** Start operation */
     private async getAllData(event: IpcMainEvent, args: any): Promise<void> {
         const query = await Folder.findAll({
             include: { all: true, nested: true },

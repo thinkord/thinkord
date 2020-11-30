@@ -1,3 +1,4 @@
+import { ipcMain } from "electron";
 export abstract class BaseChannel {
     channelName?: string;
 
@@ -9,5 +10,8 @@ export abstract class BaseChannel {
 
     public abstract handleRequest(): void;
     public abstract handleRequestOnce(): void;
-    // public abstract delete(): void
+    // public abstract deleteRequest(channelName: string): void;
+    public deleteRequest(channelName: string): void {
+        ipcMain.removeAllListeners(channelName);
+    }
 }

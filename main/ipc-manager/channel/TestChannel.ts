@@ -5,6 +5,9 @@ import log from "loglevel";
 import { BaseChannel } from "./BaseChannel";
 
 export class TestChannel extends BaseChannel {
+    // public deleteRequest(channelName: string): void {
+    //     ipcMain.removeAllListeners(channelName);
+    // }
     public handleRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
@@ -25,6 +28,7 @@ export class TestChannel extends BaseChannel {
         });
     }
 
+    /** Start operation */
     private test(event: IpcMainEvent, args: any): void {
         // eslint-disable-next-line no-console
         console.log(args);

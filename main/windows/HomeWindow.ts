@@ -2,13 +2,12 @@ import { BrowserWindow } from "electron";
 import { BaseWindow } from "./BaseWindow";
 import * as path from "path";
 import isDev from "electron-is-dev";
-import { IIpcChannel } from "../ipc/IIpcChannel";
 import { Factory } from "../ipc-manager/usage/Factory";
 import { UsageChannel } from "../ipc-manager/usage/UsageChannel";
 export class HomeWindow extends BaseWindow {
     private static win?: BrowserWindow | null;
 
-    public createWindow(channel: IIpcChannel[]): void {
+    public createWindow(): void {
         HomeWindow.win = new BrowserWindow({
             width: 800,
             height: 600,

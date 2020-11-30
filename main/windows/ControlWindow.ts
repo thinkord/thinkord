@@ -1,15 +1,14 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 import { BaseWindow } from "./BaseWindow";
 import isDev from "electron-is-dev";
 import path from "path";
-import { IIpcChannel } from "../ipc/IIpcChannel";
 import { Factory } from "../ipc-manager/usage/Factory";
 import { UsageChannel } from "../ipc-manager/usage/UsageChannel";
 
 export class ControlWindow extends BaseWindow {
     private static win?: BrowserWindow | null;
-
-    public createWindow(channel: IIpcChannel[]): void {
+    private static count = 0;
+    public createWindow(): void {
         ControlWindow.win = new BrowserWindow({
             frame: false,
             width: 400,
@@ -31,6 +30,7 @@ export class ControlWindow extends BaseWindow {
                 ControlWindow.win.show();
             }
         });
+
         ControlWindow.win.once("close", () => {
             ControlWindow.win = null;
         });
@@ -39,9 +39,19 @@ export class ControlWindow extends BaseWindow {
     public closeWindow(): void {
         ControlWindow.win?.close();
     }
-
     public register(): void {
-        new UsageChannel(new Factory()).setControlFactory().map((obj) => {
+        /**Solve repeat ipcMain register */
+        // if (ControlWindow.count < 1) {
+        //     new UsageChannel(new Factory()).setControlFactory().map((obj) => {
+        //         obj.handleRequest();
+        //         obj.handleRequestOnce();
+        //         return obj;
+        //     });
+        //     ControlWindow.count++;
+        // }
+
+        const usage = new UsageChannel(new Factory());
+        usage.setControlFactory().map((obj) => {
             obj.handleRequest();
             obj.handleRequestOnce();
             return obj;

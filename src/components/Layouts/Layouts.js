@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
 import React from "react";
 import classes from "./Layouts.module.scss";
 import WindowTitleBar from "./WindowTitlebar/WindowTitlebar";

@@ -14,17 +14,25 @@ export class UsageChannel {
     setHomeFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            // t.push(this.factory.createIPC("windprocess"));
-            t.push(this.factory.createIPC(new WindChannel("windprocess")));
-            t.push(this.factory.createIPC(new HomeChannel("homeprocess")));
+            this.factory.setIPC(new WindChannel("windprocess"));
+            t.push(this.factory.getIPC());
+            this.factory.setIPC(new HomeChannel("homeprocess"));
+            t.push(this.factory.getIPC());
         }
         return t;
     }
     setControlFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            t.push(this.factory.createIPC(new TestChannel("testprocess")));
+            this.factory.setIPC(new TestChannel("testprocess"));
+            t.push(this.factory.getIPC());
         }
         return t;
     }
+
+    // deletControlFactory(): void {
+    //     this.controlChannel.forEach((obj, index) => {
+    //         this.controlChannel.splice(index, 1);
+    //     });
+    // }
 }

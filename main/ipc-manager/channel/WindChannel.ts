@@ -4,6 +4,7 @@ import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./BaseChannel";
 import { ControlWindow } from "../../windows/ControlWindow";
+import { UsageChannel } from "../usage/UsageChannel";
 
 export class WindChannel extends BaseChannel {
     controlWindow: ControlWindow | undefined;
@@ -28,10 +29,16 @@ export class WindChannel extends BaseChannel {
             // Should add something
         });
     }
+
+    // public deleteRequest(channelName: string): void {
+    //     ipcMain.removeAllListeners(channelName);
+    // }
+
+    /** Start operation */
     public create(event: IpcMainEvent, args: any): void {
         if (!this.controlWindow) {
             this.controlWindow = new ControlWindow();
-            this.controlWindow.createWindow([]);
+            this.controlWindow.createWindow();
             this.controlWindow.register();
         }
     }
@@ -39,8 +46,8 @@ export class WindChannel extends BaseChannel {
     public close(event: IpcMainEvent, args: any): void {
         if (this.controlWindow) {
             this.controlWindow.closeWindow();
+            this.deleteRequest("testprocess");
             this.controlWindow = undefined;
         }
-        // ControlWindow.closeWindow();
     }
 }
