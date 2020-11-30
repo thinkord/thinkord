@@ -16,12 +16,12 @@ const StoreUpdateContext = React.createContext(null);
 
 class StoreProvider extends Component {
     state = {
-        data :{
+        data: {
             folders: [],
             folderIds: [],
             collections: [],
         },
-        changed: false
+        changed: false,
     };
     // Load the user's content
     componentDidMount() {
@@ -32,11 +32,11 @@ class StoreProvider extends Component {
     }
 
     componentDidUpdate() {
-        if(this.state.changed){
+        if (this.state.changed) {
             appRuntime.send("homeprocess", "getAllData", "");
             appRuntime.subscribeOnce("loadData", (data) => {
                 this.loadData(JSON.parse(data));
-                this.setState({changed: false})
+                this.setState({ changed: false });
             });
         }
     }
@@ -62,9 +62,7 @@ class StoreProvider extends Component {
         initState.folders = this.convertArrayToObject(initState.folders, "id");
 
         let data = initState;
-        console.log("loaded")
         this.setState({ data });
-        console.log(this.state)
     };
 
     /** Util */
@@ -144,8 +142,8 @@ class StoreProvider extends Component {
         };
 
         appRuntime.send("homeprocess", "addCollection", newCollection);
-        appRuntime.subscribeOnce("updateData")
-        this.setState({changed: true})
+        appRuntime.subscribeOnce("updateData");
+        this.setState({ changed: true });
 
         // appRuntime.subscribeOnce("updateData", (d) => {
         //     d = JSON.parse(d);
@@ -162,7 +160,7 @@ class StoreProvider extends Component {
         //     this.setState({
         //         data: newState,
         //     });
-        // }); 
+        // });
     };
 
     /**
@@ -215,7 +213,7 @@ class StoreProvider extends Component {
 
         appRuntime.send("homeprocess", "deleteCollection", collectionId);
         appRuntime.subscribeOnce("updateData");
-        this.setState({changed: true})
+        this.setState({ changed: true });
         // Object.values(folders).map((folder) => {
         //     if (folder.cs.includes(targetCId)) {
         //         let index = folder.cs.indexOf(collectionId);
@@ -274,8 +272,8 @@ class StoreProvider extends Component {
         };
 
         appRuntime.send("homeprocess", "addFolder", newFolder);
-        appRuntime.subscribeOnce("updateData", (d) => {
-            this.setState({changed: true})
+        appRuntime.subscribeOnce("updateData", () => {
+            this.setState({ changed: true });
             // d = JSON.parse(d);
             // d.cs = [];
             // const newState = {

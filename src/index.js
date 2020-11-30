@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { HashRouter as Router, Route } from "react-router-dom";
 
 import { StoreProvider } from "./context";
-import TabsProvider from './tabContext';
-import Layout from "./components/Layouts/Layouts"
+import TabsProvider from "./tabContext";
+import Layout from "./components/Layouts/Layouts";
 import Home from "./pages/Home";
 import Work from "./pages/Work";
 

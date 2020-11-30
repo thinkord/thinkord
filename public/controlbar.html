@@ -37,8 +37,8 @@
     })
 
     fullsnipButton.addEventListener('click', () => {
-        ipcRenderer.send('snipaste')
-
+        ipcRenderer.send('testprocess', 'test',"hello world")
+        
     })
 
     sectsnipButton.addEventListener('click', () => {
