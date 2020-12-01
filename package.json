@@ -79,7 +79,7 @@
     "@typescript-eslint/parser": "^4.5.0",
     "babel-loader": "^8.1.0",
     "concurrently": "^5.2.0",
-    "electron": "^9.1.2",
+    "electron": "^11.0.3",
     "electron-builder": "^22.8.0",
     "electron-rebuild": "^2.2.0",
     "eslint": "^6.6.0",
