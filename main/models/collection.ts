@@ -45,7 +45,7 @@ class Collection extends Model<CollectionAttributes> implements CollectionAttrib
     public setFolder!: BelongsToSetAssociationMixin<Folder, Folder["id"]>;
 
     // Block mixin methods
-    public createBlocks!: HasManyCreateAssociationMixin<Block>;
+    public createBlock!: HasManyCreateAssociationMixin<Block>;
     public addBlock!: HasManyAddAssociationsMixin<Block, Block["id"]>;
     public addBlocks!: HasManyAddAssociationMixin<Block, Block["id"]>;
     public getBlocks!: HasManyGetAssociationsMixin<Block>;

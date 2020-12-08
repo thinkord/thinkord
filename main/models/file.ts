@@ -31,7 +31,7 @@ class File extends Model<FileAttributes> implements FileAttributes {
     public readonly createdAt!: Date;
     public updatedAt!: Date;
 
-    public createBlocks!: BelongsToManyCreateAssociationMixin<Block>;
+    public createBlock!: BelongsToManyCreateAssociationMixin<Block>;
     public addBlock!: BelongsToManyAddAssociationMixin<Block, Block["id"]>;
     public addBlocks!: BelongsToManyAddAssociationsMixin<Block, Block["id"]>;
     public getBlocks!: BelongsToManyGetAssociationsMixin<Block>;

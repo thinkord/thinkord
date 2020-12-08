@@ -6,10 +6,10 @@ import * as path from "path";
 import { app, screen, desktopCapturer, IpcMainEvent } from "electron";
 
 // Third-party modules
-import { v1 as uuidv1, v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 
-// import { Block } from "../models/index";
+import { Block } from "../models/";
 
 log.setLevel("info");
 
@@ -22,7 +22,8 @@ const userPath = app.getPath("userData");
  * @param event IpcMainEvent
  */
 const getScreenshot = (event: IpcMainEvent) => {
-    const screenshotPath = path.join(userPath, "blob_storage", `${uuidv1()}.png`);
+    const screenshotName = `${uuidv4()}.png`
+    const screenshotPath = path.join(userPath, "blob_storage", screenshotName);
     const determineScreenShotSize = () => {
         const screenSize = screen.getPrimaryDisplay().workAreaSize;
         const maxDimension = Math.max(screenSize.width, screenSize.height);
@@ -39,10 +40,21 @@ const getScreenshot = (event: IpcMainEvent) => {
 
         sources.forEach((source) => {
             if (source.name === "Entire Screen" || source.name === "Screen 1") {
-                fs.writeFile(screenshotPath, source.thumbnail.toPNG(), (err) => {
+                fs.writeFile(screenshotPath, source.thumbnail.toPNG(), async (err) => {
                     if (err) {
                         throw err;
                     } else {
+                        const block = await Block.create({
+                            id: Number(uuidv4()),
+                            title: screenshotName,
+                            type: "image",
+                            bookmark: false,
+                        });
+                        await block.createFile({
+                            id: Number(uuidv4()),
+                            name: screenshotName,
+                            path: screenshotPath,
+                        });
                         // event.reply("fullsnip", screenshotPath);
                         log.info("Screenshot has been saved successfully");
                     }

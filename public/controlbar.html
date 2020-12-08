@@ -20,12 +20,12 @@
     <script>
         // const { remote, ipcRenderer } = require('electron')
 
-        const homeButton = document.getElementById("homeButton")
-        const fullsnipButton = document.getElementById("fullsnipButton")
-        const dragsnipButton = document.getElementById("dragsnipButton")
-        const textButton = document.getElementById("textButton")
-        const audioButton = document.getElementById("audioButton")
-        const videoButton = document.getElementById("videoButton")
+        const homeButton = document.getElementById("homeButton");
+        const fullsnipButton = document.getElementById("fullsnipButton");
+        const dragsnipButton = document.getElementById("dragsnipButton");
+        const textButton = document.getElementById("textButton");
+        const audioButton = document.getElementById("audioButton");
+        const videoButton = document.getElementById("videoButton");
 
         // const currentWindow = remote.getCurrentWindow()
 
@@ -34,25 +34,25 @@
         // })
 
         fullsnipButton.addEventListener('click', () => {
-            console.log("fullsnip button clicked")
-            window.appRuntime.send("media-channel", "fullsnip")
-        })
+            console.log("fullsnip button clicked");
+            window.appRuntime.send("media-channel", "fullsnip");
+        });
 
         dragsnipButton.addEventListener('click', () => {
-            ipcRenderer.send("media-channel", "snipaste")
-        })
+            ipcRenderer.send("media-channel", "snipaste");
+        });
 
         textButton.addEventListener('click', () => {
-            ipcRenderer.send("media-channel", "text")
-        })
+            ipcRenderer.send("media-channel", "text");
+        });
 
         audioButton.addEventListener('click', () => {
-            ipcRenderer.send("media-channel", "audio")
-        })
+            ipcRenderer.send("media-channel", "audio");
+        });
 
         videoButton.addEventListener('click', () => {
-            ipcRenderer.send("media-channel", "video")
-        })
+            ipcRenderer.send("media-channel", "video");
+        });
     </script>
 </body>
 

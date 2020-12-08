@@ -29,7 +29,7 @@ class Folder extends Model<FolderAttributes> implements FolderAttributes {
     public readonly createdAt!: Date;
     public updatedAt!: Date;
 
-    public createCollections!: HasManyCreateAssociationMixin<Collection>;
+    public createCollection!: HasManyCreateAssociationMixin<Collection>;
     public addCollection!: HasManyAddAssociationsMixin<Collection, Collection["id"]>;
     public addCollections!: HasManyAddAssociationMixin<Collection, Collection["id"]>;
     public getCollections!: HasManyGetAssociationsMixin<Collection>;
@@ -37,8 +37,8 @@ class Folder extends Model<FolderAttributes> implements FolderAttributes {
     public hasCollection!: HasManyHasAssociationMixin<Collection, Collection["id"]>;
     public hasCollections!: HasManyHasAssociationsMixin<Collection, Collection["id"]>;
     public setCollections!: HasManySetAssociationsMixin<Collection, Collection["id"]>;
-    public RemoveCollection!: HasManyRemoveAssociationMixin<Collection, Collection["id"]>;
-    public RemoveCollections!: HasManyRemoveAssociationsMixin<Collection, Collection["id"]>;
+    public removeCollection!: HasManyRemoveAssociationMixin<Collection, Collection["id"]>;
+    public removeCollections!: HasManyRemoveAssociationsMixin<Collection, Collection["id"]>;
 
     public static associations: {
         collections: Association<Folder, Collection>;

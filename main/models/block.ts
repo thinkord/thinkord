@@ -26,6 +26,7 @@ interface BlockAttributes {
     type: string;
     description?: string;
     bookmark: boolean;
+    // collectionId: number; // Should add it later
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -36,6 +37,7 @@ class Block extends Model<BlockAttributes> implements BlockAttributes {
     public type!: string;
     public description!: string;
     public bookmark!: boolean;
+    // public collectionId!: number; // Should add it later
     public readonly createdAt!: Date;
     public updatedAt!: Date;
 
@@ -45,7 +47,7 @@ class Block extends Model<BlockAttributes> implements BlockAttributes {
     public setCollection!: BelongsToSetAssociationMixin<Collection, Collection["id"]>;
 
     // File mixin methods
-    public createFiles!: BelongsToManyCreateAssociationMixin<File>;
+    public createFile!: BelongsToManyCreateAssociationMixin<File>;
     public addFile!: BelongsToManyAddAssociationMixin<File, File["id"]>;
     public addFiles!: BelongsToManyAddAssociationsMixin<File, File["id"]>;
     public getFiles!: BelongsToManyGetAssociationsMixin<File>;
@@ -87,6 +89,11 @@ const initBlockModel = (sequelize: Sequelize) => {
                 allowNull: false,
                 defaultValue: false,
             },
+            // Should add it later
+            // collectionId: {
+            //     type: DataTypes.INTEGER,
+            //     allowNull: false,
+            // },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,
