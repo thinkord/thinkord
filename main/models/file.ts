@@ -1,6 +1,22 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
+import {
+    Sequelize,
+    Model,
+    DataTypes,
+    BelongsToManyCreateAssociationMixin,
+    BelongsToManyAddAssociationMixin,
+    BelongsToManyAddAssociationsMixin,
+    BelongsToManyGetAssociationsMixin,
+    BelongsToManyCountAssociationsMixin,
+    BelongsToManyHasAssociationMixin,
+    BelongsToManyHasAssociationsMixin,
+    BelongsToManySetAssociationsMixin,
+    BelongsToManyRemoveAssociationMixin,
+    BelongsToManyRemoveAssociationsMixin,
+    Association,
+} from "sequelize";
+import { Block } from "./block";
 
-export interface FileAttributes {
+interface FileAttributes {
     id: number;
     name: string;
     path: string;
@@ -8,45 +24,64 @@ export interface FileAttributes {
     updatedAt?: Date;
 }
 
-export interface FileModel extends Model<FileAttributes>, FileAttributes {
-    // At the moment, there's nothing more to add apart
-    // from the methods and attributes that the types
-    // `Model<FileAttributes>` and
-    // `FileAttributes` give us. We'll add more here when
-    //  we get on to adding associations.
+class File extends Model<FileAttributes> implements FileAttributes {
+    public id!: number;
+    public name!: string;
+    public path!: string;
+    public readonly createdAt!: Date;
+    public updatedAt!: Date;
+
+    public createBlocks!: BelongsToManyCreateAssociationMixin<Block>;
+    public addBlock!: BelongsToManyAddAssociationMixin<Block, Block["id"]>;
+    public addBlocks!: BelongsToManyAddAssociationsMixin<Block, Block["id"]>;
+    public getBlocks!: BelongsToManyGetAssociationsMixin<Block>;
+    public countBlocks!: BelongsToManyCountAssociationsMixin;
+    public hasBlock!: BelongsToManyHasAssociationMixin<Block, Block["id"]>;
+    public hasBlocks!: BelongsToManyHasAssociationsMixin<Block, Block["id"]>;
+    public setBlocks!: BelongsToManySetAssociationsMixin<Block, Block["id"]>;
+    public removeBlock!: BelongsToManyRemoveAssociationMixin<Block, Block["id"]>;
+    public removeBlocks!: BelongsToManyRemoveAssociationsMixin<Block, Block["id"]>;
+
+    public static associations: {
+        blocks: Association<File, Block>;
+    };
 }
 
-export class File extends Model<FileModel, FileAttributes> {}
-export type FileStatic = typeof Model & {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): FileModel;
+const initFileModel = (sequelize: Sequelize) => {
+    File.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            path: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+        },
+        {
+            sequelize,
+            modelName: "File",
+        }
+    );
+
+    return File;
 };
 
-export function createFileModel(sequelize: Sequelize): FileStatic {
-    return sequelize.define("File", {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        path: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-    }) as FileStatic;
-}
+export { File, initFileModel };

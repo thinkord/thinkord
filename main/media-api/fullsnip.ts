@@ -3,13 +3,13 @@ import * as fs from "fs";
 import * as path from "path";
 
 // Electron modules
-import { app, screen, desktopCapturer } from "electron";
+import { app, screen, desktopCapturer, IpcMainEvent } from "electron";
 
 // Third-party modules
 import { v1 as uuidv1, v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 
-// import { Block, File } from "../models/index";
+// import { Block } from "../models/index";
 
 log.setLevel("info");
 
@@ -21,8 +21,8 @@ const userPath = app.getPath("userData");
  * @function
  * @param event IpcMainEvent
  */
-const getScreenshot = (event) => {
-    let screenshotPath = path.join(userPath, "blob_storage", `${uuidv1()}.png`);
+const getScreenshot = (event: IpcMainEvent) => {
+    const screenshotPath = path.join(userPath, "blob_storage", `${uuidv1()}.png`);
     const determineScreenShotSize = () => {
         const screenSize = screen.getPrimaryDisplay().workAreaSize;
         const maxDimension = Math.max(screenSize.width, screenSize.height);
@@ -31,8 +31,8 @@ const getScreenshot = (event) => {
             height: maxDimension,
         };
     };
-    let thumbSize = determineScreenShotSize();
-    let options = { types: ["screen"], thumbnailSize: thumbSize };
+    const thumbSize = determineScreenShotSize();
+    const options = { types: ["screen"], thumbnailSize: thumbSize };
 
     desktopCapturer.getSources(options).then(async (sources) => {
         // if (error) return console.log(error);

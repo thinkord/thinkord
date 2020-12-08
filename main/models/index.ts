@@ -2,24 +2,24 @@ import { Sequelize } from "sequelize";
 import isDev from "electron-is-dev";
 
 import { config } from "../config/config";
-import { createUserModel } from "./user";
-import { createFolderModel } from "./folder";
-import { createCollectionModel } from "./collection";
-import { createBlockModel } from "./block";
-import { createFileModel } from "./file";
-import { createBlockFileModel } from "./blockfile";
+import { initUserModel } from "./user";
+import { initFolderModel } from "./folder";
+import { initCollectionModel } from "./collection";
+import { initBlockModel } from "./block";
+import { initFileModel } from "./file";
+import { initBlockFileModel } from "./blockfile";
 
 const sequelize: Sequelize = isDev ? new Sequelize(config["development"]) : new Sequelize(config["production"]);
 
 // Generate models
-const User = createUserModel(sequelize);
-const Folder = createFolderModel(sequelize);
-const Collection = createCollectionModel(sequelize);
-const Block = createBlockModel(sequelize);
-const File = createFileModel(sequelize);
-const BlockFile = createBlockFileModel(sequelize);
+const User = initUserModel(sequelize);
+const Folder = initFolderModel(sequelize);
+const Collection = initCollectionModel(sequelize);
+const Block = initBlockModel(sequelize);
+const File = initFileModel(sequelize);
+const BlockFile = initBlockFileModel(sequelize);
 
-// Define associations between models
+// Called association methods after initialization
 Folder.hasMany(Collection, { foreignKey: "folderId", as: "collections" });
 Collection.belongsTo(Folder, { foreignKey: "folderId", as: "folders" });
 Collection.hasMany(Block, { foreignKey: "collectionId", as: "blocks" });

@@ -1,4 +1,6 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
+import { Sequelize, Model, DataTypes } from "sequelize";
+import { Block } from "./block";
+import { File } from "./file";
 
 export interface BlockFileAttributes {
     blockId: number;
@@ -7,41 +9,44 @@ export interface BlockFileAttributes {
     updatedAt?: Date;
 }
 
-export interface BlockFileModel extends Model<BlockFileAttributes>, BlockFileAttributes {
-    // At the moment, there's nothing more to add apart
-    // from the methods and attributes that the types
-    // `Model<BlockFileAttributes>` and
-    // `BlockFileAttributes` give us. We'll add more here when
-    //  we get on to adding associations.
+class BlockFile extends Model<BlockFileAttributes> implements BlockFileAttributes {
+    public blockId!: number;
+    public fileId!: number;
+    public readonly createdAt!: Date;
+    public updatedAt!: Date;
 }
 
-export class BlockFile extends Model<BlockFileModel, BlockFileAttributes> {}
-export type BlockFileStatic = typeof Model & {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): BlockFileModel;
+const initBlockFileModel = (sequelize: Sequelize) => {
+    BlockFile.init(
+        {
+            blockId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                allowNull: false,
+            },
+            fileId: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                allowNull: false,
+            },
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+        },
+        {
+            sequelize,
+            modelName: "BlockFile",
+        }
+    );
+
+    return BlockFile;
 };
 
-export function createBlockFileModel(sequelize: Sequelize): BlockFileStatic {
-    return sequelize.define("BlockFile", {
-        blockId: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-        },
-        fildId: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-    }) as BlockFileStatic;
-}
+export { BlockFile, initBlockFileModel };

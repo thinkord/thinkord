@@ -1,47 +1,81 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
+import {
+    Sequelize,
+    Model,
+    DataTypes,
+    HasManyCreateAssociationMixin,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyGetAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManySetAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    Association,
+} from "sequelize";
+import { Collection } from "./collection";
 
-export interface FolderAttributes {
+interface FolderAttributes {
     id?: number;
     name: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
 
-export interface FolderModel extends Model<FolderAttributes>, FolderAttributes {
-    // At the moment, there's nothing more to add apart
-    // from the methods and attributes that the types
-    // `Model<FolderAttributes>` and
-    // `FolderAttributes` give us. We'll add more here when
-    //  we get on to adding associations.
+class Folder extends Model<FolderAttributes> implements FolderAttributes {
+    public id!: number;
+    public name!: string;
+    public readonly createdAt!: Date;
+    public updatedAt!: Date;
+
+    public createCollections!: HasManyCreateAssociationMixin<Collection>;
+    public addCollection!: HasManyAddAssociationsMixin<Collection, Collection["id"]>;
+    public addCollections!: HasManyAddAssociationMixin<Collection, Collection["id"]>;
+    public getCollections!: HasManyGetAssociationsMixin<Collection>;
+    public countCollections!: HasManyCountAssociationsMixin;
+    public hasCollection!: HasManyHasAssociationMixin<Collection, Collection["id"]>;
+    public hasCollections!: HasManyHasAssociationsMixin<Collection, Collection["id"]>;
+    public setCollections!: HasManySetAssociationsMixin<Collection, Collection["id"]>;
+    public RemoveCollection!: HasManyRemoveAssociationMixin<Collection, Collection["id"]>;
+    public RemoveCollections!: HasManyRemoveAssociationsMixin<Collection, Collection["id"]>;
+
+    public static associations: {
+        collections: Association<Folder, Collection>;
+    };
 }
 
-export class Folder extends Model<FolderModel, FolderAttributes> {}
-export type FolderStatic = typeof Model & {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): FolderModel;
+const initFolderModel = (sequelize: Sequelize) => {
+    Folder.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+        },
+        {
+            sequelize,
+            modelName: "Folder",
+        }
+    );
+
+    return Folder;
 };
 
-export function createFolderModel(sequelize: Sequelize): FolderStatic {
-    return sequelize.define("Folder", {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-    }) as FolderStatic;
-}
+export { Folder, initFolderModel };

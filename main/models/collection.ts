@@ -1,6 +1,26 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from "sequelize";
+import {
+    Sequelize,
+    Model,
+    DataTypes,
+    BelongsToCreateAssociationMixin,
+    BelongsToSetAssociationMixin,
+    BelongsToGetAssociationMixin,
+    HasManyCreateAssociationMixin,
+    HasManyAddAssociationMixin,
+    HasManyAddAssociationsMixin,
+    HasManyGetAssociationsMixin,
+    HasManyCountAssociationsMixin,
+    HasManyHasAssociationMixin,
+    HasManyHasAssociationsMixin,
+    HasManySetAssociationsMixin,
+    HasManyRemoveAssociationMixin,
+    HasManyRemoveAssociationsMixin,
+    Association,
+} from "sequelize";
+import { Folder } from "./folder";
+import { Block } from "./block";
 
-export interface CollectionAttributes {
+interface CollectionAttributes {
     id?: number;
     name: string;
     display?: boolean;
@@ -10,51 +30,79 @@ export interface CollectionAttributes {
     updatedAt?: Date;
 }
 
-export interface CollectionModel extends Model<CollectionAttributes>, CollectionAttributes {
-    // At the moment, there's nothing more to add apart
-    // from the methods and attributes that the types
-    // `Model<CollectionAttributes>` and
-    // `CollectionAttributes` give us. We'll add more here when
-    //  we get on to adding associations.
+class Collection extends Model<CollectionAttributes> implements CollectionAttributes {
+    public id!: number;
+    public name!: string;
+    public display!: boolean;
+    public bookmark!: boolean;
+    public folderId!: number;
+    public readonly createdAt!: Date;
+    public updatedAt!: Date;
+
+    // Folder mixin methods
+    public createFolder!: BelongsToCreateAssociationMixin<Folder>;
+    public getFolder!: BelongsToGetAssociationMixin<Folder>;
+    public setFolder!: BelongsToSetAssociationMixin<Folder, Folder["id"]>;
+
+    // Block mixin methods
+    public createBlocks!: HasManyCreateAssociationMixin<Block>;
+    public addBlock!: HasManyAddAssociationsMixin<Block, Block["id"]>;
+    public addBlocks!: HasManyAddAssociationMixin<Block, Block["id"]>;
+    public getBlocks!: HasManyGetAssociationsMixin<Block>;
+    public countBlocks!: HasManyCountAssociationsMixin;
+    public hasBlock!: HasManyHasAssociationMixin<Block, Block["id"]>;
+    public hasBlocks!: HasManyHasAssociationsMixin<Block, Block["id"]>;
+    public setBlocks!: HasManySetAssociationsMixin<Block, Block["id"]>;
+    public removeBlock!: HasManyRemoveAssociationMixin<Block, Block["id"]>;
+    public removeBlocks!: HasManyRemoveAssociationsMixin<Block, Block["id"]>;
+
+    public static associations: {
+        folders: Association<Collection, Folder>;
+        blocks: Association<Collection, Block>;
+    };
 }
 
-export class Collection extends Model<CollectionModel, CollectionAttributes> {}
-export type CollectionStatic = typeof Model & {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    new (values?: object, options?: BuildOptions): CollectionModel;
+const initCollectionModel = (sequelize: Sequelize) => {
+    Collection.init(
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            display: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: true,
+            },
+            bookmark: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
+                defaultValue: false,
+            },
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+            },
+        },
+        {
+            sequelize,
+            modelName: "Collection",
+        }
+    );
+
+    return Collection;
 };
 
-export function createCollectionModel(sequelize: Sequelize): CollectionStatic {
-    return sequelize.define("Collection", {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        display: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
-            defaultValue: true,
-        },
-        bookmark: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
-            defaultValue: false,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-        },
-    }) as CollectionStatic;
-}
+export { Collection, initCollectionModel };
