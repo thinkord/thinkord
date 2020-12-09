@@ -56,7 +56,7 @@ function App({ match }) {
                             <Link to="/">Back to Home</Link>
                             {getCollections(folder.cs) &&
                                 getCollections(folder.cs).map((collection) => {
-                                    return <NoteCard key={collection.id} id={collection.id} title={collection.name} />;
+                                    return <NoteCard key={collection.id} collection={collection} />;
                                 })}
                         </Container>
                     </main>

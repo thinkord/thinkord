@@ -20,22 +20,29 @@ class StoreProvider extends Component {
             folders: [],
             folderIds: [],
             collections: [],
+            recentUpdated: [],
         },
         changed: false,
     };
     // Load the user's content
     componentDidMount() {
-        appRuntime.send("home-channel", "getAllData", "");
+        appRuntime.send("home-channel", "getHomeData");
         appRuntime.subscribeOnce("loadData", (data) => {
-            this.loadData(JSON.parse(data));
+            const receiveData = {};
+            receiveData.folders = JSON.parse(data.data);
+            receiveData.orderCollections = JSON.parse(data.data2);
+            this.loadData(receiveData);
         });
     }
 
     componentDidUpdate() {
         if (this.state.changed) {
-            appRuntime.send("home-channel", "getAllData", "");
+            appRuntime.send("home-channel", "getHomeData", "");
             appRuntime.subscribeOnce("loadData", (data) => {
-                this.loadData(JSON.parse(data));
+                const receiveData = {};
+                receiveData.folders = JSON.parse(data.data);
+                receiveData.orderCollections = JSON.parse(data.data2);
+                this.loadData(receiveData);
                 this.setState({ changed: false });
             });
         }
@@ -46,8 +53,12 @@ class StoreProvider extends Component {
             folders: [],
             folderIds: [],
             collections: [],
+            recentUpdated: [],
         };
-        unprocessedData.map((folder) => {
+
+        /**Add Part */
+        const { folders, orderCollections } = unprocessedData;
+        folders.map((folder) => {
             initState.folderIds.push(folder.id);
             initState.folders.push(folder);
             folder.cs = [];
@@ -58,11 +69,29 @@ class StoreProvider extends Component {
                 return folder;
             });
         });
+        initState.recentUpdated = this.limitQueue(orderCollections);
         initState.collections = this.convertArrayToObject(initState.collections, "id");
         initState.folders = this.convertArrayToObject(initState.folders, "id");
-
         let data = initState;
         this.setState({ data });
+        /**Add Part */
+
+        // unprocessedData.map((folder) => {
+        //     initState.folderIds.push(folder.id);
+        //     initState.folders.push(folder);
+        //     folder.cs = [];
+        //     return folder.collections.map((collection) => {
+        //         folder["cs"].push(collection.id);
+        //         initState.collections.push(collection);
+        //         delete folder.collections;
+        //         return folder;
+        //     });
+        // });
+        // initState.collections = this.convertArrayToObject(initState.collections, "id");
+        // initState.folders = this.convertArrayToObject(initState.folders, "id");
+
+        // let data = initState;
+        // this.setState({ data });
     };
 
     /** Util */
@@ -76,6 +105,23 @@ class StoreProvider extends Component {
         }, initialValue);
     };
 
+    limitQueue = (collections) => {
+        let queue = [];
+        // If limitedQueue size exceeds 4, limitedQueue should remove the first item;
+        queue.push = function () {
+            if (this.length >= 8) {
+                this.shift();
+            }
+            return Array.prototype.push.apply(this, arguments);
+        };
+        collections.map((c) => {
+            queue.push(c);
+            return c;
+        });
+        return queue;
+    };
+
+    /** Operation */
     getFolder = (id) => {
         const { data } = this.state;
         return data.folders[id];
@@ -190,20 +236,9 @@ class StoreProvider extends Component {
      * @param {number} collectionId
      */
     updateCollectionTitle = (title, collectionId) => {
-        const { data } = this.state;
-        const collection = data.collections[collectionId];
-        collection.title = title;
-        const newState = {
-            ...data,
-            collections: {
-                ...data.collections,
-                [collectionId]: collection,
-            },
-        };
-
-        this.setState({
-            data: newState,
-        });
+        appRuntime.send("home-channel", "updateCollection", { title, collectionId });
+        appRuntime.subscribeOnce("updateData");
+        this.setState({ changed: true });
     };
 
     deleteCollection = (collectionId) => {
@@ -348,8 +383,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                    <h1>Loading</h1>
-                )}
+                        <h1>Loading</h1>
+                    )}
             </>
         );
     }
