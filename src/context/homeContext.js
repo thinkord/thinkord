@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { v4 as uuid } from "uuid";
-import appRuntime from "./appRuntime";
+import appRuntime from "../appRuntime";
 const StoreContext = React.createContext(null);
 const StoreUpdateContext = React.createContext(null);
 
@@ -75,23 +74,6 @@ class StoreProvider extends Component {
         let data = initState;
         this.setState({ data });
         /**Add Part */
-
-        // unprocessedData.map((folder) => {
-        //     initState.folderIds.push(folder.id);
-        //     initState.folders.push(folder);
-        //     folder.cs = [];
-        //     return folder.collections.map((collection) => {
-        //         folder["cs"].push(collection.id);
-        //         initState.collections.push(collection);
-        //         delete folder.collections;
-        //         return folder;
-        //     });
-        // });
-        // initState.collections = this.convertArrayToObject(initState.collections, "id");
-        // initState.folders = this.convertArrayToObject(initState.folders, "id");
-
-        // let data = initState;
-        // this.setState({ data });
     };
 
     /** Util */
@@ -150,37 +132,8 @@ class StoreProvider extends Component {
     /**
      *
      * @param {string} title
-     * @param {string} content
-     * @param {number} collectionId
-     */
-    addBlock = (title, content, collectionId) => {
-        const { data } = this.state;
-        const newBlockId = uuid();
-        const newBlock = {
-            id: newBlockId,
-            title,
-            content,
-        };
-        const collection = data.collections[collectionId];
-        collection.blocks = [...collection.blocks, newBlock];
-        const newState = {
-            ...data,
-            collections: {
-                ...data.collections,
-                [collectionId]: collection,
-            },
-        };
-        this.setState({
-            data: newState,
-        });
-    };
-
-    /**
-     *
-     * @param {string} title
      */
     addCollection = (title, id) => {
-        // const { data } = this.state;
         const folderId = parseInt(id);
         const newCollection = {
             title,
@@ -190,44 +143,6 @@ class StoreProvider extends Component {
         appRuntime.send("home-channel", "addCollection", newCollection);
         appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
-
-        // appRuntime.subscribeOnce("updateData", (d) => {
-        //     d = JSON.parse(d);
-        //     d.blocks = [];
-
-        //     const newState = {
-        //         ...data,
-        //         collections: {
-        //             ...data.collections,
-        //             [d.id]: d,
-        //         },
-        //     };
-
-        //     this.setState({
-        //         data: newState,
-        //     });
-        // });
-    };
-
-    /**
-     *
-     * @param {number} collectionId
-     * @param {number} index
-     */
-    deleteBlock = (collectionId, index) => {
-        const { data } = this.state;
-        const collection = data.collections[collectionId];
-        collection.blocks = [...collection.blocks.slice(0, index), ...collection.blocks.slice(index + 1)];
-        const newState = {
-            ...data,
-            collections: {
-                ...data.collections,
-                [collectionId]: collection,
-            },
-        };
-        this.setState({
-            data: newState,
-        });
     };
 
     /**
@@ -242,34 +157,9 @@ class StoreProvider extends Component {
     };
 
     deleteCollection = (collectionId) => {
-        // const { data } = this.state;
-        // let collections = { ...data.collections };
-        // let folders = { ...data.folders };
-
         appRuntime.send("home-channel", "deleteCollection", collectionId);
         appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
-        // Object.values(folders).map((folder) => {
-        //     if (folder.cs.includes(targetCId)) {
-        //         let index = folder.cs.indexOf(collectionId);
-        //         folder.cs.splice(index, 1);
-        //     }
-        //     return folders;
-        // });
-        // Object.keys(collections).map((cId) => {
-        //     if (parseInt(cId) === targetCId) {
-        //         delete collections[collectionId];
-        //     }
-        //     return collections;
-        // });
-        // const newState = {
-        //     ...data,
-        //     collections,
-        //     folders
-        // };
-        // this.setState({
-        //     data: newState,
-        // });
     };
 
     /**
@@ -300,7 +190,6 @@ class StoreProvider extends Component {
     };
 
     addFolder = (folderName) => {
-        // const { data } = this.state;
         const newFolder = {
             name: folderName,
             cs: [],
@@ -309,20 +198,6 @@ class StoreProvider extends Component {
         appRuntime.send("home-channel", "addFolder", newFolder);
         appRuntime.subscribeOnce("updateData", () => {
             this.setState({ changed: true });
-            // d = JSON.parse(d);
-            // d.cs = [];
-            // const newState = {
-            //     ...data,
-            //     folderIds: [...data.folderIds, d.id],
-            //     folders: {
-            //         ...data.folders,
-            //         [d.id]: d,
-            //     },
-            // };
-
-            // this.setState({
-            //     data: newState,
-            // });
         });
     };
 
@@ -366,8 +241,6 @@ class StoreProvider extends Component {
                     >
                         <StoreUpdateContext.Provider
                             value={{
-                                addBlock: this.addBlock,
-                                deleteBlock: this.deleteBlock,
                                 updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
                                 getFolder: this.getFolder,
@@ -383,13 +256,11 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                        <h1>Loading</h1>
-                    )}
+                    <h1>Loading</h1>
+                )}
             </>
         );
     }
 }
-
-// const StoreConsumer = StoreContext.Consumer
 
 export { StoreProvider, StoreUpdateContext, StoreContext };

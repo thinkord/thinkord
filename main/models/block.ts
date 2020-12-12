@@ -21,12 +21,12 @@ import { Collection } from "./collection";
 import { File } from "./file";
 
 interface BlockAttributes {
-    id: number;
+    id?: number;
     title: string;
     type: string;
     description?: string;
-    bookmark: boolean;
-    // collectionId: number; // Should add it later
+    bookmark?: boolean;
+    collectionId: number; // Should add it later
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -37,7 +37,7 @@ class Block extends Model<BlockAttributes> implements BlockAttributes {
     public type!: string;
     public description!: string;
     public bookmark!: boolean;
-    // public collectionId!: number; // Should add it later
+    public collectionId!: number; // Should add it later
     public readonly createdAt!: Date;
     public updatedAt!: Date;
 
@@ -90,10 +90,10 @@ const initBlockModel = (sequelize: Sequelize) => {
                 defaultValue: false,
             },
             // Should add it later
-            // collectionId: {
-            //     type: DataTypes.INTEGER,
-            //     allowNull: false,
-            // },
+            collectionId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useContext } from "react";
 import { NavLink, withRouter } from "react-router-dom";
-import { TabsContext } from "../../../../tabContext";
+import { TabsContext } from "../../../../context/tabContext";
 import classes from "./Tab.module.scss";
 import appRuntime from "../../../../appRuntime";
 const Tab = ({ location, history, cId, id, title }) => {

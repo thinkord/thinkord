@@ -44,17 +44,18 @@ const getScreenshot = (event: IpcMainEvent) => {
                     if (err) {
                         throw err;
                     } else {
-                        const block = await Block.create({
-                            id: Number(uuidv4()),
-                            title: screenshotName,
-                            type: "image",
-                            bookmark: false,
-                        });
-                        await block.createFile({
-                            id: Number(uuidv4()),
-                            name: screenshotName,
-                            path: screenshotPath,
-                        });
+                        /** should uncomment */
+                        // const block = await Block.create({
+                        //     id: Number(uuidv4()),
+                        //     title: screenshotName,
+                        //     type: "image",
+                        //     bookmark: false,
+                        // });
+                        // await block.createFile({
+                        //     id: Number(uuidv4()),
+                        //     name: screenshotName,
+                        //     path: screenshotPath,
+                        // });
                         // event.reply("fullsnip", screenshotPath);
                         log.info("Screenshot has been saved successfully");
                     }
