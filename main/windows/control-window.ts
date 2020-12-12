@@ -21,8 +21,8 @@ export class ControlWindow extends BaseWindow {
 
         ControlWindow.win.loadURL(
             isDev
-                ? "http://localhost:3000/controlbar.html"
-                : `file://${path.join(__dirname, "../build/controlbar.html")}`
+                ? "http://localhost:3000/#/controlbar"
+                : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
         );
 
         ControlWindow.win.once("ready-to-show", () => {
