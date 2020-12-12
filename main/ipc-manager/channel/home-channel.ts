@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
-import { Folder, Collection } from "../../models";
-// import { Block } from "../../models/block";
+import { Folder, Collection, Block } from "../../models";
 
 export class HomeChannel extends BaseChannel {
     public handleRequest(): void {
         ipcMain.on(this.channelName!, async (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "addFolder":
+                case "addBlock":
                 case "addCollection":
                 case "orderCollection":
                 case "updateCollection":
                 case "deleteCollection":
+                case "deleteBlock":
                 case "getHomeData":
+                case "getCollection":
                     this[command](event, args);
                     break;
                 default:
@@ -37,14 +39,15 @@ export class HomeChannel extends BaseChannel {
         event.reply("loadData", { data, data2 });
     }
 
-    // private async getCollection(event: IpcMainEvent, args: any): Promise<void> {
-    //     const query = await Collection.findOne({
-    //         where: { id: args.id },
-    //         include: [{ model: Block, as: "blocks" }],
-    //     });
-    //     const data = JSON.stringify(query, null, 2)
-    //     event.reply("loadData", data);
-    // }
+    private async getCollection(event: IpcMainEvent, args: any): Promise<void> {
+        const query = await Collection.findOne({
+            where: { id: args.id },
+            include: [Collection.associations.blocks],
+        });
+
+        const data = JSON.stringify(query, null, 2);
+        event.reply("loadData", data);
+    }
 
     // private async getAllData(event: IpcMainEvent, args: any): Promise<void> {
     //     const query = await Folder.findAll({
@@ -54,21 +57,33 @@ export class HomeChannel extends BaseChannel {
     //     return data;
     // }
 
-    private async addFolder(event: IpcMainInvokeEvent, args: any): Promise<string> {
+    private async addFolder(event: IpcMainEvent, args: any): Promise<string> {
         const name = args.name.toString();
         const query = await Folder.create({ name });
         const data = JSON.stringify(query, null, 2);
         return data;
     }
 
-    private async addCollection(event: IpcMainInvokeEvent, args: any): Promise<string> {
+    private async addCollection(event: IpcMainEvent, args: any): Promise<string> {
         const query = await Collection.create({ name: args.title.toString(), folderId: args.folderId });
         const data = JSON.stringify(query, null, 2);
         return data;
     }
 
-    private async deleteCollection(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        Collection.destroy({
+    private async addBlock(event: IpcMainEvent, args: any): Promise<void> {
+        const { title, type, description, collectionId } = args;
+        const data = await Block.create({ title, type, description, collectionId });
+        event.reply("updateData", JSON.stringify(data, null, 2));
+    }
+
+    private async deleteBlock(event: IpcMainEvent, args: any): Promise<void> {
+        const { blockId } = args;
+        await Block.destroy({ where: { id: blockId } });
+        event.reply("updateData");
+    }
+
+    async deleteCollection(event: IpcMainEvent, args: any): Promise<void> {
+        await Collection.destroy({
             where: {
                 id: args,
             },

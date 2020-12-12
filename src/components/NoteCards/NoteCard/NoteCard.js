@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { TabsContext } from "../../../tabContext";
+import { TabsContext } from "../../../context/tabContext";
 import appRuntime from "../../../appRuntime";
 import "./NoteCard.scss";
 

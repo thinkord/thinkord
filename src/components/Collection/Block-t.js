@@ -5,8 +5,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { BlockTitle } from "./Title";
-// import storeAPI from '../../data/storeAPI';
-import { StoreUpdateContext } from "../../context";
+import { BlockUpdateContext } from "../../context/blockContext";
 
 const useStyles = makeStyles((theme) => ({
     block: {
@@ -17,16 +16,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Block({ block, index, collectionId }) {
     const classes = useStyles();
-    const { deleteBlock } = useContext(StoreUpdateContext);
-
+    const { deleteBlock } = useContext(BlockUpdateContext);
     const handleBlockChange = () => {
-        deleteBlock(collectionId, index);
+        deleteBlock(collectionId, block.id);
     };
 
     return (
         <div className={classes.block}>
             <BlockTitle title={block.title} collectionId={collectionId} index={index} />
-            <Paper elevation={0}>{block.content}</Paper>
+            <Paper elevation={0}>{block.description}</Paper>
             <MoreHorizIcon onClick={handleBlockChange} />
         </div>
     );

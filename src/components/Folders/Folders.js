@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { StoreUpdateContext } from "../../context";
+import { StoreUpdateContext } from "../../context/homeContext";
 import appRuntime from "../../appRuntime";
 import "./Folders.scss";
 export default function Folders({ data }) {

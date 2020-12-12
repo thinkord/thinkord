@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/prop-types */
 import React, { useContext } from "react";
-import { StoreUpdateContext } from "../context";
+import { StoreUpdateContext } from "../context/homeContext";
 import Collection from "../components/Collection/Collection";
 import InsertToolBar from "../components/InsertToolBar/InsertToolBar";
 

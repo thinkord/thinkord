@@ -37,18 +37,17 @@ export class MediaChannel extends BaseChannel {
     // }
 
     private async createBlockAndFile(name: string, path: string, type: string): Promise<void> {
-        const block = await Block.create({
-            id: Number(uuidv4()),
-            title: name,
-            type: type,
-            bookmark: false,
-        });
-
-        await block.createFile({
-            id: Number(uuidv4()),
-            name: name,
-            path: path,
-        });
+        // const block = await Block.create({
+        //     id: Number(uuidv4()),
+        //     title: name,
+        //     type: type,
+        //     bookmark: false,
+        // });
+        // await block.createFile({
+        //     id: Number(uuidv4()),
+        //     name: name,
+        //     path: path,
+        // });
     }
 
     private async saveImage(event: IpcMainInvokeEvent, args: any): Promise<void> {

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
-import { StoreUpdateContext } from "../../../context";
+import { StoreUpdateContext } from "../../../context/homeContext";
 
 export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import appRuntime from "./appRuntime";
+import appRuntime from "../appRuntime";
 
 export const TabsContext = React.createContext({
     tabs: [],

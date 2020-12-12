@@ -4,7 +4,7 @@
 import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { InputBase, Typography } from "@material-ui/core";
-import { StoreContext } from "../../context";
+import { StoreContext } from "../../context/homeContext";
 
 /**
  * If you don't know hoc, check this out:

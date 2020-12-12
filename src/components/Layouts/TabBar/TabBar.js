@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Tab from "./Tab/Tab";
 import { NavLink } from "react-router-dom";
-import { TabsContext } from "../../../tabContext";
+import { TabsContext } from "../../../context/tabContext";
 import classes from "./TabBar.module.scss";
 import appRuntime from "../../../appRuntime";
 

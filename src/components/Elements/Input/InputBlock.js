@@ -4,7 +4,7 @@ import React, { useState, useContext } from "react";
 import { Paper, InputBase, Button, IconButton } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import { fade, makeStyles } from "@material-ui/core";
-import { StoreUpdateContext } from "../../../context";
+import { StoreUpdateContext } from "../../../context/homeContext";
 import appRuntime from "../../../appRuntime";
 
 const useStyle = makeStyles((theme) => ({

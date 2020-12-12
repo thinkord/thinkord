@@ -16,6 +16,7 @@ import {
     HasManyRemoveAssociationMixin,
     HasManyRemoveAssociationsMixin,
     Association,
+    Optional,
 } from "sequelize";
 import { Folder } from "./folder";
 import { Block } from "./block";
@@ -29,7 +30,6 @@ interface CollectionAttributes {
     createdAt?: Date;
     updatedAt?: Date;
 }
-
 class Collection extends Model<CollectionAttributes> implements CollectionAttributes {
     public id!: number;
     public name!: string;
