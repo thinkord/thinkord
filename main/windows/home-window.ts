@@ -13,7 +13,7 @@ export class HomeWindow extends BaseWindow {
             width: 800,
             height: 600,
             webPreferences: {
-                // enableRemoteModule: true,
+                enableRemoteModule: true,
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
             },

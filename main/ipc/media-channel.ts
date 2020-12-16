@@ -1,7 +1,7 @@
 import { ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
 import { IIpcChannel } from "./i-ipc-channel";
-import { getScreenshot } from "../media-api/fullsnip";
+// import { getScreenshot } from "../media-api/fullsnip";
 
 export class MediaChannel implements IIpcChannel {
     channelName;
@@ -21,6 +21,6 @@ export class MediaChannel implements IIpcChannel {
     }
 
     fullsnip(event: IpcMainEvent) {
-        getScreenshot(event);
+        // getScreenshot(event);
     }
 }

@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow } from "electron";
 import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import path from "path";
@@ -14,6 +14,7 @@ export class ControlWindow extends BaseWindow {
             width: 400,
             height: 100,
             webPreferences: {
+                enableRemoteModule: true,
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
             },
@@ -21,8 +22,8 @@ export class ControlWindow extends BaseWindow {
 
         ControlWindow.win.loadURL(
             isDev
-                ? "http://localhost:3000/controlbar.html"
-                : `file://${path.join(__dirname, "../build/controlbar.html")}`
+                ? "http://localhost:3000/#/controlbar"
+                : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
         );
 
         ControlWindow.win.once("ready-to-show", () => {

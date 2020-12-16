@@ -1,4 +1,5 @@
 import { BaseChannel } from "../channel/base-channel";
+import { SystemChannel } from "../channel/system-channel";
 import { HomeChannel } from "../channel/home-channel";
 import { WindowChannel } from "../channel/window-channel";
 import { MediaChannel } from "../channel/media-channel";
@@ -28,6 +29,8 @@ export class UsageChannel {
     setControlFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
+            this.factory.setIPC(new SystemChannel("system-channel"));
+            t.push(this.factory.getIPC());
             this.factory.setIPC(new TestChannel("test-channel"));
             t.push(this.factory.getIPC());
         }

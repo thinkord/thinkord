@@ -1,7 +1,10 @@
 import { ipcMain, IpcMainEvent } from "electron";
+import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
-import { getScreenshot } from "../../media-api/fullsnip";
+import { Block } from "../../models";
+
+log.setLevel("info");
 
 export class MediaChannel extends BaseChannel {
     // public deleteRequest(channelName: string): void {
@@ -11,7 +14,14 @@ export class MediaChannel extends BaseChannel {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "fullsnip":
-                    this[command](event);
+                    this[command](event, args);
+                    break;
+                case "dragsnip":
+                    break;
+                case "handleVideo":
+                    log.info(args);
+                    const status = args.status;
+                    this[command](event, status);
                     break;
                 default:
                     log.warn("There is no command in thic channel");
@@ -26,8 +36,23 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    /** Start operation */
-    private fullsnip(event: IpcMainEvent): void {
-        getScreenshot(event);
+    private async fullsnip(event: IpcMainEvent, args: any): Promise<void> {
+        const block = await Block.create({
+            id: Number(uuidv4()),
+            title: args.name,
+            type: "image",
+            bookmark: false,
+        });
+
+        await block.createFile({
+            id: Number(uuidv4()),
+            name: args.name,
+            path: args.path,
+        });
+    }
+
+    private handleVideo(event: IpcMainEvent, status: boolean): void {
+        // if (status === false) VideoRecorder.start();
+        // else if (status === true) VideoRecorder.stop();
     }
 }
