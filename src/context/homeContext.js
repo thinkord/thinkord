@@ -5,14 +5,6 @@ import appRuntime from "../appRuntime";
 const StoreContext = React.createContext(null);
 const StoreUpdateContext = React.createContext(null);
 
-/*
- * [Please notice]
- * update data without mutating state: "using spread operator"
- * if you don't follow this rule, TimLo will kill it!
- * if you don't know spread operator: check this out
- * https://codeburst.io/javascript-the-spread-operator-a867a71668ca
- */
-
 class StoreProvider extends Component {
     state = {
         data: {
@@ -80,7 +72,6 @@ class StoreProvider extends Component {
         initState.folders = this.convertArrayToObject(initState.folders, "id");
         let data = initState;
         this.setState({ data });
-        /**Add Part */
     };
 
     /** Util */

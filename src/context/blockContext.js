@@ -34,12 +34,12 @@ class BlockProvider extends Component {
         }
     }
 
-    addBlock = (title, type, description, collectionId) => {
+    addBlock = (title, type, description, id) => {
         const newBlock = {
             title,
             type,
             description,
-            collectionId,
+            id,
         };
 
         appRuntime.send("home-channel", "addBlock", newBlock);
@@ -56,7 +56,7 @@ class BlockProvider extends Component {
         appRuntime.send("home-channel", "deleteBlock", block);
         appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
-    }
+    };
 
     render() {
         return (

@@ -4,13 +4,14 @@ import { BaseChannel } from "./base-channel";
 import { ControlWindow } from "../../windows/control-window";
 import { MaskWindow } from "../../windows/mask-window";
 
+import { IpcRequest } from "../../shared/IpcRequest";
 interface BrowserWindows {
     [key: string]: ControlWindow | MaskWindow | undefined;
 }
 
 export class WindowChannel extends BaseChannel {
     wins: BrowserWindows;
-    // controlWindow: ControlWindow | undefined;
+
     constructor(props: any) {
         super(props);
         this.wins = {};
@@ -20,8 +21,6 @@ export class WindowChannel extends BaseChannel {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "create":
-                    this[command](event, args);
-                    break;
                 case "close":
                     this[command](event, args);
                     break;
@@ -48,6 +47,8 @@ export class WindowChannel extends BaseChannel {
                 this.wins.controlWindow = new ControlWindow();
                 this.wins.controlWindow.createWindow();
                 this.wins.controlWindow.register();
+            } else {
+                // this.wins.controlWindow.sendMessage(args.id);
             }
         } else if (args.win === "maskWin") {
             if (!this.wins.maskWindow) {
