@@ -21,7 +21,7 @@ const TabBar = () => {
                 <i className="fas fa-home"></i>
             </NavLink>
             {tabsList.map((tab) => {
-                return <Tab key={tab.id} id={tab.id} cId={tab.collectionId} title={tab.title} />;
+                return <Tab key={tab.id} tabId={tab.id} id={tab.collectionId} title={tab.title} />;
             })}
         </div>
     );

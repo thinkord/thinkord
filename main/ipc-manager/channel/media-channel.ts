@@ -4,11 +4,8 @@ import { BaseChannel } from "./base-channel";
 import { getScreenshot } from "../../media-api/fullsnip";
 
 export class MediaChannel extends BaseChannel {
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
     public handleRequest(): void {
-        ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+        ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string) => {
             switch (command) {
                 case "fullsnip":
                     this[command](event);

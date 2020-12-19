@@ -30,7 +30,7 @@ function NoteCard({ collection }) {
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
         tabAdd(name, id);
-        appRuntime.send("window-channel", "create");
+        appRuntime.send("window-channel", "create", { id });
     };
 
     // const handleBookmarkChanged = (noteId) => {

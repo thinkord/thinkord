@@ -5,7 +5,7 @@ import { NavLink, withRouter } from "react-router-dom";
 import { TabsContext } from "../../../../context/tabContext";
 import classes from "./Tab.module.scss";
 import appRuntime from "../../../../appRuntime";
-const Tab = ({ location, history, cId, id, title }) => {
+const Tab = ({ location, history, id, tabId, title }) => {
     const closeTab = useContext(TabsContext).closeTab;
     const [closed, setClosed] = useState(false);
     const handleTabClosed = (e) => {
@@ -15,8 +15,8 @@ const Tab = ({ location, history, cId, id, title }) => {
 
     useEffect(() => {
         if (closed === true) {
-            closeTab(id);
-            if (location.pathname === "/work/" + cId) {
+            closeTab(tabId);
+            if (location.pathname === "/work/" + id) {
                 history.replace("/");
             }
         }
@@ -24,11 +24,12 @@ const Tab = ({ location, history, cId, id, title }) => {
 
     return (
         <NavLink
-            to={`/work/${cId}`}
+            to={`/work/${id}`}
             className={classes.Tab}
             activeClassName={classes.active}
             onClick={() => {
-                appRuntime.send("window-channel", "create");
+                console.log(id);
+                appRuntime.send("window-channel", "create", { id });
             }}
         >
             <div className={classes.TabTitle}>
