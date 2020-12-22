@@ -27,7 +27,10 @@ const takeScreenshot = (userPath, thumbSize) => {
                     if (err) {
                         throw err;
                     } else {
-                        ipcRenderer.send("media-channel", "fullsnip", { name: screenshotName, path: screenshotPath });
+                        ipcRenderer.send("media-channel", "saveFullsnip", {
+                            name: screenshotName,
+                            path: screenshotPath,
+                        });
                         log.info("Screenshot has been saved successfully");
                     }
                 });

@@ -13,15 +13,13 @@ export class MediaChannel extends BaseChannel {
     public handleRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
-                case "fullsnip":
+                case "saveFullsnip":
                     this[command](event, args);
                     break;
                 case "dragsnip":
                     break;
-                case "handleVideo":
-                    log.info(args);
-                    const status = args.status;
-                    this[command](event, status);
+                case "saveVideo":
+                    this[command](event, args);
                     break;
                 default:
                     log.warn("There is no command in thic channel");
@@ -36,7 +34,7 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private async fullsnip(event: IpcMainEvent, args: any): Promise<void> {
+    private async saveFullsnip(event: IpcMainEvent, args: any): Promise<void> {
         const block = await Block.create({
             id: Number(uuidv4()),
             title: args.name,
@@ -51,8 +49,18 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private handleVideo(event: IpcMainEvent, status: boolean): void {
-        // if (status === false) VideoRecorder.start();
-        // else if (status === true) VideoRecorder.stop();
+    private async saveVideo(event: IpcMainEvent, args: any): Promise<void> {
+        const block = await Block.create({
+            id: Number(uuidv4()),
+            title: args.name,
+            type: "video",
+            bookmark: false,
+        });
+
+        await block.createFile({
+            id: Number(uuidv4()),
+            name: args.name,
+            path: args.path,
+        });
     }
 }

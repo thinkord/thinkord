@@ -1,24 +1,31 @@
 import React, { useState } from "react";
 import appRuntime from "../appRuntime";
-// import { VideoRecorder } from "../media-api/video-recorder";
 
 export default function ControlBar() {
-    // const [videoState, setVideoState] = useState(false);
+    const [videoState, setVideoState] = useState(false);
 
     const handleFullsnip = () => {
         // Refactor later
         appRuntime.send("system-channel", "getUserPath");
-        appRuntime.subscribeOnce("system-channel", (userPath) => {
+        appRuntime.subscribeOnce("system-channel", (path) => {
             appRuntime.send("system-channel", "getScreenshotSize");
             appRuntime.subscribeOnce("system-channel", (screenshotSize) => {
-                appRuntime.fullsnip(userPath, screenshotSize);
+                appRuntime.handleFullsnip(path, screenshotSize);
             });
         });
     };
 
-    // const handleVideo = () => {
-    //     setVideoState((prevState) => !prevState);
-    // };
+    const handleVideo = () => {
+        if (videoState === false) {
+            appRuntime.handleVideo(videoState);
+        } else {
+            appRuntime.send("system-channel", "getUserPath");
+            appRuntime.subscribeOnce("system-channel", (path) => {
+                appRuntime.handleVideo(videoState, path);
+            });
+        }
+        setVideoState((prevState) => !prevState);
+    };
 
     return (
         <div>
@@ -33,7 +40,14 @@ export default function ControlBar() {
                 fullsnip
             </button>
             <button id="audioButton">audio</button>
-            <button id="videoButton">video</button>
+            <button
+                id="videoButton"
+                onClick={() => {
+                    handleVideo();
+                }}
+            >
+                video
+            </button>
             <button id="homeButton">home</button>
         </div>
     );

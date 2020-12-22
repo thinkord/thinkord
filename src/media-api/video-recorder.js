@@ -1,86 +1,101 @@
-// // Nodejs modules
-// import * as fs from "fs";
-// import * as path from "path";
+/* eslint-disable @typescript-eslint/no-var-requires */
+const fs = require("fs");
+const path = require("path");
 
-// // Electron modules
-// import { desktopCapturer } from "electron";
+const { desktopCapturer, ipcRenderer } = require("electron");
 
-// // Third party modules
-// import { v4 as uuidv4 } from "uuid";
-// import log from "loglevel";
+const { v4: uuidv4 } = require("uuid");
+const log = require("loglevel");
 
-// import appRuntime from "../appRuntime";
+log.setLevel("info");
 
-// const userPath = app.getPath("userData");
+class VideoRecorder {
+    mediaRecorder;
+    videoChunks;
 
-// log.setLevel("info");
+    init() {
+        this.mediaRecorder = undefined;
+        this.videoChunks = [];
+    }
 
-// class VideoRecorder {
-//     static videoRecorder;
-//     static videoChunks;
+    /**
+     * Start recording video
+     */
+    async start() {
+        this.init();
+        const handleStream = (stream) => {
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.ondataavailable = (event) => {
+                this.videoChunks = [];
+                this.videoChunks.push(event.data);
+            };
+            this.mediaRecorder.start();
+            log.info("Start video recording");
+        };
 
-//     async init() {
-//         const sources = await desktopCapturer.getSources({ types: ["window", "screen"] });
-//         this.videoRecorder = undefined;
-//         this.videoChunks = [];
-//         return sources;
-//     }
+        const handleError = (err) => {
+            log.error(err);
+        };
 
-//     async start() {
-//         const handleStream = (stream) => {
-//             this.videoRecorder = new MediaRecorder(stream);
-//             this.videoRecorder.ondataavailable = (event) => {
-//                 this.videoChunks = [];
-//                 this.videoChunks.push(event.data);
-//             };
-//             log.info(stream);
-//             log.info("Start video recording");
-//         };
+        const sources = await desktopCapturer.getSources({ types: ["screen"] });
+        sources.forEach(async (source) => {
+            log.info(source);
+            if (source.name === "Entire Screen" || source.name === "Screen 1") {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                            },
+                        },
+                        video: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                            },
+                        },
+                    });
+                    handleStream(stream);
+                } catch (err) {
+                    handleError(err);
+                }
+            }
+        });
+    }
 
-//         const handleError = (err) => {
-//             log.error(err);
-//         };
+    /**
+     * Stop recording video
+     */
+    stop(userPath) {
+        this.mediaRecorder.onstop = () => {
+            log.info("saving video file as mp4");
+            const recName = `${uuidv4()}.mp4`;
+            const recPath = path.join(userPath, "blob_storage", recName);
+            const reader = new FileReader();
+            const videoBlob = new Blob(this.videoChunks, { type: "video/mp4" });
+            reader.readAsArrayBuffer(videoBlob);
+            reader.onload = () => {
+                if (reader.readyState == 2 && reader.result) {
+                    const videoBuffer = Buffer.from(reader.result);
+                    fs.writeFile(recPath, videoBuffer, (err) => {
+                        if (err) {
+                            log.error(err);
+                        } else {
+                            log.info("Your video file has been saved");
+                            ipcRenderer.send("media-channel", "saveVideo", { name: recName, path: recPath });
+                        }
+                    });
+                } else log.error("FileReader has problems reading blob");
+            };
+        };
+        try {
+            this.mediaRecorder.stop();
+            log.info("stop video recording");
+        } catch (err) {
+            log.error(err);
+        }
 
-//         const sources = await this.init();
-//         sources.forEach(async (source) => {
-//             if (source.name === "Entire Screen") {
-//                 try {
-//                     const stream = await navigator.mediaDevices.getUserMedia({
-//                         audio: true,
-//                         video: true,
-//                     });
-//                     handleStream(stream);
-//                 } catch (err) {
-//                     handleError(err);
-//                 }
-//             }
-//         });
-//     }
+        this.mediaRecorder = undefined;
+    }
+}
 
-//     /**
-//      * Stop recording video
-//      */
-//     stop() {
-//         this.videoRecorder.stop();
-//         this.videoRecorder.onstop = () => {
-//             const recPath = path.join(userPath, `${uuidv4()}.mp4`);
-//             const reader = new FileReader();
-//             const videoBlob = new Blob(this.videoChunks, { type: "video/mp4" });
-//             reader.readAsArrayBuffer(videoBlob);
-//             reader.onload = () => {
-//                 if (reader.readyState == 2 && reader.result) {
-//                     const videoBuffer = Buffer.from(reader.result);
-//                     fs.writeFile(recPath, videoBuffer, (err) => {
-//                         if (err) {
-//                             log.error(err);
-//                         } else {
-//                             log.info("Your video file has been saved");
-//                         }
-//                     });
-//                 } else log.error("FileReader has problems reading blob")
-//             };
-//         };
-//     }
-// }
-
-// module.exports = { VideoRecorder };
+module.exports.VideoRecorder = VideoRecorder;
