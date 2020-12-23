@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import appRuntime from "../appRuntime";
 
 export default function ControlBar() {
+    const [audioState, setAudioState] = useState(false);
     const [videoState, setVideoState] = useState(false);
 
     const handleFullsnip = () => {
@@ -13,6 +14,18 @@ export default function ControlBar() {
                 appRuntime.handleFullsnip(path, screenshotSize);
             });
         });
+    };
+
+    const handleAudio = () => {
+        if (audioState === false) {
+            appRuntime.handleAudio(audioState);
+        } else {
+            appRuntime.send("system-channel", "getUserPath");
+            appRuntime.subscribeOnce("system-channel", (path) => {
+                appRuntime.handleAudio(audioState, path);
+            });
+        }
+        setAudioState((prevState) => !prevState);
     };
 
     const handleVideo = () => {
@@ -30,7 +43,6 @@ export default function ControlBar() {
     return (
         <div>
             <button id="textButton">text</button>
-            <button id="dragsnipButton">dragsnip</button>
             <button
                 id="fullsnipButton"
                 onClick={() => {
@@ -39,7 +51,15 @@ export default function ControlBar() {
             >
                 fullsnip
             </button>
-            <button id="audioButton">audio</button>
+            <button id="dragsnipButton">dragsnip</button>
+            <button
+                id="audioButton"
+                onClick={() => {
+                    handleAudio();
+                }}
+            >
+                audio
+            </button>
             <button
                 id="videoButton"
                 onClick={() => {

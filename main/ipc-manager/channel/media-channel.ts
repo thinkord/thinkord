@@ -18,6 +18,9 @@ export class MediaChannel extends BaseChannel {
                     break;
                 case "dragsnip":
                     break;
+                case "saveAudio":
+                    this[command](event, args);
+                    break;
                 case "saveVideo":
                     this[command](event, args);
                     break;
@@ -34,33 +37,30 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private async saveFullsnip(event: IpcMainEvent, args: any): Promise<void> {
+    private async createBlockAndFile(name: string, path: string, type: string): Promise<void> {
         const block = await Block.create({
             id: Number(uuidv4()),
-            title: args.name,
-            type: "image",
+            title: name,
+            type: type,
             bookmark: false,
         });
 
         await block.createFile({
             id: Number(uuidv4()),
-            name: args.name,
-            path: args.path,
+            name: name,
+            path: path,
         });
     }
 
-    private async saveVideo(event: IpcMainEvent, args: any): Promise<void> {
-        const block = await Block.create({
-            id: Number(uuidv4()),
-            title: args.name,
-            type: "video",
-            bookmark: false,
-        });
+    private async saveFullsnip(event: IpcMainEvent, args: any): Promise<void> {
+        this.createBlockAndFile(args.name, args.path, "image");
+    }
 
-        await block.createFile({
-            id: Number(uuidv4()),
-            name: args.name,
-            path: args.path,
-        });
+    private async saveAudio(event: IpcMainEvent, args: any): Promise<void> {
+        this.createBlockAndFile(args.name, args.path, "audio");
+    }
+
+    private async saveVideo(event: IpcMainEvent, args: any): Promise<void> {
+        this.createBlockAndFile(args.name, args.path, "video");
     }
 }

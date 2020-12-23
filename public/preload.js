@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { contextBridge, ipcRenderer } = require("electron");
 const { takeScreenshot } = require("../src/media-api/fullsnip");
+const { AudioRecorder } = require("../src/media-api/audio-recorder");
 const { VideoRecorder } = require("../src/media-api/video-recorder");
 
+const audioRecorder = new AudioRecorder();
 const videoRecorder = new VideoRecorder();
 
 contextBridge.exposeInMainWorld("appRuntime", {
@@ -23,6 +25,13 @@ contextBridge.exposeInMainWorld("appRuntime", {
     },
     handleFullsnip: (userPath, thumbSize) => {
         takeScreenshot(userPath, thumbSize);
+    },
+    handleAudio: (audioState, userPath) => {
+        if (audioState === false) {
+            audioRecorder.start();
+        } else {
+            audioRecorder.stop(userPath);
+        }
     },
     handleVideo: (videoState, userPath) => {
         if (videoState === false) {

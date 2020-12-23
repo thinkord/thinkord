@@ -20,14 +20,17 @@ class VideoRecorder {
 
     /**
      * Start recording video
+     * @method
      */
     async start() {
         this.init();
         const handleStream = (stream) => {
             this.mediaRecorder = new MediaRecorder(stream);
             this.mediaRecorder.ondataavailable = (event) => {
-                this.videoChunks = [];
-                this.videoChunks.push(event.data);
+                if (event.data.size > 0) {
+                    this.videoChunks = [];
+                    this.videoChunks.push(event.data);
+                }
             };
             this.mediaRecorder.start();
             log.info("Start video recording");
@@ -39,7 +42,6 @@ class VideoRecorder {
 
         const sources = await desktopCapturer.getSources({ types: ["screen"] });
         sources.forEach(async (source) => {
-            log.info(source);
             if (source.name === "Entire Screen" || source.name === "Screen 1") {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({
@@ -64,6 +66,8 @@ class VideoRecorder {
 
     /**
      * Stop recording video
+     * @method
+     * @param {string} userPath
      */
     stop(userPath) {
         this.mediaRecorder.onstop = () => {
