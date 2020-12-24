@@ -43,7 +43,7 @@ export class HomeChannel extends BaseChannel {
     /** Start operation */
     private async getHomeData(event: IpcMainEvent): Promise<void> {
         const query1 = await Folder.findAll({
-            include: [Folder.associations.collections],
+            include: { all: true, nested: true },
         });
         const query2 = await Collection.findAll({ order: [["updatedAt", "ASC"]] });
         const data = JSON.stringify(query1, null, 2);
