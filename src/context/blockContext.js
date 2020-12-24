@@ -10,7 +10,8 @@ class BlockProvider extends Component {
         changed: false,
     };
     componentDidMount() {
-        appRuntime.send("home-channel", "getCollection", this.props.children.props.collection);
+        // appRuntime.send("home-channel", "getCollection", this.props.children.props.collection);
+        appRuntime.send("home-channel", "getBlocks", { id: this.props.cId });
         appRuntime.subscribeOnce("loadData", (data) => {
             this.setState({
                 collectionInfo: JSON.parse(data),
@@ -18,13 +19,14 @@ class BlockProvider extends Component {
         });
     }
     componentDidUpdate(prevProps) {
-        if (prevProps.children.props.collection !== this.props.children.props.collection) {
-            this.setState({
-                collectionInfo: this.props.children.props.collection,
-            });
-        }
+        // if (prevProps.children.props.collection !== this.props.children.props.collection) {
+        //     this.setState({
+        //         collectionInfo: this.props.children.props.collection,
+        //     });
+        // }
         if (this.state.changed) {
-            appRuntime.send("home-channel", "getCollection", this.props.children.props.collection);
+            // appRuntime.send("home-channel", "getCollection", this.props.children.props.collection);
+            appRuntime.send("home-channel", "getBlocks", { id: this.props.cId });
             appRuntime.subscribeOnce("loadData", (data) => {
                 this.setState({
                     collectionInfo: JSON.parse(data),

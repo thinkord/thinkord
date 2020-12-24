@@ -1,12 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ipcMain, IpcMainEvent } from "electron";
+import { IpcMain, ipcMain, IpcMainEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Folder, Collection, Block } from "../../models";
 import { IpcRequest } from "../../shared/IpcRequest";
 
+const map = new Map([
+    ["getHomeData", "loadData"],
+    ["getCollection", "loadData"],
+    ["addFolder", "updateData"],
+    ["addBlock", "updateData"],
+    ["deleteBlock", "updateData"],
+    ["addCollection", "updateData"],
+    ["orderCollection", "updateData"],
+]);
 export class HomeChannel extends BaseChannel {
+    private collectionId: string | undefined;
     public handleRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: IpcRequest) => {
             switch (command) {
@@ -19,6 +29,8 @@ export class HomeChannel extends BaseChannel {
                 case "deleteBlock":
                 case "getHomeData":
                 case "getCollection":
+                case "getBlocks":
+                case "getCID":
                     this[command](event, args);
                     break;
                 default:
@@ -31,7 +43,7 @@ export class HomeChannel extends BaseChannel {
     /** Start operation */
     private async getHomeData(event: IpcMainEvent): Promise<void> {
         const query1 = await Folder.findAll({
-            include: { all: true, nested: true },
+            include: [Folder.associations.collections],
         });
         const query2 = await Collection.findAll({ order: [["updatedAt", "ASC"]] });
         const data = JSON.stringify(query1, null, 2);
@@ -40,6 +52,7 @@ export class HomeChannel extends BaseChannel {
     }
 
     private async getCollection(event: IpcMainEvent, args: IpcRequest): Promise<void> {
+        this.collectionId = args.id;
         const query = await Collection.findOne({
             where: { id: args.id },
             include: [Collection.associations.blocks],
@@ -47,6 +60,20 @@ export class HomeChannel extends BaseChannel {
 
         const data = JSON.stringify(query, null, 2);
         event.reply("loadData", data);
+    }
+
+    private async getBlocks(event: IpcMainEvent, args: IpcRequest): Promise<void> {
+        this.collectionId = args.id;
+        const query = await Collection.findOne({
+            where: { id: args.id },
+            include: [Collection.associations.blocks],
+        });
+        const data = JSON.stringify(query, null, 2);
+        event.reply("loadData", data);
+    }
+
+    private async getCID(event: IpcMainEvent): Promise<void> {
+        event.reply("getCID", this.collectionId);
     }
 
     async addFolder(event: IpcMainEvent, args: IpcRequest): Promise<void> {

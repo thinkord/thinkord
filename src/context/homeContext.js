@@ -54,7 +54,6 @@ class StoreProvider extends Component {
             recentUpdated: [],
         };
 
-        /**Add Part */
         const { folders, orderCollections } = unprocessedData;
         folders.map((folder) => {
             initState.folderIds.push(folder.id);

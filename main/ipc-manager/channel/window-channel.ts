@@ -25,7 +25,7 @@ export class WindowChannel extends BaseChannel {
                     this[command](event, args);
                     break;
                 default:
-                    log.warn("There is no command in thic channel");
+                    log.warn("There is no command in this channel");
                     break;
             }
         });
@@ -48,7 +48,7 @@ export class WindowChannel extends BaseChannel {
                 this.wins.controlWindow.createWindow();
                 this.wins.controlWindow.register();
             } else {
-                // this.wins.controlWindow.sendMessage(args.id);
+                this.wins.controlWindow.sendMessage("changed", args.id);
             }
         } else if (args.win === "maskWin") {
             if (!this.wins.maskWindow) {

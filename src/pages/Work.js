@@ -4,14 +4,16 @@ import React, { useContext } from "react";
 import { StoreUpdateContext } from "../context/homeContext";
 import Collection from "../components/Collection/Collection";
 import InsertToolBar from "../components/InsertToolBar/InsertToolBar";
+import { BlockProvider } from "../context/blockContext";
 
 const Work = ({ match }) => {
-    const { getCollection, saveCollection } = useContext(StoreUpdateContext);
-    const collection = getCollection(match.params.id);
+    const { saveCollection } = useContext(StoreUpdateContext);
 
     return (
         <div>
-            <Collection collection={collection} key={match.params.id} />
+            <BlockProvider cId={match.params.id}>
+                <Collection />
+            </BlockProvider>
             <button onClick={() => saveCollection()}>Save File</button>
             <InsertToolBar />
         </div>

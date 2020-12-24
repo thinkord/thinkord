@@ -65,6 +65,7 @@ export default function ControlBar() {
 
     return (
         <div>
+            {/* <h1> map: {currentCId === undefined ? mapCId : currentCId}</h1> */}
             <button id="textButton">text</button>
             <button
                 id="fullsnipButton"

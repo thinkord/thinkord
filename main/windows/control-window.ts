@@ -42,8 +42,8 @@ export class ControlWindow extends BaseWindow {
         ControlWindow.win?.close();
     }
 
-    public sendMessage(data: string): void {
-        ControlWindow.win?.webContents.send("bindControl", data);
+    public sendMessage(response: string, data: string): void {
+        ControlWindow.win?.webContents.send(response, data);
     }
 
     public register(): void {

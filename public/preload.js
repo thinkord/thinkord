@@ -34,6 +34,10 @@ contextBridge.exposeInMainWorld("appRuntime", {
     handleFullsnip: (userPath, thumbSize) => {
         takeScreenshot(userPath, thumbSize);
     },
+    /** maybe change in the future */
+    fullsnip: (userPath, thumbSize, currentWork) => {
+        takeScreenshot(userPath, thumbSize, currentWork);
+    },
     handleDragsnip: () => {
         ipcRenderer.invoke("window-channel", "create", { win: "maskWin" });
         // ipcRenderer.removeAllListeners("dragsnip-saved");
