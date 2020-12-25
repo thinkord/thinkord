@@ -10,7 +10,9 @@ const TabsContextProvider = props => {
     const [tabsList, setTabsList] = useState([]);
 
     const tabExisted = (collectionId) => {
+        console.log(collectionId)
         const targetIndex = tabsList.findIndex(tab => {
+            console.log(tab.collectionId)
             return tab.collectionId === collectionId;
         })
         return targetIndex >= 0;

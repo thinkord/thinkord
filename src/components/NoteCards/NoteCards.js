@@ -12,7 +12,7 @@ const noteCards = ({ data }) => (
                     return (
                         <NoteCard
                             key={collectionId}
-                            id={collectionId}
+                            id={parseInt(collectionId)}
                             title={data.collections[collectionId].name}
                             // bookmark={data.collections[collectionId].bookmarked}
                         ></NoteCard>
