@@ -5,7 +5,7 @@ import { TabsContext } from "../../../tabContext";
 import appRuntime from "../../../appRuntime";
 import "./NoteCard.scss";
 
-import CModal from "../../Modal/CModal";
+import CModal from "../../Elements/Modal/CModal";
 
 function NoteCard(props) {
     const [menuShow, setMenuShow] = useState(false);

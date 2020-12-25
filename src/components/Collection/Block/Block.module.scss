@@ -1,0 +1,33 @@
+.Block{
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 6px rgba(black, 0.16);
+    .Icon{
+        font-size: 45px;
+        color: #35C189;
+        margin-right: 10px;
+    }
+}
+.BlockMain{
+    display: flex;
+    .BlockContent{
+        padding: 0 10px;
+    }
+    .BlockTime{
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin-top: 10px;
+        .Icon{
+            font-size: 16px;
+            color: #35C189;
+            margin-right: 5px;
+            margin-top: 2px;
+        }
+    }
+}
