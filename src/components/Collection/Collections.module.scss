@@ -1,0 +1,48 @@
+.root{
+    min-height: 100vh;
+}
+.Header{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px 50px;
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.2);
+    .user{
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    i{
+        font-size: 25px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+}
+.Content{
+    padding: 40px 0;
+    height: calc(100vh - 140px);
+    overflow: auto;
+}
+.Info{
+    display: flex;
+    align-items: center;
+    color: #35C189;
+    h2{
+        margin: 0;
+        font-weight: bold;
+    }
+    i{
+        font-size: 15px;
+        margin-left: 5px;
+    }
+}
+.Controls{
+    display: flex;
+    align-items: center;
+}
+i#clock{
+    color: #35C189;
+}
