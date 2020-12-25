@@ -1,18 +1,18 @@
-import React from 'react';
-import classes from './Layouts.module.scss';
-import WindowTitleBar from './WindowTitlebar/WindowTitlebar';
-import TabBar from './TabBar/TabBar';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
+import React from "react";
+import classes from "./Layouts.module.scss";
+import WindowTitleBar from "./WindowTitlebar/WindowTitlebar";
+import TabBar from "./TabBar/TabBar";
 
 const Layout = (props) => {
     return (
         <React.Fragment>
-            <WindowTitleBar docTitle="Home"/>
-            <TabBar/>
-            <main className={classes.Content}>
-                {props.children}
-            </main>
+            <WindowTitleBar docTitle="Home" />
+            <TabBar />
+            <main className={classes.Content}>{props.children}</main>
         </React.Fragment>
-    )
-}
+    );
+};
 
-export default Layout; 
+export default Layout;
