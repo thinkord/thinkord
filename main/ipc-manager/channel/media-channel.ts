@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainEvent } from "electron";
+import { globalShortcut, ipcMain, IpcMainEvent } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
@@ -17,6 +17,7 @@ export class MediaChannel extends BaseChannel {
                     this[command](event, args);
                     break;
                 case "dragsnip":
+                    // this[command](event, args);
                     break;
                 case "saveAudio":
                     this[command](event, args);

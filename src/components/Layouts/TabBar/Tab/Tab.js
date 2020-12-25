@@ -28,7 +28,7 @@ const Tab = ({ location, history, cId, id, title }) => {
             className={classes.Tab}
             activeClassName={classes.active}
             onClick={() => {
-                appRuntime.send("window-channel", "create");
+                appRuntime.send("window-channel", "create", { win: "controlWin" });
             }}
         >
             <div className={classes.TabTitle}>

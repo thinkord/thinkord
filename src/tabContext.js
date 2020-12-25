@@ -51,7 +51,7 @@ const TabsContextProvider = (props) => {
             updatedTabs.splice(targetIndex, 1);
             return updatedTabs;
         });
-        appRuntime.send("window-channel", "close");
+        appRuntime.send("window-channel", "close", { win: "controlWin" });
     };
 
     return (

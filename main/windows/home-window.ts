@@ -13,7 +13,6 @@ export class HomeWindow extends BaseWindow {
             width: 800,
             height: 600,
             webPreferences: {
-                enableRemoteModule: true,
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
             },
@@ -22,14 +21,21 @@ export class HomeWindow extends BaseWindow {
         HomeWindow.win.loadURL(
             isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
         );
+
         HomeWindow.win.once("ready-to-show", () => {
             if (HomeWindow.win) {
                 HomeWindow.win.show();
             }
         });
+
         HomeWindow.win.on("closed", () => {
             app.quit();
         });
+    }
+
+    public closeWindow(): void {
+        HomeWindow.win?.close();
+        app.quit();
     }
 
     public register(): void {

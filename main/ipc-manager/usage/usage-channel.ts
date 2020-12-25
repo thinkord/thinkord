@@ -3,7 +3,6 @@ import { SystemChannel } from "../channel/system-channel";
 import { HomeChannel } from "../channel/home-channel";
 import { WindowChannel } from "../channel/window-channel";
 import { MediaChannel } from "../channel/media-channel";
-import { TestChannel } from "../channel/test-channel";
 import { IFactory } from "./i-factory";
 
 export class UsageChannel {
@@ -31,7 +30,14 @@ export class UsageChannel {
         if (this.factory) {
             this.factory.setIPC(new SystemChannel("system-channel"));
             t.push(this.factory.getIPC());
-            this.factory.setIPC(new TestChannel("test-channel"));
+        }
+        return t;
+    }
+
+    setMaskFactory(): BaseChannel[] {
+        const t: BaseChannel[] = [];
+        if (this.factory) {
+            this.factory.setIPC(new SystemChannel("system-channel"));
             t.push(this.factory.getIPC());
         }
         return t;

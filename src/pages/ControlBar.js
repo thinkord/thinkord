@@ -16,6 +16,10 @@ export default function ControlBar() {
         });
     };
 
+    const handleDragsnip = () => {
+        appRuntime.handleDragsnip();
+    };
+
     const handleAudio = () => {
         if (audioState === false) {
             appRuntime.handleAudio(audioState);
@@ -51,7 +55,14 @@ export default function ControlBar() {
             >
                 fullsnip
             </button>
-            <button id="dragsnipButton">dragsnip</button>
+            <button
+                id="dragsnipButton"
+                onClick={() => {
+                    handleDragsnip();
+                }}
+            >
+                dragsnip
+            </button>
             <button
                 id="audioButton"
                 onClick={() => {

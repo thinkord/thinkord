@@ -14,7 +14,6 @@ export class ControlWindow extends BaseWindow {
             width: 400,
             height: 100,
             webPreferences: {
-                enableRemoteModule: true,
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
             },
