@@ -1,4 +1,4 @@
-import { globalShortcut, ipcMain, IpcMainEvent } from "electron";
+import { globalShortcut, ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
@@ -10,7 +10,7 @@ export class MediaChannel extends BaseChannel {
     // public deleteRequest(channelName: string): void {
     //     ipcMain.removeAllListeners(channelName);
     // }
-    public handleRequest(): void {
+    public onRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "saveFullsnip":
@@ -32,11 +32,23 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    public handleRequestOnce(): void {
+    public onRequestOnce(): void {
         ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             // Should add something
         });
     }
+
+    // public handleRequest(): void {
+    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
+
+    // public handleRequestOnce(): void {
+    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
 
     private async createBlockAndFile(name: string, path: string, type: string): Promise<void> {
         const block = await Block.create({

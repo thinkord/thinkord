@@ -23,6 +23,10 @@ contextBridge.exposeInMainWorld("appRuntime", {
         const subscription = (event, ...args) => listener(...args);
         ipcRenderer.once(channel, subscription);
     },
+    invoke: async (channel, command, args) => {
+        const result = await ipcRenderer.invoke(channel, command, args);
+        return result;
+    },
     handleFullsnip: (userPath, thumbSize) => {
         takeScreenshot(userPath, thumbSize);
     },

@@ -1,17 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { getCurrentScreen } = require("./utils");
-
-const curScreen = getCurrentScreen();
+const { ipcRenderer } = require("electron");
+// const { getCurrentScreen } = require("./utils");
 
 /**
  * Get screen resources and create canvas and video
- * @function
- *
  * @param {function} callback
  */
-function getScreen(callback) {
+const getScreen = async (callback) => {
     this.callback = callback;
-
+    const curScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreenAsync");
     document.body.style.opacity = "0";
     let oldCursor = document.body.style.cursor;
     document.body.style.cursor = "none";
@@ -117,7 +114,7 @@ function getScreen(callback) {
             this.handleError
         );
     }
-}
+};
 
 exports.getScreenSources = ({ types = ["screen"] } = {}, callback) => {
     getScreen(callback);

@@ -15,6 +15,8 @@ export class UsageChannel {
     setHomeFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
+            this.factory.setIPC(new SystemChannel("system-channel"));
+            t.push(this.factory.getIPC());
             this.factory.setIPC(new WindowChannel("window-channel"));
             t.push(this.factory.getIPC());
             this.factory.setIPC(new HomeChannel("home-channel"));
@@ -28,8 +30,6 @@ export class UsageChannel {
     setControlFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            this.factory.setIPC(new SystemChannel("system-channel"));
-            t.push(this.factory.getIPC());
         }
         return t;
     }
@@ -37,8 +37,6 @@ export class UsageChannel {
     setMaskFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
-            this.factory.setIPC(new SystemChannel("system-channel"));
-            t.push(this.factory.getIPC());
         }
         return t;
     }

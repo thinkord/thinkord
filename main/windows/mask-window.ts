@@ -70,8 +70,10 @@ export class MaskWindow extends BaseWindow {
 
     public register(): void {
         new UsageChannel(new Factory()).setMaskFactory().map((obj) => {
-            obj.handleRequest();
-            obj.handleRequestOnce();
+            obj.onRequest();
+            // obj.onRequestOnce();
+            // obj.handleRequest();
+            // obj.handleRequestOnce();
             return obj;
         });
     }

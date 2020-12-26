@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainEvent, globalShortcut } from "electron";
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent, globalShortcut } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { ControlWindow } from "../../windows/control-window";
@@ -16,7 +16,7 @@ export class WindowChannel extends BaseChannel {
         this.wins = {};
     }
 
-    public handleRequest(): void {
+    public onRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "create":
@@ -32,12 +32,23 @@ export class WindowChannel extends BaseChannel {
         });
     }
 
-    public handleRequestOnce(): void {
-        ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-            // Should add something
-        });
-    }
+    // public onRequestOnce(): void {
+    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
 
+    // public handleRequest(): void {
+    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
+
+    // public handleRequestOnce(): void {
+    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
     // public deleteRequest(channelName: string): void {
     //     ipcMain.removeAllListeners(channelName);
     // }

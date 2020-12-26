@@ -4,15 +4,14 @@ import "@babel/polyfill";
 // Nodejs modules
 const fs = require("fs");
 const path = require("path");
-
-// Electron modules
 const { ipcRenderer } = require("electron");
 
-const uuidv1 = require("uuid/v1");
+const { v4: uuidv4 } = require("uuid");
+const log = require("loglevel");
 
 const { getScreenSources } = require("./desktop-capturer");
 const { CaptureEditor } = require("./capture-editor");
-const { getCurrentScreen } = require("./utils");
+// const { getCurrentScreen } = require("./utils");
 
 const $canvas = document.getElementById("js-canvas");
 const $bg = document.getElementById("js-bg");
@@ -22,10 +21,12 @@ const $btnClose = document.getElementById("js-tool-close");
 const $btnSave = document.getElementById("js-tool-save");
 const $btnReset = document.getElementById("js-tool-reset");
 
-const currentScreen = getCurrentScreen();
+log.setLevel("info");
 
-getScreenSources({}, (imgSrc) => {
+getScreenSources({}, async (imgSrc) => {
     // console.timeEnd('capture')
+    const currentScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreenAsync");
+    log.info(currentScreen);
     let capture = new CaptureEditor($canvas, $bg, imgSrc);
     let onDrag = (selectRect) => {
         $toolbar.style.display = "none";
@@ -71,17 +72,17 @@ getScreenSources({}, (imgSrc) => {
         capture.reset();
     });
 
-    $btnSave.addEventListener("click", () => {
-        const userPath = app.getPath("userData").replace(/\\/g, "\\\\");
-        let url = capture.getImageUrl();
+    $btnSave.addEventListener("click", async () => {
+        const userPath = await ipcRenderer.invoke("system-channel", "getUserPathAsync");
+        const url = capture.getImageUrl();
 
-        let dragsnipName = `${uuidv1()}.png`;
-        let dragsnipPath = path.join(userPath, "MediaResource", dragsnipName);
+        const dragsnipName = `${uuidv4()}.png`;
+        const dragsnipPath = path.join(userPath, "blob_storage", dragsnipName);
 
         fs.writeFile(dragsnipPath, new Buffer.from(url.replace("data:image/png;base64,", ""), "base64"), (err) => {
-            if (err) console.log(err);
+            if (err) log.error(err);
 
-            console.log("Dragsnip has been saved!");
+            log.info("Dragsnip has been saved!");
             ipcRenderer.send("dragsnip-saved", dragsnipPath);
         });
     });

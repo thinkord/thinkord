@@ -8,8 +8,10 @@ export abstract class BaseChannel {
         console.log(`${channelName} setup`);
     }
 
-    public abstract handleRequest(): void;
-    public abstract handleRequestOnce(): void;
+    public abstract onRequest(): void;
+    // public abstract onRequestOnce(): void;
+    // public abstract handleRequest(): void;
+    // public abstract handleRequestOnce(): void;
     // public abstract deleteRequest(channelName: string): void;
     public deleteRequest(channelName: string): void {
         ipcMain.removeAllListeners(channelName);

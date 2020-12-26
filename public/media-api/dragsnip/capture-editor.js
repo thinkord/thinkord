@@ -20,12 +20,12 @@ const ANCHORS = [
 ];
 
 class CaptureEditor extends Event {
-    constructor($canvas, $bg, imageSrc) {
+    async constructor($canvas, $bg, imageSrc) {
         super();
         this.$canvas = $canvas;
         this.imageSrc = imageSrc;
         this.disabled = false;
-        let currentScreen = getCurrentScreen();
+        let currentScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreenAsync");
         this.scaleFactor = currentScreen.scaleFactor;
         this.screenWidth = currentScreen.bounds.width;
         this.screenHeight = currentScreen.bounds.height;

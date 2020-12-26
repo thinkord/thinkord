@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ipcMain, IpcMainEvent } from "electron";
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Folder, Collection } from "../../models";
@@ -9,7 +9,7 @@ export class HomeChannel extends BaseChannel {
     // public deleteRequest(channelName: string): void {
     //     ipcMain.removeAllListeners(channelName);
     // }
-    public handleRequest(): void {
+    public onRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "getAllData":
@@ -25,11 +25,24 @@ export class HomeChannel extends BaseChannel {
             }
         });
     }
-    public handleRequestOnce(): void {
-        ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-            // Should add something
-        });
-    }
+
+    // public onRequestOnce(): void {
+    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
+
+    // public handleRequest(): void {
+    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
+
+    // public handleRequestOnce(): void {
+    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
 
     /** Start operation */
     private async getAllData(event: IpcMainEvent, args: any): Promise<void> {

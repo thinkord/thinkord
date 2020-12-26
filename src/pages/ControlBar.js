@@ -5,41 +5,33 @@ export default function ControlBar() {
     const [audioState, setAudioState] = useState(false);
     const [videoState, setVideoState] = useState(false);
 
-    const handleFullsnip = () => {
+    const handleFullsnip = async () => {
         // Refactor later
-        appRuntime.send("system-channel", "getUserPath");
-        appRuntime.subscribeOnce("system-channel", (path) => {
-            appRuntime.send("system-channel", "getScreenshotSize");
-            appRuntime.subscribeOnce("system-channel", (screenshotSize) => {
-                appRuntime.handleFullsnip(path, screenshotSize);
-            });
-        });
+        const path = await appRuntime.invoke("system-channel", "getUserPath");
+        const screenshotSize = await appRuntime.invoke("system-channel", "getScreenshotSize");
+        appRuntime.handleFullsnip(path, screenshotSize);
     };
 
     const handleDragsnip = () => {
         appRuntime.handleDragsnip();
     };
 
-    const handleAudio = () => {
+    const handleAudio = async () => {
         if (audioState === false) {
             appRuntime.handleAudio(audioState);
         } else {
-            appRuntime.send("system-channel", "getUserPath");
-            appRuntime.subscribeOnce("system-channel", (path) => {
-                appRuntime.handleAudio(audioState, path);
-            });
+            const path = await appRuntime.invoke("system-channel", "getUserPath");
+            appRuntime.handleAudio(audioState, path);
         }
         setAudioState((prevState) => !prevState);
     };
 
-    const handleVideo = () => {
+    const handleVideo = async () => {
         if (videoState === false) {
             appRuntime.handleVideo(videoState);
         } else {
-            appRuntime.send("system-channel", "getUserPath");
-            appRuntime.subscribeOnce("system-channel", (path) => {
-                appRuntime.handleVideo(videoState, path);
-            });
+            const path = await appRuntime.invoke("system-channel", "getUserPath");
+            appRuntime.handleVideo(videoState, path);
         }
         setVideoState((prevState) => !prevState);
     };
