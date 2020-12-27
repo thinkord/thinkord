@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { ipcRenderer } = require("electron");
-// const { getCurrentScreen } = require("./utils");
+const { desktopCapturer, ipcRenderer } = require("electron");
 
 /**
  * Get screen resources and create canvas and video
@@ -8,7 +7,7 @@ const { ipcRenderer } = require("electron");
  */
 const getScreen = async (callback) => {
     this.callback = callback;
-    const curScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreenAsync");
+    const curScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreen");
     document.body.style.opacity = "0";
     let oldCursor = document.body.style.cursor;
     document.body.style.cursor = "none";
@@ -27,9 +26,11 @@ const getScreen = async (callback) => {
                 return;
             }
             loaded = true;
-            //加這個
+
+            // Should add these lines
             video.play();
             video.pause();
+
             // Set video ORIGINAL height (screenshot)
             video.style.height = video.videoHeight + "px"; // videoHeight
             video.style.width = video.videoWidth + "px"; // videoWidth
@@ -39,6 +40,7 @@ const getScreen = async (callback) => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             let ctx = canvas.getContext("2d");
+
             // Draw video on canvas
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -66,8 +68,8 @@ const getScreen = async (callback) => {
     };
 
     if (require("os").platform() === "win32") {
-        require("electron")
-            .desktopCapturer.getSources({
+        desktopCapturer
+            .getSources({
                 types: ["screen"],
                 thumbnailSize: { width: 1, height: 1 },
             })

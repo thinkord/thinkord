@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { contextBridge, ipcRenderer } = require("electron");
 const { takeScreenshot } = require("./media-api/fullsnip");
+const { startDragsnip } = require("./media-api/dragsnip/capture-renderer");
 const { AudioRecorder } = require("./media-api/audio-recorder");
 const { VideoRecorder } = require("./media-api/video-recorder");
 
@@ -31,11 +32,16 @@ contextBridge.exposeInMainWorld("appRuntime", {
         takeScreenshot(userPath, thumbSize);
     },
     handleDragsnip: () => {
-        ipcRenderer.send("window-channel", "create", { win: "maskWin", type: "start" });
+        ipcRenderer.send("window-channel", "create", { win: "maskWin" });
         ipcRenderer.removeAllListeners("dragsnip-saved");
         ipcRenderer.once("dragsnip-saved", (event, dragsnipPath) => {
             // Add new block to the note object
             // let note = noteManager.addBlock(this.state.collection, { filePath: dragsnipPath });
+        });
+    },
+    handleDragsnipStart: () => {
+        window.addEventListener("DOMContentLoaded", () => {
+            startDragsnip();
         });
     },
     handleAudio: (audioState, userPath) => {

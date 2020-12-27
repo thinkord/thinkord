@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const Event = require("events");
-const { getCurrentScreen } = require("./utils");
+const { ipcRenderer } = require("electron");
+const log = require("loglevel");
+
+log.setLevel("info");
 
 const CREATE_RECT = 1;
 const MOVING_RECT = 2;
@@ -20,15 +23,11 @@ const ANCHORS = [
 ];
 
 class CaptureEditor extends Event {
-    async constructor($canvas, $bg, imageSrc) {
+    constructor($canvas, $bg, imageSrc) {
         super();
         this.$canvas = $canvas;
         this.imageSrc = imageSrc;
         this.disabled = false;
-        let currentScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreenAsync");
-        this.scaleFactor = currentScreen.scaleFactor;
-        this.screenWidth = currentScreen.bounds.width;
-        this.screenHeight = currentScreen.bounds.height;
         this.$bg = $bg;
         this.ctx = $canvas.getContext("2d");
 
@@ -37,13 +36,18 @@ class CaptureEditor extends Event {
         this.onMouseUp = this.onMouseUp.bind(this);
 
         this.init().then(() => {
-            console.log("init");
+            log.info("Initialize CaptureEditor...");
         });
     }
 
     async init() {
-        this.$bg.style.backgroundImage = `url(${this.imageSrc})`;
+        const currentScreen = await ipcRenderer.invoke("system-channel", "getCurrentScreen");
+        this.scaleFactor = currentScreen.scaleFactor;
+        this.screenWidth = currentScreen.bounds.width;
+        this.screenHeight = currentScreen.bounds.height;
+        this.$bg.style.backgroundImage = `url(${this.imageSrc})`; // Draw background image
         this.$bg.style.backgroundSize = `${this.screenWidth}px ${this.screenHeight}px`;
+
         let canvas = document.createElement("canvas");
         let ctx = canvas.getContext("2d");
         let img = await new Promise((resolve) => {
@@ -387,7 +391,7 @@ class CaptureEditor extends Event {
         if (w && h) {
             let imageData = this.bgCtx.getImageData(x * scaleFactor, y * scaleFactor, w * scaleFactor, h * scaleFactor);
             let canvas = document.createElement("canvas");
-            //加scaleFactor
+            // add scaleFactor
             canvas.width = w * scaleFactor;
             canvas.height = h * scaleFactor;
             let ctx = canvas.getContext("2d");

@@ -13,8 +13,14 @@ export class HomeChannel extends BaseChannel {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
                 case "getAllData":
+                    this[command](event, args);
+                    break;
                 case "addFolder":
+                    this[command](event, args);
+                    break;
                 case "addCollection":
+                    this[command](event, args);
+                    break;
                 case "deleteCollection":
                     this[command](event, args);
                     break;

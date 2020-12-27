@@ -13,11 +13,8 @@ export class MediaChannel extends BaseChannel {
     public onRequest(): void {
         ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
             switch (command) {
-                case "saveFullsnip":
+                case "saveImage":
                     this[command](event, args);
-                    break;
-                case "dragsnip":
-                    // this[command](event, args);
                     break;
                 case "saveAudio":
                     this[command](event, args);
@@ -32,11 +29,11 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    public onRequestOnce(): void {
-        ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-            // Should add something
-        });
-    }
+    // public onRequestOnce(): void {
+    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    //         // Should add something
+    //     });
+    // }
 
     // public handleRequest(): void {
     //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
@@ -65,9 +62,17 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private async saveFullsnip(event: IpcMainEvent, args: any): Promise<void> {
+    private async saveImage(event: IpcMainEvent, args: any): Promise<void> {
         this.createBlockAndFile(args.name, args.path, "image");
     }
+
+    // private handleDragsnip(event: IpcMainEvent, args: any): void {
+    //     const type = args.type;
+
+    //     if (type === "select") {
+    //         event.reply("capture-screen", { type: "select" });
+    //     }
+    // }
 
     private async saveAudio(event: IpcMainEvent, args: any): Promise<void> {
         this.createBlockAndFile(args.name, args.path, "audio");

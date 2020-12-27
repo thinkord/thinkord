@@ -1,6 +1,6 @@
 import os from "os";
 import * as path from "path";
-import { BrowserWindow, screen } from "electron";
+import { BrowserWindow, IpcMainEvent, screen } from "electron";
 import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import { Factory } from "../ipc-manager/usage/factory";

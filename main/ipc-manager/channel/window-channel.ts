@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent, globalShortcut } from "electron";
+import { ipcMain, IpcMainEvent, globalShortcut } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { ControlWindow } from "../../windows/control-window";
@@ -21,7 +21,6 @@ export class WindowChannel extends BaseChannel {
             switch (command) {
                 case "create":
                     this[command](event, args);
-                    break;
                 case "close":
                     this[command](event, args);
                     break;
@@ -49,6 +48,7 @@ export class WindowChannel extends BaseChannel {
     //         // Should add something
     //     });
     // }
+
     // public deleteRequest(channelName: string): void {
     //     ipcMain.removeAllListeners(channelName);
     // }
@@ -62,7 +62,7 @@ export class WindowChannel extends BaseChannel {
             }
         } else if (args.win === "maskWin") {
             if (!this.wins.maskWindow) {
-                this.createMaskWindow(args.type);
+                this.createMaskWindow();
             }
         }
     }
@@ -81,7 +81,7 @@ export class WindowChannel extends BaseChannel {
         }
     }
 
-    private createMaskWindow = (type: string) => {
+    private createMaskWindow = () => {
         if (this.wins.maskWindow) {
             this.wins.maskWindow.closeWindow();
             this.wins.maskWindow = undefined;
@@ -89,14 +89,6 @@ export class WindowChannel extends BaseChannel {
         this.wins.maskWindow = new MaskWindow();
         this.wins.maskWindow.createWindow();
         this.wins.maskWindow.register();
-        // if (type === "start") {
-        //     this.captureScreen();
-        // } else if (type === "complete") {
-        //     // nothing
-        // }
-        // } else if (type === "select") {
-        //     win.webContents.send("capture-screen", { type: "select" });
-        // }
 
         globalShortcut.register("Esc", () => {
             if (this.wins.maskWindow) {
@@ -105,11 +97,6 @@ export class WindowChannel extends BaseChannel {
             }
         });
 
-        ipcMain.on("dragsnip-saved", (event, dragsnipPath) => {
-            if (this.wins.maskWindow) {
-                this.wins.maskWindow.closeWindow();
-            }
-            // homeWin.webContents.send("dragsnip-saved", dragsnipPath);
-        });
+        // homeWin.webContents.send("dragsnip-saved", dragsnipPath);
     };
 }

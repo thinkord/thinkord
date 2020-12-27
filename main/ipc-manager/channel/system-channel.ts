@@ -38,13 +38,10 @@ export class SystemChannel extends BaseChannel {
             switch (command) {
                 case "getUserPath":
                     return await this[command]();
-                    break;
                 case "getScreenshotSize":
                     return await this[command]();
-                    break;
                 case "getCurrentScreen":
                     return await this[command]();
-                    break;
                 default:
                     log.warn("There is no command in thic channel");
                     break;
@@ -97,10 +94,11 @@ export class SystemChannel extends BaseChannel {
     // }
 
     private getCurrentScreen(): any {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const currentWindow = require("electron").getCurrentWindow();
-        const { x, y } = currentWindow.getBounds();
-        const currentScreen = screen.getAllDisplays().filter((d) => d.bounds.x === x && d.bounds.y === y)[0];
+        // // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // const currentWindow = require("electron").getCurrentWindow();
+        // const { x, y } = currentWindow.getBounds();
+        // const currentScreen = screen.getAllDisplays().filter((d) => d.bounds.x === x && d.bounds.y === y)[0];
+        const currentScreen = screen.getPrimaryDisplay();
         return currentScreen;
     }
 }
