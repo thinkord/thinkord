@@ -1,42 +1,56 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React, { useEffect, useState, useContext } from "react";
+import { ControlContext } from "../context/controlContext";
 import appRuntime from "../appRuntime";
 
 export default function ControlBar() {
+    const { mapCId } = useContext(ControlContext);
+    const [currentCId, setCurrentCId] = useState(mapCId);
+    const [path, setPath] = useState("");
     const [audioState, setAudioState] = useState(false);
     const [videoState, setVideoState] = useState(false);
-
     useEffect(() => {
-        appRuntime.registerAllShortcuts();
-
-        // Listen to globalShortcut
-        appRuntime.subscribe("system-channel", (command) => {
-            switch (command) {
-                case "fullsnip":
-                    handleFullsnip();
-                    break;
-                case "dragsnip":
-                    handleDragsnip();
-                    break;
-                case "record-audio":
-                    handleAudio();
-                    break;
-                case "record-video":
-                    handleVideo();
-                    break;
-                default:
-                    break;
-            }
+        appRuntime.subscribe("changed", (data) => {
+            setCurrentCId(data);
         });
 
-        return function cleanup() {
-            appRuntime.invoke("system-channel", "unregisterAllShortcuts");
-        };
-    });
+        async function getPath() {
+            const path = await appRuntime.invoke("system-channel", "getUserPath");
+            setPath(path);
+        }
+        getPath();
+        // appRuntime.registerAllShortcuts();
+
+        // // Listen to globalShortcut
+        // appRuntime.subscribe("system-channel", (command) => {
+        //     switch (command) {
+        //         case "fullsnip":
+        //             handleFullsnip();
+        //             break;
+        //         case "dragsnip":
+        //             handleDragsnip();
+        //             break;
+        //         case "record-audio":
+        //             handleAudio();
+        //             break;
+        //         case "record-video":
+        //             handleVideo();
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // });
+
+        // return function cleanup() {
+        //     appRuntime.invoke("system-channel", "unregisterAllShortcuts");
+        // };
+    }, [currentCId]);
 
     const handleFullsnip = async () => {
-        const path = await appRuntime.invoke("system-channel", "getUserPath");
         const screenshotSize = await appRuntime.invoke("system-channel", "getScreenshotSize");
-        appRuntime.handleFullsnip(path, screenshotSize);
+        const currentWork = currentCId === undefined ? mapCId : currentCId;
+        appRuntime.handleFullsnip(path, screenshotSize, currentWork);
     };
 
     const handleDragsnip = () => {
@@ -47,8 +61,8 @@ export default function ControlBar() {
         if (audioState === false) {
             appRuntime.handleAudio(audioState);
         } else {
-            const path = await appRuntime.invoke("system-channel", "getUserPath");
-            appRuntime.handleAudio(audioState, path);
+            const currentWork = currentCId === undefined ? mapCId : currentCId;
+            appRuntime.handleAudio(audioState, path, currentWork);
         }
         setAudioState((prevState) => !prevState);
     };
@@ -57,15 +71,15 @@ export default function ControlBar() {
         if (videoState === false) {
             appRuntime.handleVideo(videoState);
         } else {
-            const path = await appRuntime.invoke("system-channel", "getUserPath");
-            appRuntime.handleVideo(videoState, path);
+            const currentWork = currentCId === undefined ? mapCId : currentCId;
+            appRuntime.handleVideo(videoState, path, currentWork);
         }
         setVideoState((prevState) => !prevState);
     };
 
     return (
         <div>
-            {/* <h1> map: {currentCId === undefined ? mapCId : currentCId}</h1> */}
+            <h1> map: {currentCId === undefined ? mapCId : currentCId}</h1>
             <button id="textButton">text</button>
             <button
                 id="fullsnipButton"

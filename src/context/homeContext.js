@@ -138,8 +138,7 @@ class StoreProvider extends Component {
             folderId,
         };
 
-        await appRuntime.invoke("home-channel", "addCollection", newCollection);
-        // appRuntime.subscribeOnce("updateData");
+        appRuntime.send("home-channel", "addCollection", newCollection);
         this.setState({ changed: true });
     };
 
@@ -150,13 +149,11 @@ class StoreProvider extends Component {
      */
     updateCollectionTitle = (title, collectionId) => {
         appRuntime.send("home-channel", "updateCollection", { title, collectionId });
-        appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
     };
 
     deleteCollection = (collectionId) => {
         appRuntime.send("home-channel", "deleteCollection", collectionId);
-        appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
     };
 
@@ -195,9 +192,7 @@ class StoreProvider extends Component {
         };
 
         appRuntime.send("home-channel", "addFolder", newFolder);
-        appRuntime.subscribeOnce("updateData", () => {
-            this.setState({ changed: true });
-        });
+        this.setState({ changed: true });
     };
 
     deletFolder = (folderId) => {

@@ -37,13 +37,9 @@ export class UsageChannel {
     setMaskFactory(): BaseChannel[] {
         const t: BaseChannel[] = [];
         if (this.factory) {
+            this.factory.setIPC(new SystemChannel("system-channel"));
+            t.push(this.factory.getIPC());
         }
         return t;
     }
-
-    // deletControlFactory(): void {
-    //     this.controlChannel.forEach((obj, index) => {
-    //         this.controlChannel.splice(index, 1);
-    //     });
-    // }
 }

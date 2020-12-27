@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld("appRuntime", {
             ipcRenderer.removeListener(channel, subscription);
         };
     },
+    unsubscribe: (channel) => {
+        ipcRenderer.removeAllListeners(channel);
+    },
     subscribeOnce: (channel, listener) => {
         const subscription = (event, ...args) => listener(...args);
         ipcRenderer.once(channel, subscription);
@@ -31,11 +34,7 @@ contextBridge.exposeInMainWorld("appRuntime", {
         const result = await ipcRenderer.invoke(channel, command, args);
         return result;
     },
-    handleFullsnip: (userPath, thumbSize) => {
-        takeScreenshot(userPath, thumbSize);
-    },
-    /** maybe change in the future */
-    fullsnip: (userPath, thumbSize, currentWork) => {
+    handleFullsnip: (userPath, thumbSize, currentWork) => {
         takeScreenshot(userPath, thumbSize, currentWork);
     },
     handleDragsnip: () => {
@@ -51,18 +50,18 @@ contextBridge.exposeInMainWorld("appRuntime", {
             startDragsnip();
         });
     },
-    handleAudio: (audioState, userPath) => {
+    handleAudio: (audioState, userPath, currentWork) => {
         if (audioState === false) {
             audioRecorder.start();
         } else {
-            audioRecorder.stop(userPath);
+            audioRecorder.stop(userPath, currentWork);
         }
     },
-    handleVideo: (videoState, userPath) => {
+    handleVideo: (videoState, userPath, currentWork) => {
         if (videoState === false) {
             videoRecorder.start();
         } else {
-            videoRecorder.stop(userPath);
+            videoRecorder.stop(userPath, currentWork);
         }
     },
     registerAllShortcuts: () => {

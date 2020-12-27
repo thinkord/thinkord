@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, ipcMain } from "electron";
 import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import path from "path";
@@ -15,6 +15,7 @@ export class ControlWindow extends BaseWindow {
             height: 400,
             webPreferences: {
                 contextIsolation: true,
+                // nodeIntegration: false,
                 preload: path.resolve(__dirname, "preload.js"),
             },
         });
@@ -42,13 +43,12 @@ export class ControlWindow extends BaseWindow {
         ControlWindow.win?.close();
     }
 
-    public sendMessage(response: string, data: string): void {
+    public static sendMessage(response: string, data: string): void {
         ControlWindow.win?.webContents.send(response, data);
     }
 
     public register(): void {
-        const usage = new UsageChannel(new Factory());
-        usage.setControlFactory().map((obj) => {
+        new UsageChannel(new Factory()).setControlFactory().map((obj) => {
             obj.handleRequest();
             return obj;
         });

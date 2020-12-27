@@ -14,17 +14,35 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "white",
     },
 }));
+
 export default function Block({ block, index, collectionId }) {
     const classes = useStyles();
     const { deleteBlock } = useContext(BlockUpdateContext);
+
     const handleBlockChange = () => {
         deleteBlock(collectionId, block.id);
     };
 
+    const typeRender = () => {
+        let content;
+        if (block.type === "text") {
+            content = <Paper elevation={0}>{block.description}</Paper>;
+        } else if (block.type === "image") {
+            content = (
+                <img
+                    src={`C:\\Users\\User\\AppData\\Roaming\\thinkord\\blob_storage\\${block.title}`}
+                    width="400"
+                    height="300"
+                    alt={block.title}
+                />
+            );
+        }
+        return content;
+    };
     return (
         <div className={classes.block}>
             <BlockTitle title={block.title} collectionId={collectionId} index={index} />
-            <Paper elevation={0}>{block.description}</Paper>
+            {typeRender()}
             <MoreHorizIcon onClick={handleBlockChange} />
         </div>
     );

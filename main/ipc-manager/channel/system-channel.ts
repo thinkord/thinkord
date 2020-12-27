@@ -9,11 +9,10 @@ export class SystemChannel extends BaseChannel {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "getUserPath":
-                    return this[command]();
                 case "getScreenshotSize":
-                    return this[command]();
                 case "getCurrentScreen":
-                    return this[command]();
+                    this[command]();
+                    break;
                 case "registerAllShortcuts":
                 // case "getScreenShot":
                     this[command](event);
@@ -28,32 +27,11 @@ export class SystemChannel extends BaseChannel {
         });
     }
 
-    // public handleRequestOnce(): void {
-    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
-
-    // private getScreenShot(event: IpcMainEvent): void {
-    //     const userPath = this.getUserPath();
-    //     const maxDimension = this.getScreenshotSize();
-    //     const screenshotInfo = {
-    //         ...maxDimension,
-    //         userPath,
-    //     };
-    //     event.reply(this.channelName, screenshotInfo);
-    // }
-
     private getUserPath(): string {
         const userPath = app.getPath("userData");
         return userPath;
     }
 
-    // private getScreenshotSize(): Record<string, unknown> {
     private getScreenshotSize(): Record<number, number> {
         const screenSize = screen.getPrimaryDisplay().workAreaSize;
         const maxDimension = Math.max(screenSize.width, screenSize.height);

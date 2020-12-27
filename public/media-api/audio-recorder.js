@@ -55,7 +55,7 @@ class AudioRecorder {
      * @method
      * @param {string} userPath
      */
-    stop(userPath) {
+    stop(userPath, currentWork) {
         this.mediaRecorder.onstop = () => {
             log.info("saving video file as mp3");
             const recName = `${uuidv4()}.mp3`;
@@ -71,7 +71,12 @@ class AudioRecorder {
                             log.error(err);
                         } else {
                             log.info("Your audio file has been saved");
-                            ipcRenderer.invoke("media-channel", "saveAudio", { name: recName, path: recPath });
+                            ipcRenderer.invoke("media-channel", "saveAudio", {
+                                name: recName,
+                                path: recPath,
+                                current: currentWork,
+                            });
+                            ipcRenderer.invoke("window-channel", "captureSignal", "data");
                         }
                     });
                 } else log.error("FileReader has problems reading blob");

@@ -5,6 +5,7 @@ import { Paper, InputBase, Button, IconButton } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import { fade, makeStyles } from "@material-ui/core";
 import { StoreUpdateContext } from "../../../context/homeContext";
+import { BlockUpdateContext } from "../../../context/blockContext";
 import appRuntime from "../../../appRuntime";
 
 const useStyle = makeStyles((theme) => ({
@@ -31,7 +32,8 @@ export default function InputBlock({ setOpen, collectionId, type }) {
     const classes = useStyle();
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
-    const { addBlock, addCollection } = useContext(StoreUpdateContext);
+    const { addCollection } = useContext(StoreUpdateContext);
+    const { addBlock } = useContext(BlockUpdateContext);
     const handleOnChange = (e) => {
         setTitle(e.target.value);
     };
@@ -40,7 +42,7 @@ export default function InputBlock({ setOpen, collectionId, type }) {
     };
     const handleBtnConfirm = () => {
         if (type === "block") {
-            addBlock(title, content, collectionId);
+            addBlock(title, "text", content, collectionId);
             setTitle("");
             setContent("");
             setOpen(false);

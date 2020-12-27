@@ -5,6 +5,7 @@ import { ControlWindow } from "../../windows/control-window";
 import { MaskWindow } from "../../windows/mask-window";
 
 import { IpcRequest } from "../../shared/IpcRequest";
+import { HomeWindow } from "../../windows/home-window";
 interface BrowserWindows {
     [key: string]: ControlWindow | MaskWindow | undefined;
 }
@@ -12,7 +13,7 @@ interface BrowserWindows {
 export class WindowChannel extends BaseChannel {
     wins: BrowserWindows;
 
-    constructor(props: any) {
+    constructor(props: string) {
         super(props);
         this.wins = {};
     }
@@ -22,6 +23,10 @@ export class WindowChannel extends BaseChannel {
             switch (command) {
                 case "create":
                 case "close":
+                case "captureSignal":
+                    // case "createControlBar":
+                    // case "closeControlBar":
+                    // case "captureSignal":
                     this[command](event, args);
                     break;
                 default:
@@ -48,7 +53,7 @@ export class WindowChannel extends BaseChannel {
                 this.wins.controlWindow.createWindow();
                 this.wins.controlWindow.register();
             } else {
-                this.wins.controlWindow.sendMessage("changed", args.id);
+                ControlWindow.sendMessage("changed", args.id);
             }
         } else if (args.win === "maskWin") {
             if (!this.wins.maskWindow) {
@@ -89,4 +94,29 @@ export class WindowChannel extends BaseChannel {
 
         // homeWin.webContents.send("dragsnip-saved", dragsnipPath);
     };
+    /** Start operation */
+    // public createControlBar(event: IpcMainEvent, args: IpcRequest): void {
+    //     if (!this.wins.controlWindow) {
+    //         this.wins.controlWindow = new ControlWindow();
+    //         this.wins.controlWindow.createWindow();
+    //         this.wins.controlWindow.register();
+    //     } else {
+    //         // Transfer information to different frame
+    //         ControlWindow.sendMessage("changed", args.id);
+    //     }
+    // }
+
+    public closeControlBar(): void {
+        if (this.wins.controlWindow) {
+            this.wins.controlWindow.closeWindow();
+            this.deleteRequest("test-channel");
+            this.deleteRequest("system-channel");
+            this.wins.controlWindow = undefined;
+        }
+    }
+
+    public captureSignal(event: IpcMainInvokeEvent, args: IpcRequest): void {
+        // Transfer information to different frame
+        HomeWindow.sendMessage("capture", "hello");
+    }
 }
