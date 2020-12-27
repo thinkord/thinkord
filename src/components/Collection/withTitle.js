@@ -18,11 +18,9 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: "bold",
     },
     editableTitleContainer: {
-        margin: theme.spacing(1),
         display: "flex",
     },
     input: {
-        margin: theme.spacing(1),
         "&:focus": {
             background: "#ddd",
         },

@@ -1,39 +1,36 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from "react";
-import { Paper, CssBaseline } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@material-ui/core";
 import { CollectionTitle } from "./Title";
-import Block from "./Block";
-import InputContainer from "../Input/InputContainer";
+import Block from "./Block/Block";
+import InputContainer from "../Elements/Input/InputContainer";
+import classes from './Collections.module.scss';
 
-const useStyle = makeStyles((theme) => ({
-    root: {
-        width: "500px",
-        backgroundColor: "#EBECF0",
-        margin: theme.spacing(1),
-        padding: theme.spacing(0, 0, 1, 0),
-    },
-    blockContainer: {
-        marginTop: theme.spacing(4),
-    },
-}));
 
 export default function Collection({ collection }) {
-    const classes = useStyle();
     return (
-        <div>
-            <Paper className={classes.root}>
-                <CssBaseline />
-                <CollectionTitle title={collection.name} collectionId={collection.id} />
-                <div className={classes.blockContainer}>
+        <>
+            <div className={classes.Header}>
+                <div className={classes.Info}>
+                    <CollectionTitle title={collection.name} collectionId={collection.id} />
+                    <i className={(collection.bookmarked ? "fas" : "far") + " fa-bookmark"}></i>
+                </div>
+                <div className={classes.Controls}>
+                    <i id="clock" className="fas fa-clock"></i>
+                    <i className="fas fa-ellipsis-h"></i>
+                    <img className={classes.user} alt="user" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU" />
+                </div>
+            </div>
+            <div className={classes.Content}>
+                <Container className={classes.BlockContainer} maxWidth="md">
                     {collection.blocks.map((block, index) => {
                         return <Block key={block.id} collectionId={collection.id} block={block} index={index} />;
                     })}
-                </div>
 
-                <InputContainer collectionId={collection.id} type="block" />
-            </Paper>
-        </div>
+                    <InputContainer collectionId={collection.id} type="block" />
+                </Container>
+            </div>
+        </>
     );
 }
