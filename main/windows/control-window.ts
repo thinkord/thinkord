@@ -1,9 +1,9 @@
-import { BrowserWindow, ipcMain } from "electron";
-import { BaseWindow } from "./BaseWindow";
+import { BrowserWindow } from "electron";
+import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import path from "path";
-import { Factory } from "../ipc-manager/usage/Factory";
-import { UsageChannel } from "../ipc-manager/usage/UsageChannel";
+import { Factory } from "../ipc-manager/usage/factory";
+import { UsageChannel } from "../ipc-manager/usage/usage-channel";
 
 export class ControlWindow extends BaseWindow {
     private static win?: BrowserWindow | null;
@@ -14,15 +14,15 @@ export class ControlWindow extends BaseWindow {
             width: 400,
             height: 100,
             webPreferences: {
-                enableRemoteModule: true,
-                nodeIntegration: true,
+                contextIsolation: true,
+                preload: path.resolve(__dirname, "preload.js"),
             },
         });
 
         ControlWindow.win.loadURL(
             isDev
-                ? "http://localhost:3000/controlbar.html"
-                : `file://${path.join(__dirname, "../build/controlbar.html")}`
+                ? "http://localhost:3000/#/controlbar"
+                : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
         );
 
         ControlWindow.win.once("ready-to-show", () => {
@@ -39,6 +39,7 @@ export class ControlWindow extends BaseWindow {
     public closeWindow(): void {
         ControlWindow.win?.close();
     }
+
     public register(): void {
         /**Solve repeat ipcMain register */
         // if (ControlWindow.count < 1) {
@@ -53,7 +54,6 @@ export class ControlWindow extends BaseWindow {
         const usage = new UsageChannel(new Factory());
         usage.setControlFactory().map((obj) => {
             obj.handleRequest();
-            obj.handleRequestOnce();
             return obj;
         });
     }

@@ -1,12 +1,24 @@
 import { app } from "electron";
-import { HomeWindow } from "./windows/HomeWindow";
+import { sequelize } from "./models/index";
+import log from "loglevel";
+import { HomeWindow } from "./windows/home-window";
 
-app.on("ready", () => {
-    const a: HomeWindow = new HomeWindow();
+log.setLevel("info");
+
+app.on("ready", async () => {
+    const homeWin: HomeWindow = new HomeWindow();
     // a.createWindow([new SystemChannel("systemprocess")]);
     // Alternative setting ipc channel
-    a.createWindow();
-    a.register();
+    homeWin.createWindow();
+    homeWin.register();
+
+    try {
+        await sequelize.sync({ logging: false });
+        log.info("Connection has been established successfully.");
+    } catch (error) {
+        log.info("Unable to connect to the database:", error);
+        app.quit();
+    }
 });
 
 app.on("window-all-closed", () => {

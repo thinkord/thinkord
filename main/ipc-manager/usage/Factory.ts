@@ -1,5 +1,5 @@
-import { IFactory } from "./IFactory";
-import { BaseChannel } from "../channel/BaseChannel";
+import { IFactory } from "./i-factory";
+import { BaseChannel } from "../channel/base-channel";
 
 export class Factory implements IFactory {
     channel!: BaseChannel;

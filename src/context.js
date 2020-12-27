@@ -23,21 +23,18 @@ class StoreProvider extends Component {
         },
         changed: false,
     };
+
     // Load the user's content
-    componentDidMount() {
-        appRuntime.send("homeprocess", "getAllData", "");
-        appRuntime.subscribeOnce("loadData", (data) => {
-            this.loadData(JSON.parse(data));
-        });
+    async componentDidMount() {
+        const data = await appRuntime.invoke("home-channel", "getAllData", "");
+        this.loadData(JSON.parse(data));
     }
 
-    componentDidUpdate() {
+    async componentDidUpdate() {
         if (this.state.changed) {
-            appRuntime.send("homeprocess", "getAllData", "");
-            appRuntime.subscribeOnce("loadData", (data) => {
-                this.loadData(JSON.parse(data));
-                this.setState({ changed: false });
-            });
+            const data = await appRuntime.invoke("home-channel", "getAllData", "");
+            this.loadData(JSON.parse(data));
+            this.setState({ changed: false });
         }
     }
 
@@ -133,7 +130,7 @@ class StoreProvider extends Component {
      *
      * @param {string} title
      */
-    addCollection = (title, id) => {
+    addCollection = async (title, id) => {
         // const { data } = this.state;
         const folderId = parseInt(id);
         const newCollection = {
@@ -141,8 +138,8 @@ class StoreProvider extends Component {
             folderId,
         };
 
-        appRuntime.send("homeprocess", "addCollection", newCollection);
-        appRuntime.subscribeOnce("updateData");
+        await appRuntime.invoke("home-channel", "addCollection", newCollection);
+        // appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
 
         // appRuntime.subscribeOnce("updateData", (d) => {
@@ -206,13 +203,13 @@ class StoreProvider extends Component {
         });
     };
 
-    deleteCollection = (collectionId) => {
+    deleteCollection = async (collectionId) => {
         // const { data } = this.state;
         // let collections = { ...data.collections };
         // let folders = { ...data.folders };
 
-        appRuntime.send("homeprocess", "deleteCollection", collectionId);
-        appRuntime.subscribeOnce("updateData");
+        await appRuntime.invoke("home-channel", "deleteCollection", collectionId);
+        // appRuntime.subscribeOnce("updateData");
         this.setState({ changed: true });
         // Object.values(folders).map((folder) => {
         //     if (folder.cs.includes(targetCId)) {
@@ -264,31 +261,31 @@ class StoreProvider extends Component {
         });
     };
 
-    addFolder = (folderName) => {
+    addFolder = async (folderName) => {
         // const { data } = this.state;
         const newFolder = {
             name: folderName,
             cs: [],
         };
 
-        appRuntime.send("homeprocess", "addFolder", newFolder);
-        appRuntime.subscribeOnce("updateData", () => {
-            this.setState({ changed: true });
-            // d = JSON.parse(d);
-            // d.cs = [];
-            // const newState = {
-            //     ...data,
-            //     folderIds: [...data.folderIds, d.id],
-            //     folders: {
-            //         ...data.folders,
-            //         [d.id]: d,
-            //     },
-            // };
+        await appRuntime.invoke("home-channel", "addFolder", newFolder);
+        this.setState({ changed: true });
+        // appRuntime.subscribeOnce("updateData", () => {
+        // d = JSON.parse(d);
+        // d.cs = [];
+        // const newState = {
+        //     ...data,
+        //     folderIds: [...data.folderIds, d.id],
+        //     folders: {
+        //         ...data.folders,
+        //         [d.id]: d,
+        //     },
+        // };
 
-            // this.setState({
-            //     data: newState,
-            // });
-        });
+        // this.setState({
+        //     data: newState,
+        // });
+        // });
     };
 
     deletFolder = (folderId) => {
@@ -348,8 +345,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                    <h1>Loading</h1>
-                )}
+                        <h1>Loading</h1>
+                    )}
             </>
         );
     }
