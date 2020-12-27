@@ -53,10 +53,7 @@ export class ControlWindow extends BaseWindow {
 
         const usage = new UsageChannel(new Factory());
         usage.setControlFactory().map((obj) => {
-            obj.onRequest();
-            // obj.onRequestOnce();
-            // obj.handleRequest();
-            // obj.handleRequestOnce();
+            obj.handleRequest();
             return obj;
         });
     }

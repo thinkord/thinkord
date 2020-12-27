@@ -6,43 +6,23 @@ import { BaseChannel } from "./base-channel";
 import { Folder, Collection } from "../../models";
 
 export class HomeChannel extends BaseChannel {
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
-    public onRequest(): void {
-        ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    public handleRequest(): void {
+        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "getAllData":
-                    this[command](event, args);
-                    break;
+                    return this[command](event, args);
                 case "addFolder":
-                    this[command](event, args);
-                    break;
+                    return this[command](event, args);
                 case "addCollection":
-                    this[command](event, args);
-                    break;
+                    return this[command](event, args);
                 case "deleteCollection":
-                    this[command](event, args);
-                    break;
+                    return this[command](event, args);
                 default:
-                    // eslint-disable-next-line no-console
                     log.warn("There is no command in thic channel");
                     break;
             }
         });
     }
-
-    // public onRequestOnce(): void {
-    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public handleRequest(): void {
-    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
 
     // public handleRequestOnce(): void {
     //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
@@ -50,27 +30,32 @@ export class HomeChannel extends BaseChannel {
     //     });
     // }
 
-    /** Start operation */
-    private async getAllData(event: IpcMainEvent, args: any): Promise<void> {
+    // public deleteRequest(channelName: string): void {
+    //     ipcMain.removeAllListeners(channelName);
+    // }
+
+    private async getAllData(event: IpcMainInvokeEvent, args: any): Promise<string> {
         const query = await Folder.findAll({
             include: { all: true, nested: true },
         });
         const data = JSON.stringify(query, null, 2);
-        event.reply("loadData", data);
+        return data;
     }
 
-    async addFolder(event: IpcMainEvent, args: any): Promise<void> {
+    private async addFolder(event: IpcMainInvokeEvent, args: any): Promise<string> {
         const name = args.name.toString();
-        const data = await Folder.create({ name });
-        event.reply("updateData", JSON.stringify(data, null, 2));
+        const query = await Folder.create({ name });
+        const data = JSON.stringify(query, null, 2);
+        return data;
     }
 
-    async addCollection(event: IpcMainEvent, args: any): Promise<void> {
-        const data = await Collection.create({ name: args.title.toString(), folderId: args.folderId });
-        event.reply("updateData", JSON.stringify(data, null, 2));
+    private async addCollection(event: IpcMainInvokeEvent, args: any): Promise<string> {
+        const query = await Collection.create({ name: args.title.toString(), folderId: args.folderId });
+        const data = JSON.stringify(query, null, 2);
+        return data;
     }
 
-    async deleteCollection(event: IpcMainEvent, args: any): Promise<void> {
+    private async deleteCollection(event: IpcMainInvokeEvent, args: any): Promise<void> {
         Collection.destroy({
             where: {
                 id: args,

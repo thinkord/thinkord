@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainEvent, globalShortcut } from "electron";
+import { ipcMain, IpcMainInvokeEvent, globalShortcut } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { ControlWindow } from "../../windows/control-window";
@@ -16,11 +16,12 @@ export class WindowChannel extends BaseChannel {
         this.wins = {};
     }
 
-    public onRequest(): void {
-        ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    public handleRequest(): void {
+        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "create":
                     this[command](event, args);
+                    break;
                 case "close":
                     this[command](event, args);
                     break;
@@ -30,18 +31,6 @@ export class WindowChannel extends BaseChannel {
             }
         });
     }
-
-    // public onRequestOnce(): void {
-    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public handleRequest(): void {
-    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
 
     // public handleRequestOnce(): void {
     //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
@@ -53,7 +42,7 @@ export class WindowChannel extends BaseChannel {
     //     ipcMain.removeAllListeners(channelName);
     // }
 
-    public create(event: IpcMainEvent, args: any): void {
+    public create(event: IpcMainInvokeEvent, args: any): void {
         if (args.win === "controlWin") {
             if (!this.wins.controlWindow) {
                 this.wins.controlWindow = new ControlWindow();
@@ -67,7 +56,7 @@ export class WindowChannel extends BaseChannel {
         }
     }
 
-    public close(event: IpcMainEvent, args: any): void {
+    public close(event: IpcMainInvokeEvent, args: any): void {
         if (args.win === "controlWin") {
             if (this.wins.controlWindow) {
                 this.wins.controlWindow.closeWindow();

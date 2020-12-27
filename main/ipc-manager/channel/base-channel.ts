@@ -1,16 +1,16 @@
 import { ipcMain } from "electron";
+import log from "loglevel";
+
+log.setLevel("info");
 export abstract class BaseChannel {
     channelName?: string;
 
     constructor(channelName: string) {
         this.channelName = channelName;
-        // eslint-disable-next-line no-console
-        console.log(`${channelName} setup`);
+        log.info(`${channelName} setup`);
     }
 
-    public abstract onRequest(): void;
-    // public abstract onRequestOnce(): void;
-    // public abstract handleRequest(): void;
+    public abstract handleRequest(): void;
     // public abstract handleRequestOnce(): void;
     // public abstract deleteRequest(channelName: string): void;
     public deleteRequest(channelName: string): void {

@@ -1,4 +1,4 @@
-import { globalShortcut, ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
@@ -7,11 +7,8 @@ import { Block } from "../../models";
 log.setLevel("info");
 
 export class MediaChannel extends BaseChannel {
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
-    public onRequest(): void {
-        ipcMain.on(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
+    public handleRequest(): void {
+        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "saveImage":
                     this[command](event, args);
@@ -29,22 +26,14 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    // public onRequestOnce(): void {
-    //     ipcMain.once(this.channelName!, (event: IpcMainEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public handleRequest(): void {
-    //     ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
     // public handleRequestOnce(): void {
     //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
     //         // Should add something
     //     });
+    // }
+
+    // public deleteRequest(channelName: string): void {
+    //     ipcMain.removeAllListeners(channelName);
     // }
 
     private async createBlockAndFile(name: string, path: string, type: string): Promise<void> {
@@ -62,7 +51,7 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private async saveImage(event: IpcMainEvent, args: any): Promise<void> {
+    private async saveImage(event: IpcMainInvokeEvent, args: any): Promise<void> {
         this.createBlockAndFile(args.name, args.path, "image");
     }
 
@@ -74,11 +63,11 @@ export class MediaChannel extends BaseChannel {
     //     }
     // }
 
-    private async saveAudio(event: IpcMainEvent, args: any): Promise<void> {
+    private async saveAudio(event: IpcMainInvokeEvent, args: any): Promise<void> {
         this.createBlockAndFile(args.name, args.path, "audio");
     }
 
-    private async saveVideo(event: IpcMainEvent, args: any): Promise<void> {
+    private async saveVideo(event: IpcMainInvokeEvent, args: any): Promise<void> {
         this.createBlockAndFile(args.name, args.path, "video");
     }
 }

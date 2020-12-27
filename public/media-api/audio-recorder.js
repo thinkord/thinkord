@@ -71,7 +71,7 @@ class AudioRecorder {
                             log.error(err);
                         } else {
                             log.info("Your audio file has been saved");
-                            ipcRenderer.send("media-channel", "saveAudio", { name: recName, path: recPath });
+                            ipcRenderer.invoke("media-channel", "saveAudio", { name: recName, path: recPath });
                         }
                     });
                 } else log.error("FileReader has problems reading blob");

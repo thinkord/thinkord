@@ -28,7 +28,7 @@ function NoteCard(props) {
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
         tabAdd(props.title, props.id);
-        appRuntime.send("window-channel", "create", { win: "controlWin" });
+        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
     };
 
     // const handleBookmarkChanged = (noteId) => {
@@ -77,7 +77,7 @@ function NoteCard(props) {
                     className="card-record-anchor"
                     to={`/work/${props.id}`}
                     onClick={() => {
-                        appRuntime.send("window-channel", "create", { win: "controlWin" });
+                        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
                     }}
                 >
                     <i className="far fa-dot-circle"></i>

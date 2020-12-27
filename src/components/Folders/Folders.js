@@ -16,7 +16,7 @@ export default function Folders({ data }) {
                         key={folder.id}
                         onContextMenu={(e) => {
                             if (e.type === "contextmenu") {
-                                appRuntime.send("systemprocess", "getHomeContextMenu", folder.id);
+                                appRuntime.invoke("systemprocess", "getHomeContextMenu", folder.id);
                                 appRuntime.subscribe("contextUpdate", (d) => {
                                     context[d](folder.id);
                                 });

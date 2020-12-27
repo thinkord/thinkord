@@ -9,21 +9,21 @@ const audioRecorder = new AudioRecorder();
 const videoRecorder = new VideoRecorder();
 
 contextBridge.exposeInMainWorld("appRuntime", {
-    send: (channel, command, args) => {
-        ipcRenderer.send(channel, command, args);
-    },
-    subscribe: (channel, listener) => {
-        const subscription = (event, ...args) => listener(...args);
-        ipcRenderer.on(channel, subscription);
+    // send: (channel, command, args) => {
+    //     ipcRenderer.send(channel, command, args);
+    // },
+    // subscribe: (channel, listener) => {
+    //     const subscription = (event, ...args) => listener(...args);
+    //     ipcRenderer.on(channel, subscription);
 
-        return () => {
-            ipcRenderer.removeListener(channel, subscription);
-        };
-    },
-    subscribeOnce: (channel, listener) => {
-        const subscription = (event, ...args) => listener(...args);
-        ipcRenderer.once(channel, subscription);
-    },
+    //     return () => {
+    //         ipcRenderer.removeListener(channel, subscription);
+    //     };
+    // },
+    // subscribeOnce: (channel, listener) => {
+    //     const subscription = (event, ...args) => listener(...args);
+    //     ipcRenderer.once(channel, subscription);
+    // },
     invoke: async (channel, command, args) => {
         const result = await ipcRenderer.invoke(channel, command, args);
         return result;
@@ -32,12 +32,12 @@ contextBridge.exposeInMainWorld("appRuntime", {
         takeScreenshot(userPath, thumbSize);
     },
     handleDragsnip: () => {
-        ipcRenderer.send("window-channel", "create", { win: "maskWin" });
-        ipcRenderer.removeAllListeners("dragsnip-saved");
-        ipcRenderer.once("dragsnip-saved", (event, dragsnipPath) => {
-            // Add new block to the note object
-            // let note = noteManager.addBlock(this.state.collection, { filePath: dragsnipPath });
-        });
+        ipcRenderer.invoke("window-channel", "create", { win: "maskWin" });
+        // ipcRenderer.removeAllListeners("dragsnip-saved");
+        // ipcRenderer.once("dragsnip-saved", (event, dragsnipPath) => {
+        //     // Add new block to the note object
+        //     // let note = noteManager.addBlock(this.state.collection, { filePath: dragsnipPath });
+        // });
     },
     handleDragsnipStart: () => {
         window.addEventListener("DOMContentLoaded", () => {

@@ -40,10 +40,7 @@ export class HomeWindow extends BaseWindow {
 
     public register(): void {
         new UsageChannel(new Factory()).setHomeFactory().map((obj) => {
-            obj.onRequest();
-            // obj.onRequestOnce();
-            // obj.handleRequest();
-            // obj.handleRequestOnce();
+            obj.handleRequest();
             return obj;
         });
     }

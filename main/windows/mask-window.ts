@@ -1,6 +1,6 @@
 import os from "os";
 import * as path from "path";
-import { BrowserWindow, IpcMainEvent, screen } from "electron";
+import { BrowserWindow, screen } from "electron";
 import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import { Factory } from "../ipc-manager/usage/factory";
@@ -70,10 +70,7 @@ export class MaskWindow extends BaseWindow {
 
     public register(): void {
         new UsageChannel(new Factory()).setMaskFactory().map((obj) => {
-            obj.onRequest();
-            // obj.onRequestOnce();
-            // obj.handleRequest();
-            // obj.handleRequestOnce();
+            obj.handleRequest();
             return obj;
         });
     }

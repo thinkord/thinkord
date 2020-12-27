@@ -58,7 +58,7 @@ const startDragsnip = () => {
         });
 
         $btnClose.addEventListener("click", () => {
-            ipcRenderer.send("window-channel", "close", { win: "maskWin" });
+            ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
             window.close();
         });
 
@@ -77,11 +77,11 @@ const startDragsnip = () => {
                 if (err) log.error(err);
 
                 log.info("Dragsnip has been saved!");
-                ipcRenderer.send("media-channel", "saveImage", {
+                ipcRenderer.invoke("media-channel", "saveImage", {
                     name: dragsnipName,
                     path: dragsnipPath,
                 });
-                ipcRenderer.send("window-channel", "close", { win: "maskWin" });
+                ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
             });
         });
     });

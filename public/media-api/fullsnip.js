@@ -27,7 +27,7 @@ const takeScreenshot = (userPath, thumbSize) => {
                     if (err) {
                         throw err;
                     } else {
-                        ipcRenderer.send("media-channel", "saveImage", {
+                        ipcRenderer.invoke("media-channel", "saveImage", {
                             name: screenshotName,
                             path: screenshotPath,
                         });

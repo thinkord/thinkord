@@ -85,7 +85,7 @@ class VideoRecorder {
                             log.error(err);
                         } else {
                             log.info("Your video file has been saved");
-                            ipcRenderer.send("media-channel", "saveVideo", { name: recName, path: recPath });
+                            ipcRenderer.invoke("media-channel", "saveVideo", { name: recName, path: recPath });
                         }
                     });
                 } else log.error("FileReader has problems reading blob");
