@@ -1,12 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import appRuntime from "../appRuntime";
 
 export default function ControlBar() {
     const [audioState, setAudioState] = useState(false);
     const [videoState, setVideoState] = useState(false);
 
+    useEffect(() => {
+        appRuntime.registerAllShortcuts();
+
+        // Listen to globalShortcut
+        appRuntime.subscribe("system-channel", (command) => {
+            switch (command) {
+                case "fullsnip":
+                    handleFullsnip();
+                    break;
+                case "dragsnip":
+                    handleDragsnip();
+                    break;
+                case "record-audio":
+                    handleAudio();
+                    break;
+                case "record-video":
+                    handleVideo();
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        return function cleanup() {
+            appRuntime.invoke("system-channel", "unregisterAllShortcuts");
+        };
+    });
+
     const handleFullsnip = async () => {
-        // Refactor later
         const path = await appRuntime.invoke("system-channel", "getUserPath");
         const screenshotSize = await appRuntime.invoke("system-channel", "getScreenshotSize");
         appRuntime.handleFullsnip(path, screenshotSize);

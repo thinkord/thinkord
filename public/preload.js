@@ -12,18 +12,21 @@ contextBridge.exposeInMainWorld("appRuntime", {
     // send: (channel, command, args) => {
     //     ipcRenderer.send(channel, command, args);
     // },
-    // subscribe: (channel, listener) => {
-    //     const subscription = (event, ...args) => listener(...args);
-    //     ipcRenderer.on(channel, subscription);
+    subscribe: (channel, listener) => {
+        const subscription = (event, ...args) => listener(...args);
+        ipcRenderer.on(channel, subscription);
 
-    //     return () => {
-    //         ipcRenderer.removeListener(channel, subscription);
-    //     };
-    // },
-    // subscribeOnce: (channel, listener) => {
-    //     const subscription = (event, ...args) => listener(...args);
-    //     ipcRenderer.once(channel, subscription);
-    // },
+        return () => {
+            ipcRenderer.removeListener(channel, subscription);
+        };
+    },
+    subscribeOnce: (channel, listener) => {
+        const subscription = (event, ...args) => listener(...args);
+        ipcRenderer.once(channel, subscription);
+    },
+    unsubscribe: (channel) => {
+        ipcRenderer.removeAllListeners(channel);
+    },
     invoke: async (channel, command, args) => {
         const result = await ipcRenderer.invoke(channel, command, args);
         return result;
@@ -57,5 +60,11 @@ contextBridge.exposeInMainWorld("appRuntime", {
         } else {
             videoRecorder.stop(userPath);
         }
+    },
+    registerAllShortcuts: () => {
+        ipcRenderer.invoke("system-channel", "registerAllShortcuts");
+    },
+    unregisterAllShortcuts: () => {
+        ipcRenderer.invoke("system-channel", "unregisterAllShortcuts");
     },
 });
