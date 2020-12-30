@@ -50,7 +50,7 @@ export default function InputBlock({ setOpen, collectionId, type }) {
             addCollection(title);
             setTitle("");
             setOpen(false);
-            appRuntime.send("createFile", title);
+            appRuntime.invoke("createFile", title);
         }
     };
     return (
