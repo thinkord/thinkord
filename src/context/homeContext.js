@@ -18,21 +18,31 @@ class StoreProvider extends Component {
 
     // Load the user's content
     async componentDidMount() {
-        const data = await appRuntime.invoke("home-channel", "getHomeData", "");
-        const receiveData = {};
-        receiveData.folders = JSON.parse(data.data);
-        receiveData.orderCollections = JSON.parse(data.data2);
-        this.loadData(receiveData);
-    }
-
-    async componentDidUpdate() {
-        if (this.state.changed) {
-            const data = await appRuntime.invoke("home-channel", "getHomeData", "");
+        // const data = await appRuntime.invoke("home-channel", "getAllData", "");
+        // this.loadData(JSON.parse(data));
+        // componentDidMount() {
+        appRuntime.send("home-channel", "getHomeData");
+        appRuntime.subscribeOnce("loadData", (data) => {
             const receiveData = {};
             receiveData.folders = JSON.parse(data.data);
             receiveData.orderCollections = JSON.parse(data.data2);
             this.loadData(receiveData);
-            this.setState({ changed: false });
+        });
+    }
+
+    async componentDidUpdate() {
+        if (this.state.changed) {
+            // const data = await appRuntime.invoke("home-channel", "getAllData", "");
+            // this.loadData(JSON.parse(data));
+            // this.setState({ changed: false });
+            appRuntime.send("home-channel", "getHomeData", "");
+            appRuntime.subscribeOnce("loadData", (data) => {
+                const receiveData = {};
+                receiveData.folders = JSON.parse(data.data);
+                receiveData.orderCollections = JSON.parse(data.data2);
+                this.loadData(receiveData);
+                this.setState({ changed: false });
+            });
         }
     }
 
@@ -128,7 +138,7 @@ class StoreProvider extends Component {
             folderId,
         };
 
-        appRuntime.invoke("home-channel", "addCollection", newCollection);
+        appRuntime.send("home-channel", "addCollection", newCollection);
         this.setState({ changed: true });
     };
 
@@ -138,12 +148,12 @@ class StoreProvider extends Component {
      * @param {number} collectionId
      */
     updateCollectionTitle = (title, collectionId) => {
-        appRuntime.invoke("home-channel", "updateCollection", { title, collectionId });
+        appRuntime.send("home-channel", "updateCollection", { title, collectionId });
         this.setState({ changed: true });
     };
 
     deleteCollection = (collectionId) => {
-        appRuntime.invoke("home-channel", "deleteCollection", collectionId);
+        appRuntime.send("home-channel", "deleteCollection", collectionId);
         this.setState({ changed: true });
     };
 
@@ -175,12 +185,13 @@ class StoreProvider extends Component {
     };
 
     addFolder = async (folderName) => {
+        // const { data } = this.state;
         const newFolder = {
             name: folderName,
             cs: [],
         };
 
-        appRuntime.invoke("home-channel", "addFolder", newFolder);
+        appRuntime.send("home-channel", "addFolder", newFolder);
         this.setState({ changed: true });
     };
 
@@ -239,8 +250,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                        <h1>Loading</h1>
-                    )}
+                    <h1>Loading</h1>
+                )}
             </>
         );
     }

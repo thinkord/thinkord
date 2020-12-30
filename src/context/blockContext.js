@@ -26,11 +26,18 @@ class BlockProvider extends Component {
         }
     }
 
-    loadingData = async () => {
-        const data = await appRuntime.invoke("home-channel", "getBlocks", { id: this.props.cId });
-        this.setState({
-            collectionInfo: JSON.parse(data),
+    loadingData = () => {
+        appRuntime.send("home-channel", "getBlocks", { id: this.props.cId });
+        appRuntime.subscribeOnce("loadData", (data) => {
+            this.setState({
+                collectionInfo: JSON.parse(data),
+            });
         });
+    };
+
+    getBlocks = (id) => {
+        appRuntime.send("home-channel", "getBlocks", id);
+        this.setState({ changed: true });
     };
 
     addBlock = (title, type, description, id) => {
@@ -40,7 +47,7 @@ class BlockProvider extends Component {
             description,
             id,
         };
-        appRuntime.invoke("home-channel", "addBlock", newBlock);
+        appRuntime.send("home-channel", "addBlock", newBlock);
         this.setState({ changed: true });
     };
 

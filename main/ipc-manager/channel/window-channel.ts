@@ -12,7 +12,7 @@ interface BrowserWindows {
 
 export class WindowChannel extends BaseChannel {
     wins: BrowserWindows;
-
+    currentCollection: number | undefined;
     constructor(props: string) {
         super(props);
         this.wins = {};
@@ -29,6 +29,8 @@ export class WindowChannel extends BaseChannel {
                     // case "captureSignal":
                     this[command](event, args);
                     break;
+                case "getCurrentWork":
+                    return this[command]();
                 default:
                     log.warn("There is no command in this channel");
                     break;
@@ -36,28 +38,25 @@ export class WindowChannel extends BaseChannel {
         });
     }
 
-    // public handleRequestOnce(): void {
-    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
+    private getCurrentWork(): number {
+        return this.currentCollection!;
+    }
 
     public create(event: IpcMainInvokeEvent, args: any): void {
         if (args.win === "controlWin") {
             if (!this.wins.controlWindow) {
+                this.currentCollection = args.id;
                 this.wins.controlWindow = new ControlWindow();
                 this.wins.controlWindow.createWindow();
                 this.wins.controlWindow.register();
             } else {
+                this.currentCollection = args.id;
                 ControlWindow.sendMessage("changed", args.id);
             }
         } else if (args.win === "maskWin") {
             if (!this.wins.maskWindow) {
                 this.createMaskWindow();
+                MaskWindow.sendMessage("masktoCollection", args.current);
             }
         }
     }
@@ -106,14 +105,14 @@ export class WindowChannel extends BaseChannel {
     //     }
     // }
 
-    public closeControlBar(): void {
-        if (this.wins.controlWindow) {
-            this.wins.controlWindow.closeWindow();
-            this.deleteRequest("test-channel");
-            this.deleteRequest("system-channel");
-            this.wins.controlWindow = undefined;
-        }
-    }
+    // public closeControlBar(): void {
+    //     if (this.wins.controlWindow) {
+    //         this.wins.controlWindow.closeWindow();
+    //         this.deleteRequest("test-channel");
+    //         this.deleteRequest("system-channel");
+    //         this.wins.controlWindow = undefined;
+    //     }
+    // }
 
     public captureSignal(event: IpcMainInvokeEvent, args: IpcRequest): void {
         // Transfer information to different frame

@@ -30,8 +30,11 @@ function NoteCard({ collection }) {
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
         tabAdd(name, id);
-        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
+        appRuntime.invoke("window-channel", "create", { win: "controlWin", id });
     };
+
+    // const handleBookmarkChanged = (noteId) => {
+    // }
 
     return (
         <React.Fragment>
@@ -72,7 +75,7 @@ function NoteCard({ collection }) {
                     className="card-record-anchor"
                     to={`/work/${id}`}
                     onClick={() => {
-                        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
+                        appRuntime.invoke("window-channel", "create", { win: "controlWin", id });
                     }}
                 >
                     <i className="far fa-dot-circle"></i>

@@ -61,7 +61,7 @@ export class MaskWindow extends BaseWindow {
         }
 
         // Debug
-        MaskWindow.win.webContents.openDevTools();
+        // MaskWindow.win.webContents.openDevTools();
     }
 
     public closeWindow(): void {
@@ -74,5 +74,7 @@ export class MaskWindow extends BaseWindow {
             return obj;
         });
     }
-    public sendMessage(): void {}
+    public static sendMessage(response: string, data: string): void {
+        MaskWindow.win?.webContents.send(response, data);
+    }
 }

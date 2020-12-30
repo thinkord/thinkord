@@ -54,7 +54,8 @@ export default function ControlBar() {
     };
 
     const handleDragsnip = () => {
-        appRuntime.handleDragsnip();
+        const currentWork = currentCId === undefined ? mapCId : currentCId;
+        appRuntime.handleDragsnip(currentWork);
     };
 
     const handleAudio = async () => {
@@ -77,9 +78,15 @@ export default function ControlBar() {
         setVideoState((prevState) => !prevState);
     };
 
+    // const mapCurrent = () => {
+    //     const currentWork = currentCId === undefined ? mapCId : currentCId;
+    //     appRuntime.setCurrentCollection(currentWork);
+    // }
+
     return (
         <div>
             <h1> map: {currentCId === undefined ? mapCId : currentCId}</h1>
+            {/* {mapCurrent()} */}
             <button id="textButton">text</button>
             <button
                 id="fullsnipButton"

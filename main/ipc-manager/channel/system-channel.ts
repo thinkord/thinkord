@@ -11,10 +11,8 @@ export class SystemChannel extends BaseChannel {
                 case "getUserPath":
                 case "getScreenshotSize":
                 case "getCurrentScreen":
-                    this[command]();
-                    break;
+                    return this[command]();
                 case "registerAllShortcuts":
-                // case "getScreenShot":
                     this[command](event);
                     break;
                 case "unregisterAllShortcuts":

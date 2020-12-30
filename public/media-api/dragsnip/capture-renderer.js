@@ -12,7 +12,7 @@ const { CaptureEditor } = require("./capture-editor");
 
 log.setLevel("info");
 
-const startDragsnip = () => {
+const startDragsnip = (currentWork) => {
     const $canvas = document.getElementById("js-canvas");
     const $bg = document.getElementById("js-bg");
     const $toolbar = document.getElementById("js-toolbar");
@@ -80,8 +80,10 @@ const startDragsnip = () => {
                 ipcRenderer.invoke("media-channel", "saveImage", {
                     name: dragsnipName,
                     path: dragsnipPath,
+                    current: currentWork,
                 });
                 ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
+                ipcRenderer.invoke("window-channel", "captureSignal", "data");
             });
         });
     });
