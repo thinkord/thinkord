@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
 export default function Block({ block, index, collectionId }) {
     const classes = useStyles();
     const { deleteBlock } = useContext(BlockUpdateContext);
-
     const handleBlockChange = () => {
         deleteBlock(collectionId, block.id);
     };

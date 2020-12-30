@@ -31,10 +31,11 @@ export class HomeChannel extends BaseChannel {
         });
     }
 
+
     /** Start operation */
     private async getHomeData(event: IpcMainEvent): Promise<void> {
         const query1 = await Folder.findAll({
-            include: [Folder.associations.collections],
+            include: { all: true, nested: true },
         });
         const query2 = await Collection.findAll({ order: [["updatedAt", "ASC"]] });
         const data = JSON.stringify(query1, null, 2);
@@ -43,7 +44,6 @@ export class HomeChannel extends BaseChannel {
     }
 
     private async getCollection(event: IpcMainEvent, args: IpcRequest): Promise<void> {
-        this.collectionId = args.id;
         const query = await Collection.findOne({
             where: { id: args.id },
             include: [Collection.associations.blocks],
@@ -67,7 +67,7 @@ export class HomeChannel extends BaseChannel {
         event.reply("getCID", this.collectionId);
     }
 
-    private async addFolder(event: IpcMainEvent, args: IpcRequest): Promise<void> {
+    async addFolder(event: IpcMainEvent, args: IpcRequest): Promise<void> {
         const name = args.name.toString();
         const data = await Folder.create({ name });
     }
