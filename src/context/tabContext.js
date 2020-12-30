@@ -52,7 +52,6 @@ const TabsContextProvider = (props) => {
             return updatedTabs;
         });
         appRuntime.invoke("window-channel", "close", { win: "controlWin" });
-        // appRuntime.send("window-channel", "closeControlBar");
     };
 
     return (

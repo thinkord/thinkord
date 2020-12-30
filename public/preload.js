@@ -9,9 +9,6 @@ const audioRecorder = new AudioRecorder();
 const videoRecorder = new VideoRecorder();
 
 contextBridge.exposeInMainWorld("appRuntime", {
-    send: (channel, command, args) => {
-        ipcRenderer.send(channel, command, args);
-    },
     subscribe: (channel, listener) => {
         const subscription = (event, ...args) => listener(...args);
         ipcRenderer.on(channel, subscription);

@@ -8,12 +8,10 @@ const ControlContext = React.createContext({
 });
 
 class ControlProvider extends Component {
-    componentDidMount() {
-        appRuntime.send("home-channel", "getCID");
-        appRuntime.subscribe("getCID", (data) => {
-            this.setState({
-                mapCId: data,
-            });
+    async componentDidMount() {
+        const data = await appRuntime.invoke("home-channel", "getCID");
+        this.setState({
+            mapCId: data,
         });
     }
 
