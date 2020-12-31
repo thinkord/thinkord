@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Block } from "../../models";
+import { IpcRequest } from "../../shared/IpcRequest";
 
 log.setLevel("info");
 
@@ -11,14 +12,15 @@ export class MediaChannel extends BaseChannel {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "saveImage":
+                    // case "fullsnip":
+                    // case "handleVideo":
                     this[command](event, args);
                     break;
                 case "saveAudio":
-                    this[command](event, args);
-                    break;
                 case "saveVideo":
                     this[command](event, args);
                     break;
+
                 default:
                     log.warn("There is no command in thic channel");
                     break;
@@ -26,24 +28,14 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    // public handleRequestOnce(): void {
-    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
-
-    private async createBlockAndFile(name: string, path: string, type: string): Promise<void> {
+    private async createBlockAndFile(name: string, path: string, type: string, collectionId: number): Promise<void> {
         const block = await Block.create({
             id: Number(uuidv4()),
             title: name,
-            type: type,
+            type,
             bookmark: false,
+            collectionId,
         });
-
         await block.createFile({
             id: Number(uuidv4()),
             name: name,
@@ -52,7 +44,7 @@ export class MediaChannel extends BaseChannel {
     }
 
     private async saveImage(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "image");
+        this.createBlockAndFile(args.name, args.path, "image", parseInt(args.current));
     }
 
     // private handleDragsnip(event: IpcMainEvent, args: any): void {
@@ -64,10 +56,17 @@ export class MediaChannel extends BaseChannel {
     // }
 
     private async saveAudio(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "audio");
+        this.createBlockAndFile(args.name, args.path, "audio", parseInt(args.current));
     }
 
     private async saveVideo(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "video");
+        this.createBlockAndFile(args.name, args.path, "video", parseInt(args.current));
+    }
+
+    private handleVideo(event: IpcMainEvent, args: IpcRequest): void {
+        log.info(args);
+        const status = args.status;
+        // if (status === false) VideoRecorder.start();
+        // else if (status === true) VideoRecorder.stop();
     }
 }

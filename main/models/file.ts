@@ -17,7 +17,7 @@ import {
 import { Block } from "./block";
 
 interface FileAttributes {
-    id: number;
+    id?: number;
     name: string;
     path: string;
     createdAt?: Date;

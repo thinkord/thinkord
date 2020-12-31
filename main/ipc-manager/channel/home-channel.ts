@@ -1,21 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
-import { Folder, Collection } from "../../models";
+import { Folder, Collection, Block } from "../../models";
+import { IpcRequest } from "../../shared/IpcRequest";
 
 export class HomeChannel extends BaseChannel {
+    private collectionId: string | undefined;
     public handleRequest(): void {
-        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
+        ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: IpcRequest) => {
             switch (command) {
-                case "getAllData":
-                    return this[command](event, args);
                 case "addFolder":
-                    return this[command](event, args);
+                case "addBlock":
                 case "addCollection":
-                    return this[command](event, args);
+                case "orderCollection":
+                case "updateCollection":
                 case "deleteCollection":
+                case "deleteBlock":
+                case "getHomeData":
+                case "getCollection":
+                case "getBlocks":
+                case "getCID":
                     return this[command](event, args);
                 default:
                     log.warn("There is no command in thic channel");
@@ -24,42 +30,80 @@ export class HomeChannel extends BaseChannel {
         });
     }
 
-    // public handleRequestOnce(): void {
-    //     ipcMain.handleOnce(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
-    //         // Should add something
-    //     });
-    // }
-
-    // public deleteRequest(channelName: string): void {
-    //     ipcMain.removeAllListeners(channelName);
-    // }
-
-    private async getAllData(event: IpcMainInvokeEvent, args: any): Promise<string> {
-        const query = await Folder.findAll({
+    /** Start operation */
+    private async getHomeData(event: IpcMainInvokeEvent): Promise<Record<string, string>> {
+        const query1 = await Folder.findAll({
             include: { all: true, nested: true },
+        });
+        const query2 = await Collection.findAll({ order: [["updatedAt", "ASC"]] });
+        const data = JSON.stringify(query1, null, 2);
+        const data2 = JSON.stringify(query2, null, 2);
+
+        return { data, data2 };
+    }
+
+    private async getCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<string> {
+        const query = await Collection.findOne({
+            where: { id: args.id },
+            include: [Collection.associations.blocks],
+        });
+
+        const data = JSON.stringify(query, null, 2);
+
+        return data;
+    }
+
+    private async getBlocks(event: IpcMainInvokeEvent, args: IpcRequest): Promise<string> {
+        this.collectionId = args.id;
+        const query = await Collection.findOne({
+            where: { id: args.id },
+            include: [Collection.associations.blocks],
         });
         const data = JSON.stringify(query, null, 2);
         return data;
     }
 
-    private async addFolder(event: IpcMainInvokeEvent, args: any): Promise<string> {
+    private async getCID(event: IpcMainInvokeEvent): Promise<string> {
+        return this.collectionId!;
+    }
+
+    async addFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
         const name = args.name.toString();
-        const query = await Folder.create({ name });
-        const data = JSON.stringify(query, null, 2);
-        return data;
+        await Folder.create({ name });
     }
 
-    private async addCollection(event: IpcMainInvokeEvent, args: any): Promise<string> {
-        const query = await Collection.create({ name: args.title.toString(), folderId: args.folderId });
-        const data = JSON.stringify(query, null, 2);
-        return data;
+    private async addBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { title, type, description, id } = args;
+        const collectionId = parseInt(id);
+        await Block.create({ title, type, description, collectionId });
     }
 
-    private async deleteCollection(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        Collection.destroy({
+    private async deleteBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { blockId } = args;
+        await Block.destroy({ where: { id: blockId } });
+    }
+
+    private async addCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { folderId } = args;
+        const id = parseInt(folderId);
+        await Collection.create({ name: args.title.toString(), folderId: id });
+    }
+
+    private async deleteCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        await Collection.destroy({
             where: {
                 id: args,
             },
         });
+    }
+
+    private async orderCollection(event: IpcMainInvokeEvent): Promise<void> {
+        await Collection.findAll({ order: [["updatedAt", "DESC"]] });
+    }
+
+    private async updateCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        log.info("frontend update collection: ", args);
+        const { title, collectionId } = args;
+        Collection.update({ name: title }, { where: { id: collectionId } });
     }
 }

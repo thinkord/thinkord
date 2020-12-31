@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// Nodejs built-in modules
 const fs = require("fs");
 const path = require("path");
 
@@ -69,7 +70,10 @@ class VideoRecorder {
      * @method
      * @param {string} userPath
      */
-    stop(userPath) {
+    stop(userPath, currentWork) {
+        if (!currentWork) {
+            return;
+        }
         this.mediaRecorder.onstop = () => {
             log.info("saving video file as mp4");
             const recName = `${uuidv4()}.mp4`;
@@ -85,7 +89,12 @@ class VideoRecorder {
                             log.error(err);
                         } else {
                             log.info("Your video file has been saved");
-                            ipcRenderer.invoke("media-channel", "saveVideo", { name: recName, path: recPath });
+                            ipcRenderer.invoke("media-channel", "saveVideo", {
+                                name: recName,
+                                path: recPath,
+                                current: currentWork,
+                            });
+                            ipcRenderer.invoke("window-channel", "captureSignal", "data");
                         }
                     });
                 } else log.error("FileReader has problems reading blob");

@@ -40,10 +40,4 @@ export class UsageChannel {
         }
         return t;
     }
-
-    // deletControlFactory(): void {
-    //     this.controlChannel.forEach((obj, index) => {
-    //         this.controlChannel.splice(index, 1);
-    //     });
-    // }
 }

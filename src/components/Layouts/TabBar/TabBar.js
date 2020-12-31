@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Tab from "./Tab/Tab";
 import { NavLink } from "react-router-dom";
-import { TabsContext } from "../../../tabContext";
+import { TabsContext } from "../../../context/tabContext";
 import classes from "./TabBar.module.scss";
 import appRuntime from "../../../appRuntime";
 
@@ -16,12 +16,14 @@ const TabBar = () => {
                 activeClassName={classes.active}
                 onClick={() => {
                     appRuntime.invoke("window-channel", "close", { win: "controlWin" });
+                    appRuntime.unsubscribe("capture");
+                    appRuntime.unsubscribe("system-channel");
                 }}
             >
                 <i className="fas fa-home"></i>
             </NavLink>
             {tabsList.map((tab) => {
-                return <Tab key={tab.id} id={tab.id} cId={tab.collectionId} title={tab.title} />;
+                return <Tab key={tab.id} tabId={tab.id} id={tab.collectionId} title={tab.title} />;
             })}
         </div>
     );

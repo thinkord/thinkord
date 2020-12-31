@@ -7,7 +7,7 @@ import NoteCards from "../components/NoteCards/NoteCards";
 import Folders from "../components/Folders/Folders";
 import CModal from "../components/Modal/CModal";
 import NoteCard from "../components/NoteCards/NoteCard/NoteCard";
-import { StoreContext, StoreUpdateContext } from "../context";
+import { StoreContext, StoreUpdateContext } from "../context/homeContext";
 
 // import SearchButton from "../components/SearchButton/SearchButton";
 import "./Home.scss";
@@ -24,7 +24,6 @@ function App({ match }) {
     };
 
     const folder = getFolder(position);
-
     return (
         <React.Fragment>
             <header className="home-header">
@@ -56,7 +55,7 @@ function App({ match }) {
                             <Link to="/">Back to Home</Link>
                             {getCollections(folder.cs) &&
                                 getCollections(folder.cs).map((collection) => {
-                                    return <NoteCard key={collection.id} id={collection.id} title={collection.name} />;
+                                    return <NoteCard key={collection.id} collection={collection} />;
                                 })}
                         </Container>
                     </main>

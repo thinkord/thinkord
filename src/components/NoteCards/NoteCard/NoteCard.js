@@ -1,16 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { TabsContext } from "../../../tabContext";
+import { TabsContext } from "../../../context/tabContext";
 import appRuntime from "../../../appRuntime";
 import "./NoteCard.scss";
 
 import CModal from "../../Elements/Modal/CModal";
 
-function NoteCard(props) {
+function NoteCard({ collection }) {
     const [menuShow, setMenuShow] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [modalFunc, setModalFunc] = useState("rename");
+
+    const { id, name, bookmarked, updatedAt } = collection;
 
     const handleMenuToggle = () => {
         setMenuShow((prevState) => !prevState);
@@ -27,8 +29,8 @@ function NoteCard(props) {
 
     const tabAdd = useContext(TabsContext).addTab;
     const handleTabAdd = () => {
-        tabAdd(props.title, props.id);
-        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
+        tabAdd(name, id);
+        appRuntime.invoke("window-channel", "create", { win: "controlWin", id });
     };
 
     // const handleBookmarkChanged = (noteId) => {
@@ -37,9 +39,9 @@ function NoteCard(props) {
     return (
         <React.Fragment>
             <div className="note-block">
-                <Link to={`/work/${props.id}`} className="card-anchor" onClick={handleTabAdd}></Link>
-                <div className="bookmark" onClick={props.bookmarked}>
-                    <i className={(props.bookmark ? "fas" : "far") + " fa-bookmark"}></i>
+                <Link to={`/work/${id}`} className="card-anchor" onClick={handleTabAdd}></Link>
+                <div className="bookmark" onClick={bookmarked}>
+                    <i className={(bookmarked ? "fas" : "far") + " fa-bookmark"}></i>
                 </div>
                 <button id="note-block-more" onClick={handleMenuToggle} onBlur={handleMenuToggle}>
                     <i className="fas fa-ellipsis-h"></i>
@@ -63,21 +65,17 @@ function NoteCard(props) {
                     </div>
                 </div>
                 <div className="note-block-details">
-                    <h5 className="note-block-title">{props.title}</h5>
+                    <h5 className="note-block-title">{name}</h5>
                     <div className="note-block-time">
                         <i className="fas fa-clock"></i>
-                        <span>changed 2 hours ago</span>
+                        <span>Update at {updatedAt}</span>
                     </div>
-                    {/* <div className="note-block-tags">
-                        <i className="fas fa-tag"></i>
-                        <span>statistics</span>
-                    </div> */}
                 </div>
                 <Link
                     className="card-record-anchor"
-                    to={`/work/${props.id}`}
+                    to={`/work/${id}`}
                     onClick={() => {
-                        appRuntime.invoke("window-channel", "create", { win: "controlWin" });
+                        appRuntime.invoke("window-channel", "create", { win: "controlWin", id });
                     }}
                 >
                     <i className="far fa-dot-circle"></i>
@@ -85,8 +83,8 @@ function NoteCard(props) {
                 </Link>
             </div>
             <CModal
-                id={props.id}
-                title={props.title}
+                id={id}
+                title={name}
                 modalFunc={modalFunc}
                 modalShow={modalShow}
                 handleModalToggle={handleModalToggle}
