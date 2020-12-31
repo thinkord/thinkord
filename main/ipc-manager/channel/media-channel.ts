@@ -8,7 +8,7 @@ log.setLevel("info");
 
 export class MediaChannel extends BaseChannel {
     public handleRequest(): void {
-        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
+        ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "save":
                     this[command](event, args);
