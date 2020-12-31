@@ -17,6 +17,7 @@ class ControlProvider extends Component {
         this.setState({
             mapCId: data,
             path,
+            textState: false,
             audioState: false,
             videoState: false,
         });
@@ -33,6 +34,9 @@ class ControlProvider extends Component {
         // Listen to globalShortcut
         appRuntime.subscribe("system-channel", async (command) => {
             switch (command) {
+                case "text":
+                    appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "text" });
+                    break;
                 case "fullsnip":
                     this.handleFullsnip();
                     break;
@@ -49,6 +53,18 @@ class ControlProvider extends Component {
                     break;
             }
         });
+    };
+
+    handleText = (text) => {
+        const { textState, mapCId } = this.state;
+        if (textState === false) {
+            appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "text" });
+        } else {
+            appRuntime.invoke("media-channel", "save", { type: "text", text: text, current: mapCId });
+            appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
+        }
+
+        this.setState({ textState: !textState });
     };
 
     handleFullsnip = async () => {
@@ -85,6 +101,7 @@ class ControlProvider extends Component {
             <ControlContext.Provider
                 value={{
                     ...this.state,
+                    handleText: this.handleText,
                     handleFullsnip: this.handleFullsnip,
                     handleDragsnip: this.handleDragsnip,
                     handleAudio: this.handleAudio,

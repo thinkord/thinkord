@@ -89,9 +89,10 @@ class VideoRecorder {
                             log.error(err);
                         } else {
                             log.info("Your video file has been saved");
-                            ipcRenderer.invoke("media-channel", "saveVideo", {
+                            ipcRenderer.invoke("media-channel", "save", {
                                 name: recName,
                                 path: recPath,
+                                type: "video",
                                 current: currentWork,
                             });
                             ipcRenderer.invoke("window-channel", "captureSignal", "data");

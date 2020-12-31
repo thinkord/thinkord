@@ -24,9 +24,10 @@ const takeScreenshot = async (userPath, thumbSize, currentWork) => {
         if (source.name === "Entire Screen" || source.name === "Screen 1") {
             try {
                 await fs.writeFile(screenshotPath, source.thumbnail.toPNG());
-                ipcRenderer.invoke("media-channel", "saveImage", {
+                ipcRenderer.invoke("media-channel", "save", {
                     name: screenshotName,
                     path: screenshotPath,
+                    type: "image",
                     current: currentWork,
                 });
                 ipcRenderer.invoke("window-channel", "captureSignal", "data");
