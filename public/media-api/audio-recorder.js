@@ -56,6 +56,9 @@ class AudioRecorder {
      * @param {string} userPath
      */
     stop(userPath, currentWork) {
+        if (!currentWork) {
+            return;
+        }
         this.mediaRecorder.onstop = () => {
             log.info("saving video file as mp3");
             const recName = `${uuidv4()}.mp3`;

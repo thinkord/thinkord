@@ -17,6 +17,7 @@ const TabBar = () => {
                 onClick={() => {
                     appRuntime.invoke("window-channel", "close", { win: "controlWin" });
                     appRuntime.unsubscribe("capture");
+                    appRuntime.unsubscribe("system-channel");
                 }}
             >
                 <i className="fas fa-home"></i>

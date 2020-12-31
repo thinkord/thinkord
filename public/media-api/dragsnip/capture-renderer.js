@@ -13,6 +13,9 @@ const { CaptureEditor } = require("./capture-editor");
 log.setLevel("info");
 
 const startDragsnip = (currentWork) => {
+    if (!currentWork) {
+        return;
+    }
     const $canvas = document.getElementById("js-canvas");
     const $bg = document.getElementById("js-bg");
     const $toolbar = document.getElementById("js-toolbar");

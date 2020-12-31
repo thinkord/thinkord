@@ -12,6 +12,9 @@ const log = require("loglevel");
 log.setLevel("info");
 
 const takeScreenshot = async (userPath, thumbSize, currentWork) => {
+    if (!currentWork) {
+        return;
+    }
     const screenshotName = `${uuidv4()}.png`;
     const screenshotPath = path.join(userPath, "blob_storage", screenshotName);
     const options = { types: ["screen"], thumbnailSize: thumbSize };
