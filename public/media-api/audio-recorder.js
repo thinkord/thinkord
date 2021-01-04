@@ -74,9 +74,10 @@ class AudioRecorder {
                             log.error(err);
                         } else {
                             log.info("Your audio file has been saved");
-                            ipcRenderer.invoke("media-channel", "saveAudio", {
+                            ipcRenderer.invoke("media-channel", "save", {
                                 name: recName,
                                 path: recPath,
+                                type: "audio",
                                 current: currentWork,
                             });
                             ipcRenderer.invoke("window-channel", "captureSignal", "data");

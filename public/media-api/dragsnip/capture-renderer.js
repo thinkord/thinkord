@@ -80,9 +80,10 @@ const startDragsnip = (currentWork) => {
                 if (err) log.error(err);
 
                 log.info("Dragsnip has been saved!");
-                ipcRenderer.invoke("media-channel", "saveImage", {
+                ipcRenderer.invoke("media-channel", "save", {
                     name: dragsnipName,
                     path: dragsnipPath,
+                    type: "image",
                     current: currentWork,
                 });
                 ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });

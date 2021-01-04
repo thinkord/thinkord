@@ -74,7 +74,12 @@ export class MaskWindow extends BaseWindow {
             return obj;
         });
     }
+
     public static sendMessage(response: string, data: string): void {
         MaskWindow.win?.webContents.send(response, data);
+    }
+
+    public loadPage(): void {
+        return;
     }
 }

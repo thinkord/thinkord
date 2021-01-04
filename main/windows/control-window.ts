@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow } from "electron";
 import { BaseWindow } from "./base-window";
 import isDev from "electron-is-dev";
 import path from "path";
@@ -52,5 +52,29 @@ export class ControlWindow extends BaseWindow {
             obj.handleRequest();
             return obj;
         });
+    }
+
+    public loadPage(page: string): void {
+        if (page === "control") {
+            if (ControlWindow.win) {
+                ControlWindow.win.setBounds({ height: 400 });
+                ControlWindow.win.loadURL(
+                    isDev
+                        ? "http://localhost:3000/#/controlbar/"
+                        : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
+                );
+            }
+        } else if (page === "text") {
+            if (ControlWindow.win) {
+                // const { height } = ControlWindow.win.getBounds();
+                // const newHeight = height * 2;
+                // ControlWindow.win.setBounds({ height: newHeight });
+                ControlWindow.win.loadURL(
+                    isDev
+                        ? "http://localhost:3000/#/controlbar/text"
+                        : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
+                );
+            }
+        }
     }
 }

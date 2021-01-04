@@ -31,6 +31,8 @@ export class WindowChannel extends BaseChannel {
                     break;
                 case "getCurrentWork":
                     return this[command]();
+                case "load":
+                    this[command](event, args);
                 default:
                     log.warn("There is no command in this channel");
                     break;
@@ -71,6 +73,14 @@ export class WindowChannel extends BaseChannel {
             if (this.wins.maskWindow) {
                 this.wins.maskWindow.closeWindow();
                 this.wins.maskWindow = undefined;
+            }
+        }
+    }
+
+    private load(event: IpcMainInvokeEvent, args: any): void {
+        if (args.win === "controlWin") {
+            if (this.wins.controlWindow) {
+                this.wins.controlWindow.loadPage(args.page);
             }
         }
     }

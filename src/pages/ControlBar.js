@@ -4,11 +4,18 @@ import React, { useContext } from "react";
 import { ControlContext } from "../context/controlContext";
 
 export default function ControlBar() {
-    const { mapCId, handleFullsnip, handleDragsnip, handleAudio, handleVideo } = useContext(ControlContext);
+    const { mapCId, handleText, handleFullsnip, handleDragsnip, handleAudio, handleVideo } = useContext(ControlContext);
     return (
         <div>
             <h1> map: {mapCId}</h1>
-            <button id="textButton">text</button>
+            <button
+                id="textButton"
+                onClick={() => {
+                    handleText();
+                }}
+            >
+                text
+            </button>
             <button
                 id="fullsnipButton"
                 onClick={() => {

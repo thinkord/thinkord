@@ -1,30 +1,33 @@
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Block } from "../../models";
-import { IpcRequest } from "../../shared/IpcRequest";
 
 log.setLevel("info");
 
 export class MediaChannel extends BaseChannel {
     public handleRequest(): void {
-        ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
+        ipcMain.handle(this.channelName!, (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
-                case "saveImage":
-                    // case "fullsnip":
-                    // case "handleVideo":
+                case "save":
                     this[command](event, args);
                     break;
-                case "saveAudio":
-                case "saveVideo":
-                    this[command](event, args);
-                    break;
-
                 default:
                     log.warn("There is no command in thic channel");
                     break;
             }
+        });
+    }
+
+    private createTextBlock(type: string, description: string, collectionId: number) {
+        Block.create({
+            id: Number(uuidv4()),
+            title: "Edit title",
+            type,
+            description,
+            bookmark: false,
+            collectionId,
         });
     }
 
@@ -43,8 +46,11 @@ export class MediaChannel extends BaseChannel {
         });
     }
 
-    private async saveImage(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "image", parseInt(args.current));
+    private async save(event: IpcMainInvokeEvent, args: any): Promise<void> {
+        const type = args.type;
+        const collectionId = parseInt(args.current);
+        if (type === "text") this.createTextBlock(type, args.text, collectionId);
+        else this.createBlockAndFile(args.name, args.path, type, collectionId);
     }
 
     // private handleDragsnip(event: IpcMainEvent, args: any): void {
@@ -54,19 +60,4 @@ export class MediaChannel extends BaseChannel {
     //         event.reply("capture-screen", { type: "select" });
     //     }
     // }
-
-    private async saveAudio(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "audio", parseInt(args.current));
-    }
-
-    private async saveVideo(event: IpcMainInvokeEvent, args: any): Promise<void> {
-        this.createBlockAndFile(args.name, args.path, "video", parseInt(args.current));
-    }
-
-    private handleVideo(event: IpcMainEvent, args: IpcRequest): void {
-        log.info(args);
-        const status = args.status;
-        // if (status === false) VideoRecorder.start();
-        // else if (status === true) VideoRecorder.stop();
-    }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { app, globalShortcut, ipcMain, IpcMainInvokeEvent, screen } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
@@ -57,7 +58,7 @@ export class SystemChannel extends BaseChannel {
         });
 
         globalShortcut.register("Shift+F2", () => {
-            event.sender.send(this.channelName!, "open-text-win");
+            event.sender.send(this.channelName!, "text");
         });
 
         globalShortcut.register("Shift+F3", () => {
