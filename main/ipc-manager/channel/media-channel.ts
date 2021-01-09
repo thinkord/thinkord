@@ -14,7 +14,7 @@ export class MediaChannel extends BaseChannel {
                     this[command](event, args);
                     break;
                 default:
-                    log.warn("There is no command in thic channel");
+                    log.warn(`There is no command in ${this.channelName}`);
                     break;
             }
         });

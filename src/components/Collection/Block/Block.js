@@ -3,14 +3,14 @@
 import React, { useContext } from "react";
 import { Icon } from "@material-ui/core";
 //import { BlockTitle } from "../Title";
-import { StoreUpdateContext } from "../../../context/homeContext";
+import { BlockUpdateContext } from "../../../context/blockContext";
 import classes from "./Block.module.scss";
 
 export default function Block({ block, index, collectionId }) {
-    const { deleteBlock } = useContext(StoreUpdateContext);
+    const { deleteBlock } = useContext(BlockUpdateContext);
 
     const handleBlockChange = () => {
-        deleteBlock(collectionId, index);
+        deleteBlock(collectionId, block.id);
     };
     return (
         <div className={classes.Block}>

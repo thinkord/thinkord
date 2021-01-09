@@ -10,7 +10,7 @@ export class ControlWindow extends BaseWindow {
     private static count = 0;
     public createWindow(): void {
         ControlWindow.win = new BrowserWindow({
-            frame: false,
+            // frame: false,
             width: 700,
             height: 400,
             webPreferences: {
@@ -72,7 +72,7 @@ export class ControlWindow extends BaseWindow {
                 ControlWindow.win.loadURL(
                     isDev
                         ? "http://localhost:3000/#/controlbar/text"
-                        : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
+                        : `file://${path.join(__dirname, "../build/index.html#controlbar#text")}`
                 );
             }
         }

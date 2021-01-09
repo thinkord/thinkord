@@ -20,7 +20,7 @@ export class SystemChannel extends BaseChannel {
                     this[command]();
                     break;
                 default:
-                    log.warn("There is no command in thic channel");
+                    log.warn(`There is no command in ${this.channelName}`);
                     break;
             }
         });

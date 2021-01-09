@@ -35,7 +35,7 @@ class ControlProvider extends Component {
         appRuntime.subscribe("system-channel", async (command) => {
             switch (command) {
                 case "text":
-                    appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "text" });
+                    this.handleShortcutText();
                     break;
                 case "fullsnip":
                     this.handleFullsnip();
@@ -55,15 +55,32 @@ class ControlProvider extends Component {
         });
     };
 
+    /** should notice the text state, otherwise back to the control bar
+     * the textState is not correspond to the handleText
+     */
+    handleShortcutText = () => {
+        const { textState } = this.state;
+        if (!textState) {
+            this.handleTextState();
+            appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "text" });
+        }
+    };
+
     handleText = (text) => {
         const { textState, mapCId } = this.state;
         if (textState === false) {
             appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "text" });
         } else {
             appRuntime.invoke("media-channel", "save", { type: "text", text: text, current: mapCId });
+            appRuntime.invoke("window-channel", "captureSignal", "data");
             appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
         }
 
+        this.handleTextState();
+    };
+
+    handleTextState = () => {
+        const { textState } = this.state;
         this.setState({ textState: !textState });
     };
 
@@ -102,6 +119,7 @@ class ControlProvider extends Component {
                 value={{
                     ...this.state,
                     handleText: this.handleText,
+                    handleTextState: this.handleTextState,
                     handleFullsnip: this.handleFullsnip,
                     handleDragsnip: this.handleDragsnip,
                     handleAudio: this.handleAudio,
