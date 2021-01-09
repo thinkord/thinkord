@@ -5,7 +5,7 @@ import { ControlContext } from "../../context/controlContext";
 import { Paper, InputBase, Button, IconButton } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import { fade, makeStyles } from "@material-ui/core";
-
+import appRuntime from "../../appRuntime";
 const useStyle = makeStyles((theme) => ({
     block: {
         paddingBottom: theme.spacing(4),
@@ -27,7 +27,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 export default function InputText() {
-    const { handleText } = useContext(ControlContext);
+    const { handleText, handleTextState } = useContext(ControlContext);
     const classes = useStyle();
     const [content, setContent] = useState(null);
     // const { addBlock } = useContext(StoreUpdateContext);
@@ -38,7 +38,13 @@ export default function InputText() {
     const handleBtnConfirm = () => {
         setContent("");
         handleText(content);
+        appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
+        handleTextState();
     };
+    const handleCancelConfirm = () => {
+        appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
+        handleTextState();
+    }
     return (
         <div>
             <div>
@@ -57,7 +63,7 @@ export default function InputText() {
                 <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
                     {"Enter"}
                 </Button>
-                <IconButton>
+                <IconButton onClick={handleCancelConfirm}>
                     <ClearIcon />
                 </IconButton>
             </div>

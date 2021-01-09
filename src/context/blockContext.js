@@ -33,11 +33,6 @@ class BlockProvider extends Component {
         });
     };
 
-    // getBlocks = (id) => {
-    //     appRuntime.send("home-channel", "getBlocks", id);
-    //     this.setState({ changed: true });
-    // };
-
     addBlock = (title, type, description, id) => {
         const newBlock = {
             title,

@@ -24,17 +24,13 @@ export class WindowChannel extends BaseChannel {
                 case "create":
                 case "close":
                 case "captureSignal":
-                    // case "createControlBar":
-                    // case "closeControlBar":
-                    // case "captureSignal":
+                case "load":
                     this[command](event, args);
                     break;
                 case "getCurrentWork":
                     return this[command]();
-                case "load":
-                    this[command](event, args);
                 default:
-                    log.warn("There is no command in this channel");
+                    log.warn(`There is no command in ${this.channelName}`);
                     break;
             }
         });

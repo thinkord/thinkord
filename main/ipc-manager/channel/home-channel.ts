@@ -24,7 +24,7 @@ export class HomeChannel extends BaseChannel {
                 case "getCID":
                     return this[command](event, args);
                 default:
-                    log.warn("There is no command in thic channel");
+                    log.warn(`There is no command in ${this.channelName}`);
                     break;
             }
         });
