@@ -21,25 +21,15 @@
 
 ### Step 1: Fork
 
-Fork the project [on GitHub](https://github.com/thinkord/thinkord-desktop) and clone your fork
+Fork the project [on GitHub](https://github.com/thinkord/thinkord) and clone your fork
 locally.
 
 ```sh
-$ git clone git@github.com:username/thinkord-desktop.git
-$ cd thinkord-desktop
-$ git remote add upstream https://github.com/thinkord/thinkord-desktop.git
+$ git clone git@github.com:username/thinkord.git
+$ cd thinkord
+$ git remote add upstream https://github.com/thinkord/thinkord.git
 $ git fetch upstream
 ```
-
-<!-- ### Step 2: Build
-
-Build steps and dependencies differ slightly depending on your operating system.
-See these detailed guides on building Electron locally:
-* [Building on macOS](https://electronjs.org/docs/development/build-instructions-macos)
-* [Building on Linux](https://electronjs.org/docs/development/build-instructions-linux)
-* [Building on Windows](https://electronjs.org/docs/development/build-instructions-windows)
-
-Once you've built the project locally, you're ready to start making changes! -->
 
 ### Step 2: Branch
 
@@ -58,11 +48,11 @@ Examples of branch names:
 
 ### Step 3: Code
 
-Most pull requests opened against the `thinkord/thinkord-desktop` repository include
-changes to either the JavaScript code in the `app/` folder, the documentation in `docs/`.
+Most pull requests opened against the `thinkord/thinkord` repository include
+changes to either the Electron code in the `main/` folder, the React code in the `src/`, the documentation in `docs/`.
 
-<!-- Please be sure to run `npm run lint` from time to time on any code changes
-to ensure that they follow the project's code style. -->
+Please be sure to run `npm run lint` from time to time on any code changes
+to ensure that they follow the project's code style.
 
 ### Step 4: Commit
 
@@ -98,7 +88,12 @@ $ git fetch upstream
 $ git rebase upstream/master
 ```
 
-This ensures that your working branch has the latest changes from `thinkord/thinkord-desktop`
+or more succinct
+```sh
+$ git pull --rebase upstream/master
+```
+
+This ensures that your working branch has the latest changes from `thinkord/thinkord`
 master.
 
 <!-- ### Step 6: Test
@@ -140,19 +135,7 @@ $ git push origin my-branch
 
 ### Step 8: Opening the Pull Request
 
-From within GitHub, opening a new pull request will present you with a template
-that should be filled out:
-
-```markdown
-<!--
-Thank you for your pull request. Please provide a description above and review
-the requirements below.
-
-Bug fixes and new features should include tests and possibly benchmarks.
-
-Contributors guide: https://github.com/electron/electron/blob/master/CONTRIBUTING.md
--->
-```
+Open a new pull request from within GitHub.
 
 ### Step 9: Discuss and update
 
@@ -206,7 +189,7 @@ Congratulations and thanks for your contribution!
 
 ### Continuous Integration Testing
 
-Every pull request is tested on the Continuous Integration (CI) system to
+Every pull request is tested on the Continuous Integration (CI) system, GitHub Actions, to
 confirm that it works on Thinkord's supported platforms.
 
 Ideally, the pull request will pass ("be green") on all of CI's platforms.
@@ -218,3 +201,6 @@ failure must be manually inspected to determine the cause.
 CI starts automatically when you open a pull request, but only
 core maintainers can restart a CI run. If you believe CI is giving a
 false negative, ask a maintainer to restart the tests.
+
+## Disclaimer
+This guidelines are modified from [this link](https://www.electronjs.org/docs/development/pull-requests).
