@@ -22,7 +22,7 @@ ReactDOM.render(
                     </ControlProvider>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/folder/:id" component={Home} />
-                    <Route path="/work/:id" component={Work} />
+                    <Route exact path="/work/:id" component={Work} />
                 </Layout>
             </StoreProvider>
         </TabsProvider>

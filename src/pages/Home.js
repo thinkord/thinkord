@@ -50,13 +50,17 @@ function App({ match }) {
                 </>
             ) : (
                 <>
-                    <main>
-                        <Container>
+                    <main className="Content">
+                        <Container className="container">
                             <Link to="/">Back to Home</Link>
-                            {getCollections(folder.cs) &&
-                                getCollections(folder.cs).map((collection) => {
-                                    return <NoteCard key={collection.id} collection={collection} />;
-                                })}
+                            <div className="note-cards"> 
+                                <div className="card-deck" style={{ display: "flex" }}>
+                                {getCollections(folder.cs) &&
+                                    getCollections(folder.cs).map((collection) => {
+                                        return <NoteCard key={collection.id} collection={collection} />;
+                                    })}
+                                </div>
+                            </div>
                         </Container>
                     </main>
                     <CModal
