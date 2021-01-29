@@ -22,9 +22,9 @@ export default function NoteCards({ data }) {
     const { recentUpdated } = data;
     return (
         <div className="note-cards">
-            <h2>Files</h2>
+            <h2>Recent Files</h2>
             <div className="card-deck" style={{ display: "flex" }}>
-                {recentUpdated.length > 0 &&
+                {recentUpdated && recentUpdated.length > 0 &&
                     recentUpdated.map((collection) => {
                         return <NoteCard key={collection.id} collection={collection}></NoteCard>;
                     })}

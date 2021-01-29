@@ -4,12 +4,15 @@ import React, { useContext, useState, useEffect } from "react";
 import { Container } from "@material-ui/core";
 import { CollectionTitle } from "./Title";
 import Block from "./Block/Block";
-import InputContainer from "../Elements/Input/InputContainer";
+import InputContainer from "../Input/InputContainer";
 import classes from "./Collections.module.scss";
 import { BlockContext } from "../../context/blockContext";
 import { withRouter } from "react-router-dom";
 import EditorJs from 'react-editor-js';
-import Image from '@editorjs/image'
+import Image from '@editorjs/image';
+import EditorIcon from '@material-ui/icons/Subject';
+import ListIcon from '@material-ui/icons/FormatListBulleted';
+
 function Collection(props) {
     const { collectionInfo } = useContext(BlockContext);
     const [editorView, setEditorView] = useState(false);
@@ -29,14 +32,19 @@ function Collection(props) {
 
     async function handleEditorRender(data) {
         if(editor){
-            await editor.isReady
-            console.log(editor)
-            editor.render(data)
+            try{
+                await editor.isReady
+                editor.render(data)
+                console.log(editor)
+            }catch(reason) {
+                console.log(`Editor.js initialization failed because of ${reason}`)
+            }
         }
     }
 
     useEffect(() =>{
         data.blocks = []
+        console.log(process)
         if(collectionInfo !== undefined){
             console.log(collectionInfo.blocks)
             collectionInfo.blocks.map((block, index) => {
@@ -79,16 +87,13 @@ function Collection(props) {
                     <div className={classes.Header}>
                         <div className={classes.Info}>
                             <CollectionTitle title={collectionInfo.name} collectionId={collectionInfo.id} />
-                            <i className={(collectionInfo.bookmarked ? "fas" : "far") + " fa-bookmark"}></i>
                         </div>
                         <div className={classes.Controls}>
-                            <i id="clock" className="fas fa-clock" onClick={() => setEditorView(!editorView)}></i>
+                            {editorView ? 
+                                <ListIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)}/> :
+                                <EditorIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)}/> 
+                            }
                             <i className="fas fa-ellipsis-h"></i>
-                            <img
-                                className={classes.user}
-                                alt="user"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU"
-                            />
                         </div>
                     </div>
                     <div className={classes.Content}>

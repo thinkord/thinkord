@@ -1,0 +1,37 @@
+.ControlBar
+    background-color: #eee
+    .Controls
+        display: flex
+        align-items: center
+        justify-content: center
+        padding: 5px 10px
+        hr 
+            margin: 5px 5px 
+        button
+            padding: 10px
+    .Control
+        font-size: 30px
+        cursor: pointer
+        color: #555
+        &:hover
+            color: #35C189
+        #homeButton
+            color: #35C189  
+.TitleBar
+    display: flex
+    color: #fff
+    padding: 2px 8px
+    justify-content: space-between
+    align-items: center
+    background-color: #35C189
+    font-size: 14px
+    font-weight: 700
+    -webkit-app-region: drag
+    .winControls
+        display: flex
+        align-items: center
+        cursor: pointer
+        -webkit-app-region: no-drag;
+    .winControl
+        font-size: 20px
+

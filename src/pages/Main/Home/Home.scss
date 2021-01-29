@@ -1,11 +1,15 @@
 .Content{
-    height: calc(100vh - 180px);
+    height: calc(100vh - 150px);
     padding: 40px 0;
     overflow: auto;
 }
 body{
     overflow: hidden;
     background-color: #f3f3f3;
+}
+a:focus, button:focus {
+    outline: none;
+    border: none;
 }
 .home-header{
     position: relative;
@@ -29,10 +33,14 @@ body{
     align-items: center;
 }
 
-.home-header i{
-    font-size: 40px;
-    margin: 15px;
+.home-header .controls button{
+    background-color: #35C189;
+    border-radius: 10px;
+    color: #FFFFFF;
     cursor: pointer;
+    :hover{
+        background-color: #35C189;
+    }
 }
 
 .home-header .user{
@@ -41,8 +49,4 @@ body{
     margin: 15px;
     border-radius: 50%;
     object-fit: cover;
-}
-
-.home-header .fa-plus-circle{
-    color: #35C189;
 }

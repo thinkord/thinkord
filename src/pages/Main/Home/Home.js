@@ -3,13 +3,14 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import NoteCards from "../components/NoteCards/NoteCards";
-import Folders from "../components/Folders/Folders";
-import CModal from "../components/Modal/CModal";
-import NoteCard from "../components/NoteCards/NoteCard/NoteCard";
-import { StoreContext, StoreUpdateContext } from "../context/homeContext";
+import NoteCards from "../../../components/NoteCards/NoteCards";
+import Folders from "../../../components/Folders/Folders";
+import CModal from "../../../components/Modal/CModal";
+import NoteCard from "../../../components/NoteCards/NoteCard/NoteCard";
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import { StoreContext, StoreUpdateContext } from "../../../context/homeContext";
 
-// import SearchButton from "../components/SearchButton/SearchButton";
 import "./Home.scss";
 
 function App({ match }) {
@@ -29,13 +30,14 @@ function App({ match }) {
             <header className="home-header">
                 <h1 className="title">{position === "home" ? "home" : folder.name}</h1>
                 <div className="controls">
-                    {/* <SearchButton collections={data} onSearchChange={handleSearchClick} /> */}
-                    <i className="fas fa-plus-circle fa-lg" onClick={handleModalToggle}></i>
-                    <img
-                        className="user"
-                        alt="user"
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU"
-                    />
+                    <Button
+                        variant="contained"
+                        className="button"
+                        startIcon={<Icon className="fa fa-plus-circle" />}
+                        onClick={handleModalToggle}
+                    >
+                        { position === "home"? "Add Folder" : "Add Note"}
+                    </Button>
                 </div>
             </header>
             {position === "home" ? (
