@@ -6,7 +6,7 @@ import { StoreUpdateContext } from "../../context/homeContext";
 
 export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const { addCollection, addFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
+    const { addCollection, addFolder, deleteFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value);
@@ -24,6 +24,12 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
         addFolder(newTitle);
         handleModalToggle();
     };
+
+    const handleFolderDelete = (folderId) => {
+        deleteFolder(folderId);
+        handleModalToggle();
+    };
+
     const handleNoteCreate = (title, folderId) => {
         addCollection(title, folderId);
         handleModalToggle();
@@ -66,6 +72,45 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleFolderCreate();
+                            }}
+                        ></i>
+                        <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
+                    </Modal.Footer>
+                </Modal>
+            );
+            break;
+        case "deleteFolder":
+            modalDialog = (
+                <Modal show={modalShow} onHide={handleModalToggle} centered>
+                    <Modal.Header className="modal_header">
+                        <Modal.Title>Delete Folder</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Do you really want to delete folder {title} ?</Modal.Body>
+                    <Modal.Footer className="modal_footer">
+                        <i
+                            className="modal_icon fas fa-check-circle"
+                            onClick={() => {
+                                console.log(folderId)
+                                handleFolderDelete(folderId);
+                            }}
+                        ></i>
+                        <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
+                    </Modal.Footer>
+                </Modal>
+            );
+            break;
+        case "renameFolder":
+            modalDialog = (
+                <Modal show={modalShow} onHide={handleModalToggle} centered>
+                    <Modal.Header className="modal_header">
+                        <Modal.Title>Delete Folder</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Do you really want to delete folder {title} ?</Modal.Body>
+                    <Modal.Footer className="modal_footer">
+                        <i
+                            className="modal_icon fas fa-check-circle"
+                            onClick={() => {
+                                handleFolderDelete(folderId);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>

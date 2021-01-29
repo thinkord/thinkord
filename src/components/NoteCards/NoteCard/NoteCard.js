@@ -3,16 +3,16 @@ import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { TabsContext } from "../../../context/tabContext";
 import appRuntime from "../../../appRuntime";
-import "./NoteCard.scss";
+import "./noteCard.scss";
 
-import CModal from "../../Elements/Modal/CModal";
+import CModal from "../../Modal/CModal";
 
 function NoteCard({ collection }) {
     const [menuShow, setMenuShow] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [modalFunc, setModalFunc] = useState("rename");
 
-    const { id, name, bookmarked, updatedAt } = collection;
+    const { id, name, updatedAt } = collection;
 
     const handleMenuToggle = () => {
         setMenuShow((prevState) => !prevState);
@@ -33,16 +33,10 @@ function NoteCard({ collection }) {
         appRuntime.invoke("window-channel", "create", { win: "controlWin", id });
     };
 
-    // const handleBookmarkChanged = (noteId) => {
-    // }
-
     return (
         <React.Fragment>
             <div className="note-block">
                 <Link to={`/work/${id}`} className="card-anchor" onClick={handleTabAdd}></Link>
-                <div className="bookmark" onClick={bookmarked}>
-                    <i className={(bookmarked ? "fas" : "far") + " fa-bookmark"}></i>
-                </div>
                 <button id="note-block-more" onClick={handleMenuToggle} onBlur={handleMenuToggle}>
                     <i className="fas fa-ellipsis-h"></i>
                 </button>
