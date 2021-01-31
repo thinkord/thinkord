@@ -6,7 +6,9 @@ import { StoreUpdateContext } from "../../context/homeContext";
 
 export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const { addCollection, addFolder, deleteFolder, updateCollectionTitle, deleteCollection } = useContext(StoreUpdateContext);
+    const { addCollection, addFolder, deleteFolder, updateCollectionTitle, deleteCollection } = useContext(
+        StoreUpdateContext
+    );
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value);
@@ -90,7 +92,6 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
-                                console.log(folderId)
                                 handleFolderDelete(folderId);
                             }}
                         ></i>

@@ -240,8 +240,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                        <h1>Loading</h1>
-                    )}
+                    <h1>Loading</h1>
+                )}
             </>
         );
     }

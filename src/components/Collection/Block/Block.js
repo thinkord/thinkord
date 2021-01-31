@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useContext } from "react";
 import { Icon } from "@material-ui/core";
-import TextIcon from '@material-ui/icons/TextFields';
-import AudioIcon from '@material-ui/icons/VolumeUp';
-import ImageIcon from '@material-ui/icons/Image';
-import VideoIcon from '@material-ui/icons/Movie';
+import TextIcon from "@material-ui/icons/TextFields";
+import AudioIcon from "@material-ui/icons/VolumeUp";
+import ImageIcon from "@material-ui/icons/Image";
+import VideoIcon from "@material-ui/icons/Movie";
 import { BlockTitle } from "../Title";
 import { BlockUpdateContext } from "../../../context/blockContext";
 import classes from "./Block.module.scss";
@@ -19,18 +19,18 @@ export default function Block({ block, index, collectionId }) {
 
     let typeIcon = null;
 
-    switch(block.type){
+    switch (block.type) {
         case "audio":
-            typeIcon = <AudioIcon className={classes.TypeIcon}/>;
+            typeIcon = <AudioIcon className={classes.TypeIcon} />;
             break;
         case "image":
-            typeIcon = <ImageIcon className={classes.TypeIcon}/>;
+            typeIcon = <ImageIcon className={classes.TypeIcon} />;
             break;
         case "video":
-            typeIcon = <VideoIcon className={classes.TypeIcon}/>;
+            typeIcon = <VideoIcon className={classes.TypeIcon} />;
             break;
         default:
-            typeIcon = <TextIcon className={classes.TypeIcon}/>;
+            typeIcon = <TextIcon className={classes.TypeIcon} />;
             break;
     }
 
@@ -41,6 +41,7 @@ export default function Block({ block, index, collectionId }) {
                 <div className={classes.BlockContent}>
                     <BlockTitle title={block.title} collectionId={collectionId} index={index} />
                     <div>{block.description}</div>
+                    {/* {block.type == "image"? <img src={`http://localhost:3000/media/image/${block.title}`} alt={block.title}/>:<></>} */}
                     <div className={classes.BlockTime}>
                         <Icon className={classes.Icon + " fas fa-clock"}></Icon>
                         {block.updatedAt}

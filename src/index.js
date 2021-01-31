@@ -12,19 +12,21 @@ ReactDOM.render(
     <Router>
         <StoreProvider>
             <Switch>
-                <Route path="/controlbar" 
-                    render={ () => (
+                <Route
+                    path="/controlbar"
+                    render={() => (
                         <ControlProvider>
-                            <ControlBar/>
+                            <ControlBar />
                         </ControlProvider>
-                    )} 
+                    )}
                 />
-                <Route path="/" 
-                    render={ () => (
+                <Route
+                    path="/"
+                    render={() => (
                         <TabsProvider>
-                            <Main/>
+                            <Main />
                         </TabsProvider>
-                    )} 
+                    )}
                 />
             </Switch>
         </StoreProvider>

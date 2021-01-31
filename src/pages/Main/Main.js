@@ -1,5 +1,5 @@
-import React from 'react'
-import { HashRouter as Router, Route} from "react-router-dom";
+import React from "react";
+import { HashRouter as Router, Route } from "react-router-dom";
 import Layout from "../../components/Layouts/Layouts";
 import Home from "./Home/Home";
 import Work from "./Work/Work";
@@ -14,6 +14,6 @@ const Main = (props) => {
             </Router>
         </Layout>
     );
-}
+};
 
 export default Main;

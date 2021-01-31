@@ -7,8 +7,8 @@ import NoteCards from "../../../components/NoteCards/NoteCards";
 import Folders from "../../../components/Folders/Folders";
 import CModal from "../../../components/Modal/CModal";
 import NoteCard from "../../../components/NoteCards/NoteCard/NoteCard";
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
 import { StoreContext, StoreUpdateContext } from "../../../context/homeContext";
 
 import "./Home.scss";
@@ -36,7 +36,7 @@ function App({ match }) {
                         startIcon={<Icon className="fa fa-plus-circle" />}
                         onClick={handleModalToggle}
                     >
-                        { position === "home"? "Add Folder" : "Add Note"}
+                        {position === "home" ? "Add Folder" : "Add Note"}
                     </Button>
                 </div>
             </header>
@@ -55,12 +55,12 @@ function App({ match }) {
                     <main className="Content">
                         <Container className="container">
                             <Link to="/">Back to Home</Link>
-                            <div className="note-cards"> 
+                            <div className="note-cards">
                                 <div className="card-deck" style={{ display: "flex" }}>
-                                {getCollections(folder.cs) &&
-                                    getCollections(folder.cs).map((collection) => {
-                                        return <NoteCard key={collection.id} collection={collection} />;
-                                    })}
+                                    {getCollections(folder.cs) &&
+                                        getCollections(folder.cs).map((collection) => {
+                                            return <NoteCard key={collection.id} collection={collection} />;
+                                        })}
                                 </div>
                             </div>
                         </Container>

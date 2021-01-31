@@ -145,6 +145,7 @@ sketch
 .env.production.local
 /public/electron.js.map
 /public/electron.js
+/public/media/image
 
 npm-debug.log*
 yarn-debug.log*

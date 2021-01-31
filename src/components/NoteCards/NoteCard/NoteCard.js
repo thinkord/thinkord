@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { TabsContext } from "../../../context/tabContext";
 import appRuntime from "../../../appRuntime";
-import "./noteCard.scss";
+import "./NoteCard.scss";
 
 import CModal from "../../Modal/CModal";
 

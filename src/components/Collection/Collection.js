@@ -8,10 +8,10 @@ import InputContainer from "../Input/InputContainer";
 import classes from "./Collections.module.scss";
 import { BlockContext } from "../../context/blockContext";
 import { withRouter } from "react-router-dom";
-import EditorJs from 'react-editor-js';
-import Image from '@editorjs/image';
-import EditorIcon from '@material-ui/icons/Subject';
-import ListIcon from '@material-ui/icons/FormatListBulleted';
+import EditorJs from "react-editor-js";
+import Image from "@editorjs/image";
+import EditorIcon from "@material-ui/icons/Subject";
+import ListIcon from "@material-ui/icons/FormatListBulleted";
 
 function Collection(props) {
     const { collectionInfo } = useContext(BlockContext);
@@ -20,65 +20,66 @@ function Collection(props) {
 
     //editorjs 需要的資料格式
     const data = {
-        blocks: []
-    }
+        blocks: [],
+    };
 
     async function handleEditorChange() {
-        if(editor){
+        if (editor) {
             let savedData = await editor.save();
+            // eslint-disable-next-line no-console
             console.log(savedData);
         }
     }
 
     async function handleEditorRender(data) {
-        if(editor){
-            try{
-                await editor.isReady
-                editor.render(data)
-                console.log(editor)
-            }catch(reason) {
-                console.log(`Editor.js initialization failed because of ${reason}`)
+        if (editor) {
+            try {
+                await editor.isReady;
+                editor.render(data);
+            } catch (reason) {
+                // eslint-disable-next-line no-console
+                console.log(`Editor.js initialization failed because of ${reason}`);
             }
         }
     }
 
-    useEffect(() =>{
-        data.blocks = []
-        console.log(process)
-        if(collectionInfo !== undefined){
-            console.log(collectionInfo.blocks)
+    useEffect(() => {
+        data.blocks = [];
+
+        if (collectionInfo !== undefined) {
             collectionInfo.blocks.map((block, index) => {
-                let blockData = null
-                switch(block.type){
+                let blockData = null;
+                switch (block.type) {
                     case "image":
                         blockData = {
                             type: "image",
                             data: {
-                                file : {
-                                    url: `${process.env.HOME}//AppData//Roaming//thinkord//blob_storage//${block.title}`
+                                file: {
+                                    // url: `${process.env.HOME}//AppData//Roaming//thinkord//blob_storage//${block.title}`
+                                    url: `http://localhost:3000/media/image/${block.title}`,
                                 },
                                 caption: block.description ? block.description : "",
                                 withBorder: "",
                                 stretched: false,
-                                withBackground: false
-                            }
-                        }
+                                withBackground: false,
+                            },
+                        };
                         break;
                     default:
                         blockData = {
                             type: "paragraph",
                             data: {
-                                text: block.description
-                            }
-                        }
+                                text: block.description,
+                            },
+                        };
                         break;
                 }
-                data.blocks.push(blockData)
+                data.blocks.push(blockData);
                 return 0;
-            })
-            handleEditorRender(data)
+            });
+            handleEditorRender(data);
         }
-    })
+    });
 
     return (
         <>
@@ -89,9 +90,10 @@ function Collection(props) {
                             <CollectionTitle title={collectionInfo.name} collectionId={collectionInfo.id} />
                         </div>
                         <div className={classes.Controls}>
-                            {editorView ? 
-                                <ListIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)}/> :
-                                <EditorIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)}/> 
+                            {
+                                editorView ?
+                                    <ListIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)} /> :
+                                    <EditorIcon className={classes.EditorSwitch} onClick={() => setEditorView(!editorView)} />
                             }
                             <i className="fas fa-ellipsis-h"></i>
                         </div>
@@ -101,8 +103,8 @@ function Collection(props) {
                             {editorView ? (
                                 <EditorJs
                                     data={data}
-                                    tools={{image: Image}}
-                                    instanceRef={instance => setEditor(instance)} 
+                                    tools={{ image: Image }}
+                                    instanceRef={instance => setEditor(instance)}
                                     onChange={handleEditorChange}
                                 />
                             ) : (

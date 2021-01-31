@@ -76,19 +76,31 @@ const startDragsnip = (currentWork) => {
             const dragsnipName = `${uuidv4()}.png`;
             const dragsnipPath = path.join(userPath, "blob_storage", dragsnipName);
 
-            fs.writeFile(dragsnipPath, new Buffer.from(url.replace("data:image/png;base64,", ""), "base64"), (err) => {
-                if (err) log.error(err);
-
-                log.info("Dragsnip has been saved!");
-                ipcRenderer.invoke("media-channel", "save", {
-                    name: dragsnipName,
-                    path: dragsnipPath,
-                    type: "image",
-                    current: currentWork,
-                });
-                ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
-                ipcRenderer.invoke("window-channel", "captureSignal", "data");
-            });
+            await fs.writeFile(
+                dragsnipPath,
+                new Buffer.from(url.replace("data:image/png;base64,", ""), "base64"),
+                (err) => {
+                    if (err) log.error(err);
+                    log.info("Dragsnip has been saved!");
+                    ipcRenderer.invoke("media-channel", "save", {
+                        name: dragsnipName,
+                        path: dragsnipPath,
+                        type: "image",
+                        current: currentWork,
+                    });
+                    ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
+                    ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                }
+            );
+            await fs.writeFile(
+                `./public/media/image/${dragsnipName}`,
+                new Buffer.from(url.replace("data:image/png;base64,", ""), "base64"),
+                (err) => {
+                    if (err) {
+                        return;
+                    }
+                }
+            );
         });
     });
 };
