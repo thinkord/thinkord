@@ -26,6 +26,10 @@ class BlockProvider extends Component {
         }
     }
 
+    updatePage = () => {
+        this.setState({ changed: !this.state.changed });
+    }
+
     loadingData = async () => {
         const data = await appRuntime.invoke("home-channel", "getBlocks", { id: this.props.cId });
         this.setState({
@@ -42,6 +46,25 @@ class BlockProvider extends Component {
         };
         appRuntime.invoke("home-channel", "addBlock", newBlock);
         this.setState({ changed: true });
+    };
+
+    updateBlock = (blocks, index) => {
+        // console.log("Editor blocks: ", blocks.data.text);
+        // console.log("maping index: ", index)
+        // console.log("Collection Info: ", this.state.collectionInfo.blocks);
+        const changedBlock = {
+            title: "",
+            type: "text",
+            description: blocks.data.text,
+            id: this.state.collectionInfo.id,
+        }
+        if (index > this.state.collectionInfo.blocks.length - 1) {
+            // Add the new block
+            appRuntime.invoke("home-channel", "addBlock", changedBlock);
+            // this.setState({ changed: true });
+        } else {
+            // Update the new block
+        }
     };
 
     deleteBlock = (collectionId, blockId) => {
@@ -63,6 +86,8 @@ class BlockProvider extends Component {
                             getBlocks: this.getBlocks,
                             addBlock: this.addBlock,
                             deleteBlock: this.deleteBlock,
+                            updateBlock: this.updateBlock,
+                            updatePage: this.updatePage,
                         }}
                     >
                         {this.props.children}
