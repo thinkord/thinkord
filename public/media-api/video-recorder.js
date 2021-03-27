@@ -84,6 +84,9 @@ class VideoRecorder {
             reader.onload = () => {
                 if (reader.readyState == 2 && reader.result) {
                     const videoBuffer = Buffer.from(reader.result);
+                    fs.writeFile(`./public/media/video/${recName}`, videoBuffer, (err) => {
+                        console.log(err)
+                    })
                     fs.writeFile(recPath, videoBuffer, (err) => {
                         if (err) {
                             log.error(err);

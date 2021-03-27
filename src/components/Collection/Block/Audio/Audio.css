@@ -1,0 +1,35 @@
+.audio-block audio {
+    width: 100%;
+    border-radius: 50px;
+    margin: 10px 0;
+    box-shadow: 0 0 6px rgba(0,0, 0, 0.2);
+}
+label.label input[type="file"] {
+    position: absolute;
+    display: none;
+}
+.label {
+    cursor: pointer;
+    border: 1px solid #cccccc;
+    width: 100%;
+    text-align: center;
+    padding: 5px 15px;
+    margin: 5px;
+    background: #dddddd;
+    display: inline-block;
+}
+.label:hover {
+    background: #5cbd95;
+}
+.label:active {
+    background: #9fa1a0;
+}
+.label:invalid+span {
+    color: #000000;
+}
+.label:valid+span {
+    color: #ffffff;
+}
+.audio-block audio:focus{
+    outline: 0;
+}
