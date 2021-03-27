@@ -69,6 +69,9 @@ class AudioRecorder {
             reader.onload = () => {
                 if (reader.readyState == 2 && reader.result) {
                     const audioBuffer = Buffer.from(reader.result);
+                    fs.writeFile(`./public/media/audio/${recName}`, audioBuffer, (err) => {
+                        console.log(err)
+                    })
                     fs.writeFile(recPath, audioBuffer, (err) => {
                         if (err) {
                             log.error(err);

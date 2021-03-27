@@ -5,7 +5,14 @@ import React, { useContext, useState, useEffect } from "react";
 import { BlockContext } from "../../context/blockContext";
 import { BlockUpdateContext } from "../../context/blockContext";
 import EditorJs from "react-editor-js";
-import Image from "@editorjs/image";
+// import Image from "@editorjs/image";
+import Attaches from '@editorjs/attaches';
+import './Block/SimpleImage/simple-image.css';
+import './Block/Audio/Audio.css';
+import './Block/Video/Video.css';
+import SimpleImage from './Block/SimpleImage/simple-image';
+import Audio from './Block/Audio/Audio';
+import Video from './Block/Video/Video';
 
 export default function Edit() {
     const { collectionInfo } = useContext(BlockContext);
@@ -20,6 +27,7 @@ export default function Edit() {
     async function handleEditorChange() {
         if (editor) {
             let savedData = await editor.save();
+            console.log(savedData)
             // console.log("Editor blocks:", savedData.blocks[editor.blocks.getCurrentBlockIndex()]);
             if (savedData.blocks[editor.blocks.getCurrentBlockIndex()])
                 updateBlock(
@@ -51,17 +59,31 @@ export default function Edit() {
                         blockData = {
                             type: "image",
                             data: {
-                                file: {
-                                    // url: `${process.env.HOME}//AppData//Roaming//thinkord//blob_storage//${block.title}`
-                                    url: `http://localhost:3000/media/image/${block.title}`,
-                                },
+                                // url: `${process.env.HOME}//AppData//Roaming//thinkord//blob_storage//${block.title}`
+                                url: `http://localhost:3000/media/image/${block.title}`,
                                 id: block.id,
                                 caption: block.description ? block.description : "",
-                                withBorder: "",
+                                withBorder: false,
                                 stretched: false,
                                 withBackground: false,
                             },
                         };
+                        break;
+                    case "audio":
+                        blockData = {
+                            type: "audio",
+                            data: {
+                                url: `http://localhost:3000/media/audio/${block.title}`
+                            }
+                        }
+                        break;
+                    case "video":
+                        blockData = {
+                            type: "video",
+                            data: {
+                                url: `http://localhost:3000/media/video/${block.title}`
+                            }
+                        }
                         break;
                     default:
                         blockData = {
@@ -85,7 +107,27 @@ export default function Edit() {
         <>
             <EditorJs
                 data={data}
-                tools={{ image: Image }}
+                tools={{ 
+                    image: {
+                        class: SimpleImage,
+                        inlineToolbar: true,
+                        config: {
+                            placeholder: 'Paste image URL'
+                        }
+                    },
+                    audio: {
+                        class: Audio
+                    },
+                    video: {
+                        class: Video
+                    },
+                    attaches: {
+                        class: Attaches,
+                        config: {
+                            endpoint: 'http://localhost:8008/uploadFile'
+                        }
+                    }
+                }}
                 instanceRef={(instance) => setEditor(instance)}
                 onChange={handleEditorChange}
             />
