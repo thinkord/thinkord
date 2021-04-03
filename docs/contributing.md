@@ -9,6 +9,44 @@ These guides are intended for people working on Thinkord project.
 - [Coding Style](coding-style.md)
 - Testing
 
+## Development
+Normally, the development cycle would look like this
+
+### Step 1: start
+```
+npm run start
+```
+
+### Step 2: commit
+Make some changes
+```
+git add
+git commit
+```
+
+### Step 3: build
+```
+npm run build
+```
+
+### Step 4: pack (optional)
+```
+npm run pack
+```
+After packaging the application, folder **dist** should be created, and you could click .exe to install it to your computer.
+
+### Step 5: push
+If you are comfortable with your changes, you can push them to your origin.
+```
+git push origin my-branch
+```
+
+### Step 6: pull request
+Integrate your works to the project.
+
+> For more details, you can check out this [pull requests](pull-requests.md) guidelines.
+
+
 ## Branch naming guidelines
 
 Common prefixes:
