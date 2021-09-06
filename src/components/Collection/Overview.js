@@ -13,9 +13,7 @@ export default function Overview() {
             <Container className={classes.BlockContainer} maxWidth="md">
                 <>
                     {collectionInfo.blocks.map((block, index) => {
-                        return (
-                            <Block key={block.id} collectionId={collectionInfo.id} block={block} index={index} />
-                        );
+                        return <Block key={block.id} collectionId={collectionInfo.id} block={block} index={index} />;
                     })}
                     <InputContainer collectionId={collectionInfo.id} type="block" />
                 </>
