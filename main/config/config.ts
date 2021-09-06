@@ -1,6 +1,9 @@
 import * as path from "path";
+import { app } from "electron";
 import { Options } from "sequelize";
-const workpath = process.env.HOME + "//AppData//Roaming//thinkord";
+
+// const workpath = process.env.HOME + "//AppData//Roaming//thinkord";
+const userPath = app.getPath("userData");
 
 const config = {
     development: {
@@ -13,7 +16,7 @@ const config = {
     } as Options,
     production: {
         dialect: "sqlite",
-        storage: path.join(workpath, "/db_prd.sqlite3"),
+        storage: path.join(userPath, "/db_prd.sqlite3"),
     } as Options,
 };
 

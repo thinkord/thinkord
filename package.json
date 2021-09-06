@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "Electron application dedicated to helping people comveniently capture their thoughts.",
   "contributors": [
-    "Lo Tingyi",
-    "Lu Jiaqi",
-    "Chiu Shihchuan"
+    "Tingyi Lo",
+    "Qi Xuan Lu",
+    "Shihchuan Chiu"
   ],
   "private": true,
   "homepage": "./",
@@ -21,8 +21,9 @@
     "react-build": "react-scripts build",
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
-    "electron-build": "webpack --config ./webpack.config.js",
-    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-build && electron .\"",
+    "electron-start": "webpack --config ./webpack.config.js --mode=development",
+    "electron-build": "webpack --config ./webpack.config.js --mode=production",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-start && electron .\"",
     "lint": "eslint **/*.{js,ts,jsx} --quiet --fix ",
     "build": "npm run electron-build && npm run react-build",
     "pack": "electron-builder --config electron-builder.json"

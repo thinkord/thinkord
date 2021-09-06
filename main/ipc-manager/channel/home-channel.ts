@@ -57,7 +57,7 @@ export class HomeChannel extends BaseChannel {
         this.collectionId = args.id;
         const query = await Collection.findOne({
             where: { id: args.id },
-            include: [Collection.associations.blocks],
+            include: { all: true, nested: true },
         });
         const data = JSON.stringify(query, null, 2);
         return data;
