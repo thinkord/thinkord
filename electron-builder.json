@@ -16,6 +16,10 @@
         "icon": "public/asset/icon.png"
     },
     "linux": {
-        "icon": "public/asset/icon.png"
+        "icon": "public/asset/icon.png",
+        "target": [
+            "AppImage",
+            "snap"
+        ]
     }
 }

@@ -9,6 +9,7 @@ export class SystemChannel extends BaseChannel {
     public handleRequest(): void {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
+                case "getNodeEnv":
                 case "getUserPath":
                 case "getScreenshotSize":
                 case "getCurrentScreen":
@@ -24,6 +25,10 @@ export class SystemChannel extends BaseChannel {
                     break;
             }
         });
+    }
+
+    private getNodeEnv(): string | undefined {
+        return process.env.NODE_ENV;
     }
 
     private getUserPath(): string {

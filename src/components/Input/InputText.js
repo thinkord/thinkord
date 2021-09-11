@@ -44,7 +44,7 @@ export default function InputText() {
     const handleCancelConfirm = () => {
         appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
         handleTextState();
-    }
+    };
     return (
         <div>
             <div>

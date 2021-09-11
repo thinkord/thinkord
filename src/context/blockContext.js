@@ -28,7 +28,7 @@ class BlockProvider extends Component {
 
     updatePage = () => {
         this.setState({ changed: !this.state.changed });
-    }
+    };
 
     loadingData = async () => {
         const data = await appRuntime.invoke("home-channel", "getBlocks", { id: this.props.cId });
@@ -57,7 +57,7 @@ class BlockProvider extends Component {
             type: "text",
             description: blocks.data.text,
             id: this.state.collectionInfo.id,
-        }
+        };
         if (index > this.state.collectionInfo.blocks.length - 1) {
             // Add the new block
             appRuntime.invoke("home-channel", "addBlock", changedBlock);
