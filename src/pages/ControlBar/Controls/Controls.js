@@ -9,6 +9,7 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import HomeIcon from "@material-ui/icons/Home";
 import Divider from "@material-ui/core/Divider";
 import classes from "../ConrolBar.module.sass";
+import appRuntime from "../../../appRuntime";
 
 export default function Text() {
     const { handleText, handleFullsnip, handleDragsnip, handleAudio, handleVideo } = useContext(ControlContext);
@@ -56,7 +57,14 @@ export default function Text() {
                 <FiberManualRecordIcon className={classes.Control} />
             </IconButton>
             <Divider orientation="vertical" flexItem />
-            <IconButton id="homeButton">
+            <IconButton
+                id="homeButton"
+                onClick={() => {
+                    appRuntime.invoke("window-channel", "jump", { path: "/" });
+                    appRuntime.invoke("window-channel", "close", { win: "controlWin" });
+                    appRuntime.unsubscribe("capture");
+                    appRuntime.unsubscribe("system-channel");
+                }} >
                 <HomeIcon className={classes.Control} />
             </IconButton>
         </div>

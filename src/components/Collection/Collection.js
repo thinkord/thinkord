@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Container } from "@material-ui/core";
 import { CollectionTitle } from "./Title";
+import { useHistory } from "react-router-dom";
 
 import classes from "./Collections.module.scss";
 import { BlockContext, BlockUpdateContext } from "../../context/blockContext";
@@ -11,12 +12,19 @@ import EditorIcon from "@material-ui/icons/Subject";
 import ListIcon from "@material-ui/icons/FormatListBulleted";
 import Edit from "./Edit";
 import Overview from "./Overview";
+import appRuntime from "../../appRuntime";
 
 function Collection(props) {
+    const history = useHistory();
     const { collectionInfo } = useContext(BlockContext);
     const { updatePage } = useContext(BlockUpdateContext);
     const [editorView, setEditorView] = useState(false);
 
+    useEffect(() => {
+        appRuntime.subscribe("jump", (data) => {
+            history.push(data);
+        });
+    });
     return (
         <>
             {collectionInfo !== undefined ? (

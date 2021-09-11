@@ -25,6 +25,7 @@ export class WindowChannel extends BaseChannel {
                 case "close":
                 case "captureSignal":
                 case "load":
+                case "jump":
                     this[command](event, args);
                     break;
                 case "getCurrentWork":
@@ -73,6 +74,11 @@ export class WindowChannel extends BaseChannel {
         }
     }
 
+    public jump(event: IpcMainInvokeEvent, args: any): string {
+        HomeWindow.sendMessage("jump", args.path);
+        return args.path;
+    }
+
     private load(event: IpcMainInvokeEvent, args: any): void {
         if (args.win === "controlWin") {
             if (this.wins.controlWindow) {
@@ -96,29 +102,7 @@ export class WindowChannel extends BaseChannel {
                 this.wins.maskWindow = undefined;
             }
         });
-
-        // homeWin.webContents.send("dragsnip-saved", dragsnipPath);
     };
-    /** Start operation */
-    // public createControlBar(event: IpcMainEvent, args: IpcRequest): void {
-    //     if (!this.wins.controlWindow) {
-    //         this.wins.controlWindow = new ControlWindow();
-    //         this.wins.controlWindow.createWindow();
-    //         this.wins.controlWindow.register();
-    //     } else {
-    //         // Transfer information to different frame
-    //         ControlWindow.sendMessage("changed", args.id);
-    //     }
-    // }
-
-    // public closeControlBar(): void {
-    //     if (this.wins.controlWindow) {
-    //         this.wins.controlWindow.closeWindow();
-    //         this.deleteRequest("test-channel");
-    //         this.deleteRequest("system-channel");
-    //         this.wins.controlWindow = undefined;
-    //     }
-    // }
 
     public captureSignal(event: IpcMainInvokeEvent, args: IpcRequest): void {
         // Transfer information to different frame
