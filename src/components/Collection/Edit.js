@@ -13,6 +13,7 @@ import "./Block/Video/Video.css";
 import SimpleImage from "./Block/SimpleImage/simple-image";
 import Audio from "./Block/Audio/Audio";
 import Video from "./Block/Video/Video";
+import { Length } from "sequelize-typescript";
 
 export default function Edit() {
     const { collectionInfo } = useContext(BlockContext);
@@ -53,7 +54,7 @@ export default function Edit() {
         // data.blocks = [];
         if (collectionInfo !== undefined) {
             collectionInfo.blocks.map((block, index) => {
-                const path = block.files !== undefined ? block.files[0].path : null;
+                const path = block.files !== undefined && block.files.length > 0 ? block.files[0].path : null;
                 let blockData = null;
                 switch (block.type) {
                     case "image":

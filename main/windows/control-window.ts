@@ -63,7 +63,7 @@ export class ControlWindow extends BaseWindow {
                 ControlWindow.win.loadURL(
                     isDev
                         ? "http://localhost:3000/#/controlbar/"
-                        : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
+                        : `file://${path.join(__dirname, "../build/index.html#/controlbar")}`
                 );
             }
         } else if (page === "text") {
@@ -74,7 +74,7 @@ export class ControlWindow extends BaseWindow {
                 ControlWindow.win.loadURL(
                     isDev
                         ? "http://localhost:3000/#/controlbar/text"
-                        : `file://${path.join(__dirname, "../build/index.html#controlbar#text")}`
+                        : `file://${path.join(__dirname, "../build/index.html#/controlbar#/text")}`
                 );
             }
         }
