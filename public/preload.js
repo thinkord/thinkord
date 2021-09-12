@@ -37,8 +37,9 @@ contextBridge.exposeInMainWorld("appRuntime", {
     handleFullsnip: (userPath, thumbSize, currentWork) => {
         takeScreenshot(userPath, thumbSize, currentWork);
     },
-    handleDragsnip: () => {
-        ipcRenderer.invoke("window-channel", "create", { win: "maskWin" });
+    handleDragsnip: async () => {
+        await ipcRenderer.invoke("window-channel", "create", { win: "maskWin" });
+
         // ipcRenderer.removeAllListeners("dragsnip-saved");
         // ipcRenderer.once("dragsnip-saved", (event, dragsnipPath) => {
         //     // Add new block to the note object
