@@ -185,33 +185,45 @@ class StoreProvider extends Component {
         this.setState({ changed: true });
     };
 
-    deletFolder = (folderId) => {
-        const { data } = this.state;
-        const newState = {
-            collections: { ...data.collections },
-            folderIds: [...data.folderIds],
-            folders: { ...data.folders },
-        };
-        newState.folderIds.map((id, index) => {
-            if (id === folderId) {
-                newState.folderIds.splice(index, 1);
-            }
-            return newState;
-        });
-        Object.values(newState.folders).map((folder) => {
-            if (folder.id === folderId) {
-                delete newState.folders[folderId];
-                folder.cs.map((collection) => {
-                    delete newState.collections[collection];
-                    return folder;
-                });
-            }
-            return newState;
-        });
+    /**
+     *
+     * @param {string} title
+     * @param {number} folderId
+     */
+    updateFolderTitle = (title, folderId) => {
+        appRuntime.invoke("home-channel", "updateFolder", { title, folderId });
+        this.setState({ changed: true });
+    };
 
-        this.setState({
-            data: newState,
-        });
+    deletFolder = (folderId) => {
+        appRuntime.invoke("home-channel", "deleteFolder", { folderId });
+        this.setState({ changed: true });
+        // const { data } = this.state;
+        // const newState = {
+        //     collections: { ...data.collections },
+        //     folderIds: [...data.folderIds],
+        //     folders: { ...data.folders },
+        // };
+        // newState.folderIds.map((id, index) => {
+        //     if (id === folderId) {
+        //         newState.folderIds.splice(index, 1);
+        //     }
+        //     return newState;
+        // });
+        // Object.values(newState.folders).map((folder) => {
+        //     if (folder.id === folderId) {
+        //         delete newState.folders[folderId];
+        //         folder.cs.map((collection) => {
+        //             delete newState.collections[collection];
+        //             return folder;
+        //         });
+        //     }
+        //     return newState;
+        // });
+
+        // this.setState({
+        //     data: newState,
+        // });
     };
 
     render() {
@@ -227,6 +239,7 @@ class StoreProvider extends Component {
                             value={{
                                 updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
+                                updateFolderTitle: this.updateFolderTitle,
                                 getFolder: this.getFolder,
                                 deleteFolder: this.deletFolder,
                                 addCollection: this.addCollection,

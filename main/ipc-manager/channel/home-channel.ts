@@ -15,7 +15,9 @@ export class HomeChannel extends BaseChannel {
                 case "addBlock":
                 case "addCollection":
                 case "orderCollection":
+                case "updateFolder":
                 case "updateCollection":
+                case "deleteFolder":
                 case "deleteCollection":
                 case "deleteBlock":
                 case "getHomeData":
@@ -78,6 +80,11 @@ export class HomeChannel extends BaseChannel {
         await Block.create({ title, type, description, collectionId });
     }
 
+    private async deleteFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { folderId } = args;
+        await Folder.destroy({ where: { id: folderId } });
+    }
+
     private async deleteBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
         const { blockId } = args;
         await Block.destroy({ where: { id: blockId } });
@@ -99,6 +106,12 @@ export class HomeChannel extends BaseChannel {
 
     private async orderCollection(event: IpcMainInvokeEvent): Promise<void> {
         await Collection.findAll({ order: [["updatedAt", "DESC"]] });
+    }
+
+    private async updateFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        log.info("frontend update folder: ", args);
+        const { title, folderId } = args;
+        Folder.update({ name: title }, { where: { id: folderId } });
     }
 
     private async updateCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {

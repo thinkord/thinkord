@@ -19,6 +19,7 @@ export class ControlWindow extends BaseWindow {
                 contextIsolation: true,
                 // nodeIntegration: false,
                 preload: path.resolve(__dirname, "preload.js"),
+                devTools: isDev ? true : false,
             },
         });
 

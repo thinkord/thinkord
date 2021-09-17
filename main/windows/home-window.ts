@@ -16,9 +16,10 @@ export class HomeWindow extends BaseWindow {
                 contextIsolation: true,
                 nodeIntegration: false,
                 preload: path.resolve(__dirname, "preload.js"),
+                devTools: isDev ? true : false,
             },
         });
-        HomeWindow.win.webContents.openDevTools();
+        isDev && HomeWindow.win.webContents.openDevTools();
         HomeWindow.win.loadURL(
             isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
         );
