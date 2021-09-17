@@ -46,8 +46,16 @@ class VideoRecorder {
             if (source.name === "Entire Screen" || source.name === "Screen 1") {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({
-                        audio: true,
-                        video: true,
+                        audio: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                            },
+                        },
+                        video: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                            },
+                        },
                     });
                     handleStream(stream);
                 } catch (err) {
@@ -70,15 +78,14 @@ class VideoRecorder {
             log.info("saving video file as mp4");
             const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
             const recName = `${uuidv4()}.mp4`;
-            const recPath =
-                env === "development" ? `media/image/${recName}` : path.join(userPath, "blob_storage", recName);
+            const recPath = env === "development" ? `media/${recName}` : path.join(userPath, "blob_storage", recName);
             const reader = new FileReader();
             const videoBlob = new Blob(this.videoChunks, { type: "video/mp4" });
             reader.readAsArrayBuffer(videoBlob);
             reader.onload = () => {
                 if (reader.readyState == 2 && reader.result) {
                     const videoBuffer = Buffer.from(reader.result);
-                    fs.writeFile(mode === "development" ? `./public/${recPath}` : `${recPath}`, videoBuffer, (err) => {
+                    fs.writeFile(env === "development" ? `./public/${recPath}` : `${recPath}`, videoBuffer, (err) => {
                         if (err) {
                             log.error(err);
                         } else {

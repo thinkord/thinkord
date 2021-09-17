@@ -75,9 +75,7 @@ const startDragsnip = (currentWork) => {
             const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
             const dragsnipName = `${uuidv4()}.png`;
             const dragsnipPath =
-                env === "development"
-                    ? `media/image/${dragsnipName}`
-                    : path.join(userPath, "blob_storage", dragsnipName);
+                env === "development" ? `media/${dragsnipName}` : path.join(userPath, "blob_storage", dragsnipName);
             // const dragsnipPath = path.join(userPath, "blob_storage", dragsnipName);
 
             try {

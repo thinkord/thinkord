@@ -63,8 +63,7 @@ class AudioRecorder {
             log.info("saving audio file as mp3");
             const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
             const recName = `${uuidv4()}.mp3`;
-            const recPath =
-                env === "development" ? `media/image/${recName}` : path.join(userPath, "blob_storage", recName);
+            const recPath = env === "development" ? `media/${recName}` : path.join(userPath, "blob_storage", recName);
             // const recPath = path.join(userPath, "blob_storage", recName);
             const reader = new FileReader();
             const audioBlob = new Blob(this.audioChunks, { type: "audio/mp3" });

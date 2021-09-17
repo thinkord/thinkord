@@ -19,7 +19,7 @@ const takeScreenshot = async (userPath, thumbSize, currentWork) => {
     const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
     const screenshotName = `${uuidv4()}.png`;
     const screenshotPath =
-        env === "development" ? `media/image/${screenshotName}` : path.join(userPath, "blob_storage", screenshotName);
+        env === "development" ? `media/${screenshotName}` : path.join(userPath, "blob_storage", screenshotName);
     const options = { types: ["screen"], thumbnailSize: thumbSize };
 
     const sources = await desktopCapturer.getSources(options);
