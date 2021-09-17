@@ -4,10 +4,10 @@ import React, { useContext } from "react";
 import { StoreUpdateContext } from "../../context/homeContext";
 import { ControlContext } from "../../context/controlContext";
 import { HashRouter as Router, Route } from "react-router-dom";
-import classes from './ConrolBar.module.sass';
+import classes from "./ConrolBar.module.sass";
 import Controls from "./Controls/Controls";
 import Text from "./Text/Text";
-import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
+import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
 import appRuntime from "../../appRuntime";
 // import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 // import RoomIcon from '@material-ui/icons/Room';
@@ -20,14 +20,15 @@ export default function ControlBar() {
         <div className={classes.ControlBar}>
             <div className={classes.TitleBar}>
                 <div> Note: {mappedCollection ? mappedCollection.name : ""}</div>
-                <div 
-                    className={classes.winControls} 
+                <div
+                    className={classes.winControls}
                     onClick={() => {
-                   appRuntime.invoke("window-channel", "jump", { path: "/" });
-                   appRuntime.invoke("window-channel", "close", { win: "controlWin" });
-                   appRuntime.unsubscribe("capture");
-                   appRuntime.unsubscribe("system-channel");
-                }}>
+                        appRuntime.invoke("window-channel", "jump", { path: "/" });
+                        appRuntime.invoke("window-channel", "close", { win: "controlWin" });
+                        appRuntime.unsubscribe("capture");
+                        appRuntime.unsubscribe("system-channel");
+                    }}
+                >
                     {/* <RoomIcon className={classes.winControl}/>
                     <RoomOutlinedIcon className={classes.winControl}/> */}
                     <ClearOutlinedIcon className={classes.winControl} />

@@ -23,7 +23,6 @@ function App({ match }) {
     const handleModalToggle = () => {
         setModalShow((prevState) => !prevState);
     };
-
     const folder = getFolder(position);
     return (
         <React.Fragment>

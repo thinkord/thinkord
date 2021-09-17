@@ -47,10 +47,7 @@ export class SystemChannel extends BaseChannel {
     }
 
     private getCurrentScreen(): any {
-        // // eslint-disable-next-line @typescript-eslint/no-var-requires
-        // const currentWindow = require("electron").getCurrentWindow();
-        // const { x, y } = currentWindow.getBounds();
-        // const currentScreen = screen.getAllDisplays().filter((d) => d.bounds.x === x && d.bounds.y === y)[0];
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const currentScreen = screen.getPrimaryDisplay();
         return currentScreen;
     }

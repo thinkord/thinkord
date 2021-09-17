@@ -64,7 +64,8 @@ export default function Text() {
                     appRuntime.invoke("window-channel", "close", { win: "controlWin" });
                     appRuntime.unsubscribe("capture");
                     appRuntime.unsubscribe("system-channel");
-                }} >
+                }}
+            >
                 <HomeIcon className={classes.Control} />
             </IconButton>
         </div>

@@ -59,33 +59,36 @@ class AudioRecorder {
         if (!currentWork) {
             return;
         }
-        this.mediaRecorder.onstop = () => {
-            log.info("saving video file as mp3");
+        this.mediaRecorder.onstop = async () => {
+            log.info("saving audio file as mp3");
+            const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
             const recName = `${uuidv4()}.mp3`;
-            const recPath = path.join(userPath, "blob_storage", recName);
+            const recPath = env === "development" ? `media/${recName}` : path.join(userPath, "blob_storage", recName);
+            // const recPath = path.join(userPath, "blob_storage", recName);
             const reader = new FileReader();
             const audioBlob = new Blob(this.audioChunks, { type: "audio/mp3" });
             reader.readAsArrayBuffer(audioBlob);
-            reader.onload = () => {
+            reader.onload = async () => {
                 if (reader.readyState == 2 && reader.result) {
                     const audioBuffer = Buffer.from(reader.result);
-                    fs.writeFile(`./public/media/audio/${recName}`, audioBuffer, (err) => {
-                        console.log(err)
-                    })
-                    fs.writeFile(recPath, audioBuffer, (err) => {
-                        if (err) {
-                            log.error(err);
-                        } else {
-                            log.info("Your audio file has been saved");
-                            ipcRenderer.invoke("media-channel", "save", {
-                                name: recName,
-                                path: recPath,
-                                type: "audio",
-                                current: currentWork,
-                            });
-                            ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                    await fs.writeFile(
+                        env === "development" ? `./public/${recPath}` : `${recPath}`,
+                        audioBuffer,
+                        (err) => {
+                            if (err) {
+                                log.error(err);
+                            } else {
+                                log.info("Your audio file has been saved");
+                                ipcRenderer.invoke("media-channel", "save", {
+                                    name: recName,
+                                    path: recPath,
+                                    type: "audio",
+                                    current: currentWork,
+                                });
+                                ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                            }
                         }
-                    });
+                    );
                 } else log.error("FileReader has problems reading blob");
             };
         };

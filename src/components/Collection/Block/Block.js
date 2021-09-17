@@ -44,7 +44,7 @@ export default function Block({ block, index, collectionId }) {
                     {/* {block.type == "image"? <img src={`http://localhost:3000/media/image/${block.title}`} alt={block.title}/>:<></>} */}
                     <div className={classes.BlockTime}>
                         <Icon className={classes.Icon + " fas fa-clock"}></Icon>
-                        {block.updatedAt}
+                        {new Date(block.updatedAt).toLocaleString()}
                     </div>
                 </div>
             </div>

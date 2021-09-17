@@ -1,4 +1,4 @@
-const { argv } = require("process");
+// import { argv } from "process";
 
 // require("@babel/polyfill");
 let config = {
@@ -28,7 +28,7 @@ let config = {
     },
 };
 
-module.exports = (env, argv) => {
+export default (env, argv) => {
     if (argv.mode === "development") {
         config.devtool = "source-map";
     }

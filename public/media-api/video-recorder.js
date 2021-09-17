@@ -74,20 +74,18 @@ class VideoRecorder {
         if (!currentWork) {
             return;
         }
-        this.mediaRecorder.onstop = () => {
+        this.mediaRecorder.onstop = async () => {
             log.info("saving video file as mp4");
+            const env = await ipcRenderer.invoke("system-channel", "getNodeEnv");
             const recName = `${uuidv4()}.mp4`;
-            const recPath = path.join(userPath, "blob_storage", recName);
+            const recPath = env === "development" ? `media/${recName}` : path.join(userPath, "blob_storage", recName);
             const reader = new FileReader();
             const videoBlob = new Blob(this.videoChunks, { type: "video/mp4" });
             reader.readAsArrayBuffer(videoBlob);
             reader.onload = () => {
                 if (reader.readyState == 2 && reader.result) {
                     const videoBuffer = Buffer.from(reader.result);
-                    fs.writeFile(`./public/media/video/${recName}`, videoBuffer, (err) => {
-                        console.log(err)
-                    })
-                    fs.writeFile(recPath, videoBuffer, (err) => {
+                    fs.writeFile(env === "development" ? `./public/${recPath}` : `${recPath}`, videoBuffer, (err) => {
                         if (err) {
                             log.error(err);
                         } else {

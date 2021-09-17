@@ -96,25 +96,33 @@ const getScreen = async (callback) => {
                 );
             });
     } else {
-        navigator.getUserMedia(
-            {
-                audio: false,
-                video: {
-                    mandatory: {
-                        chromeMediaSource: "desktop",
-                        chromeMediaSourceId: `screen:${curScreen.id}`,
-                        minWidth: 1280,
-                        minHeight: 720,
-                        maxWidth: 8000,
-                        maxHeight: 8000,
+        desktopCapturer
+            .getSources({
+                types: ["screen"],
+                thumbnailSize: { width: 1, height: 1 },
+            })
+            .then(async (sources) => {
+                let selectSource = sources.filter((source) => source.name === "Entire Screen")[0];
+                navigator.getUserMedia(
+                    {
+                        audio: false,
+                        video: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                                chromeMediaSourceId: selectSource.id + "",
+                                minWidth: 1280,
+                                minHeight: 720,
+                                maxWidth: 8000,
+                                maxHeight: 8000,
+                            },
+                        },
                     },
-                },
-            },
-            (e) => {
-                this.handleStream(e);
-            },
-            this.handleError
-        );
+                    (e) => {
+                        this.handleStream(e);
+                    },
+                    this.handleError
+                );
+            });
     }
 };
 

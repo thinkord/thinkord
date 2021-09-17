@@ -13,7 +13,6 @@ function NoteCard({ collection }) {
     const [modalFunc, setModalFunc] = useState("rename");
 
     const { id, name, updatedAt } = collection;
-
     const handleMenuToggle = () => {
         setMenuShow((prevState) => !prevState);
     };
@@ -62,7 +61,7 @@ function NoteCard({ collection }) {
                     <h5 className="note-block-title">{name}</h5>
                     <div className="note-block-time">
                         <i className="fas fa-clock"></i>
-                        <span>Update at {updatedAt}</span>
+                        <span>Update at {new Date(updatedAt).toLocaleString()}</span>
                     </div>
                 </div>
                 <Link

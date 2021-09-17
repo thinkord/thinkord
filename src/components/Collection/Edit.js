@@ -77,7 +77,10 @@ export default function Edit() {
                         blockData = {
                             type: "audio",
                             data: {
-                                url: `http://localhost:3000/media/audio/${block.title}`,
+                                url:
+                                    process.env.NODE_ENV === "development"
+                                        ? `http://localhost:3000/${path}`
+                                        : `${path}`,
                             },
                         };
                         break;
@@ -85,7 +88,10 @@ export default function Edit() {
                         blockData = {
                             type: "video",
                             data: {
-                                url: `http://localhost:3000/media/video/${block.title}`,
+                                url:
+                                    process.env.NODE_ENV === "development"
+                                        ? `http://localhost:3000/${path}`
+                                        : `${path}`,
                             },
                         };
                         break;

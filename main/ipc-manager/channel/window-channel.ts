@@ -106,6 +106,6 @@ export class WindowChannel extends BaseChannel {
 
     public captureSignal(event: IpcMainInvokeEvent, args: IpcRequest): void {
         // Transfer information to different frame
-        HomeWindow.sendMessage("capture", "hello");
+        HomeWindow.sendMessage("capture", "");
     }
 }
