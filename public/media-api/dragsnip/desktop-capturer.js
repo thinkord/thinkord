@@ -67,14 +67,16 @@ const getScreen = async (callback) => {
         // console.log(e)
     };
 
-    if (require("os").platform() === "win32") {
+    if (require("os").platform() === "win32" || require("os").platform() === "win64") {
         desktopCapturer
             .getSources({
-                types: ["screen"],
+                types: ["window", "screen"],
                 thumbnailSize: { width: 1, height: 1 },
             })
             .then(async (sources) => {
-                let selectSource = sources.filter((source) => source.display_id + "" === curScreen.id + "")[0];
+                let selectSource = sources.filter((source) => {
+                    return source.display_id + "" === curScreen.id + "";
+                })[0];
                 navigator.getUserMedia(
                     {
                         audio: false,

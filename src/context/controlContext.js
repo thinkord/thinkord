@@ -14,6 +14,7 @@ class ControlProvider extends Component {
     async componentDidMount() {
         const data = await appRuntime.invoke("home-channel", "getCID");
         const path = await appRuntime.invoke("system-channel", "getUserPath");
+
         this.setState({
             mapCId: data,
             path,

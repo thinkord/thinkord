@@ -25,6 +25,7 @@ export class WindowChannel extends BaseChannel {
                 case "close":
                 case "captureSignal":
                 case "load":
+                case "loadTab":
                 case "jump":
                     this[command](event, args);
                     break;
@@ -85,6 +86,10 @@ export class WindowChannel extends BaseChannel {
                 this.wins.controlWindow.loadPage(args.page);
             }
         }
+    }
+
+    private loadTab(event: IpcMainInvokeEvent, args: any): void {
+        HomeWindow.sendMessage("loadTab", args.needLoad);
     }
 
     private createMaskWindow = () => {

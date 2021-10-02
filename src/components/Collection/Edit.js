@@ -13,7 +13,6 @@ import "./Block/Video/Video.css";
 import SimpleImage from "./Block/SimpleImage/simple-image";
 import Audio from "./Block/Audio/Audio";
 import Video from "./Block/Video/Video";
-import { Length } from "sequelize-typescript";
 
 export default function Edit() {
     const { collectionInfo } = useContext(BlockContext);

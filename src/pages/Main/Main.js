@@ -4,7 +4,7 @@ import Layout from "../../components/Layouts/Layouts";
 import Home from "./Home/Home";
 import Work from "./Work/Work";
 
-const Main = (props) => {
+const Main = () => {
     return (
         <Layout>
             <Router>

@@ -28,7 +28,7 @@ let config = {
     },
 };
 
-export default (env, argv) => {
+module.exports = (env, argv) => {
     if (argv.mode === "development") {
         config.devtool = "source-map";
     }

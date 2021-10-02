@@ -24,6 +24,8 @@ function Collection(props) {
         appRuntime.subscribe("jump", (data) => {
             history.push(data);
         });
+
+        appRuntime.invoke("window-channel", "loadTab", { needLoad: true });
     });
     return (
         <>

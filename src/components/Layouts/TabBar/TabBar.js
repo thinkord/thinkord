@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Tab from "./Tab/Tab";
 import { NavLink } from "react-router-dom";
 import { TabsContext } from "../../../context/tabContext";
@@ -6,7 +6,17 @@ import classes from "./TabBar.module.scss";
 import appRuntime from "../../../appRuntime";
 
 const TabBar = () => {
-    const tabsList = useContext(TabsContext).tabs;
+    let { tabs, loadTab } = useContext(TabsContext);
+    useEffect(() => {
+        // listen loadTab events when needs to reload tabs from the localStorage
+        appRuntime.subscribe("loadTab", (data) => {
+            let currentTabs = localStorage.getItem("current_tabs");
+            if (tabs.length < 1 && currentTabs != null && currentTabs.length > 0) {
+                loadTab();
+                tabs = JSON.parse(currentTabs);
+            }
+        });
+    }, [tabs]);
     return (
         <div className={classes.TabBar}>
             <NavLink
@@ -22,7 +32,7 @@ const TabBar = () => {
             >
                 <i className="fas fa-home"></i>
             </NavLink>
-            {tabsList.map((tab) => {
+            {tabs.map((tab) => {
                 return <Tab key={tab.id} tabId={tab.id} id={tab.collectionId} title={tab.title} />;
             })}
         </div>

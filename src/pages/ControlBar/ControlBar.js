@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import { StoreUpdateContext } from "../../context/homeContext";
 import { ControlContext } from "../../context/controlContext";
-import { HashRouter as Router, Route } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import classes from "./ConrolBar.module.sass";
 import Controls from "./Controls/Controls";
 import Text from "./Text/Text";
@@ -34,10 +34,12 @@ export default function ControlBar() {
                     <ClearOutlinedIcon className={classes.winControl} />
                 </div>
             </div>
-            <Router>
-                <Route exact path="/controlbar" component={Controls} />
-                <Route exact path="/controlbar/text" component={Text} />
-            </Router>
+            <HashRouter>
+                <Switch>
+                    <Route exact path="/controlbar" component={Controls} />
+                    <Route path="/controlbar/text" component={Text} />
+                </Switch>
+            </HashRouter>
         </div>
     );
 }
