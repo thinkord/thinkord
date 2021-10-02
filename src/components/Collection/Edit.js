@@ -27,8 +27,6 @@ export default function Edit() {
     async function handleEditorChange() {
         if (editor) {
             let savedData = await editor.save();
-            // console.log(savedData);
-            // console.log("Editor blocks:", savedData.blocks[editor.blocks.getCurrentBlockIndex()]);
             if (savedData.blocks[editor.blocks.getCurrentBlockIndex()])
                 updateBlock(
                     savedData.blocks[editor.blocks.getCurrentBlockIndex()],
@@ -50,7 +48,6 @@ export default function Edit() {
     }
 
     useEffect(() => {
-        // data.blocks = [];
         if (collectionInfo !== undefined) {
             collectionInfo.blocks.map((block, index) => {
                 const path = block.files !== undefined && block.files.length > 0 ? block.files[0].path : null;
@@ -110,7 +107,7 @@ export default function Edit() {
 
             handleEditorRender(data);
         }
-    });
+    }, [data]);
     return (
         <>
             <EditorJs

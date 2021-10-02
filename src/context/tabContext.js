@@ -57,6 +57,7 @@ const TabsContextProvider = (props) => {
                 return tab.id === tabId;
             });
             updatedTabs.splice(targetIndex, 1);
+            localStorage.setItem("current_tabs", JSON.stringify(updatedTabs));
             return updatedTabs;
         });
         appRuntime.invoke("window-channel", "close", { win: "controlWin" });
