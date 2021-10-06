@@ -89,7 +89,7 @@ export class WindowChannel extends BaseChannel {
     }
 
     private loadTab(event: IpcMainInvokeEvent, args: any): void {
-        HomeWindow.sendMessage("loadTab", args.needLoad);
+        HomeWindow.sendMessage("loadTab", args);
     }
 
     private createMaskWindow = () => {

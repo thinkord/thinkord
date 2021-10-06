@@ -5,6 +5,7 @@ import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Folder, Collection, Block } from "../../models";
 import { IpcRequest } from "../../shared/IpcRequest";
+import { HomeWindow } from "../../windows/home-window";
 
 export class HomeChannel extends BaseChannel {
     private collectionId: string | undefined;
@@ -82,6 +83,14 @@ export class HomeChannel extends BaseChannel {
 
     private async deleteFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
         const { folderId } = args;
+
+        const allCollections = await Collection.findAll({ where: { folderId: folderId } });
+        const ids = new Array<number>();
+        allCollections.forEach((data) => {
+            ids.push(data.id);
+        });
+        HomeWindow.sendMessage("delete_tabs", JSON.stringify(ids));
+        await Collection.destroy({ where: { folderId: folderId } });
         await Folder.destroy({ where: { id: folderId } });
     }
 
@@ -97,9 +106,13 @@ export class HomeChannel extends BaseChannel {
     }
 
     private async deleteCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { collectionId } = args;
+        const ids = new Array<number>();
+        ids.push(parseInt(collectionId));
+        HomeWindow.sendMessage("delete_tabs", JSON.stringify(ids));
         await Collection.destroy({
             where: {
-                id: args,
+                id: collectionId,
             },
         });
     }

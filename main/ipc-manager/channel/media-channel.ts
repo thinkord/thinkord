@@ -62,12 +62,4 @@ export class MediaChannel extends BaseChannel {
 
         return isSave;
     }
-
-    // private handleDragsnip(event: IpcMainEvent, args: any): void {
-    //     const type = args.type;
-
-    //     if (type === "select") {
-    //         event.reply("capture-screen", { type: "select" });
-    //     }
-    // }
 }

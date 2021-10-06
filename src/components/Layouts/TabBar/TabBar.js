@@ -14,6 +14,10 @@ const TabBar = () => {
             if (tabs.length < 1 && currentTabs != null && currentTabs.length > 0) {
                 loadTab();
                 tabs = JSON.parse(currentTabs);
+                return;
+            }
+            if (data.fromEvent === "delete_folders") {
+                loadTab();
             }
         });
     }, [tabs]);

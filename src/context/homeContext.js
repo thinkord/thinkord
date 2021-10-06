@@ -23,6 +23,15 @@ class StoreProvider extends Component {
         receiveData.folders = JSON.parse(data.data);
         receiveData.orderCollections = JSON.parse(data.data2);
         this.loadData(receiveData);
+
+        appRuntime.subscribe("delete_tabs", (needDeleteCollectionIDs) => {
+            let currentTabs = JSON.parse(localStorage.getItem("current_tabs"));
+            const result = currentTabs.filter((currentTab) => {
+                return !needDeleteCollectionIDs.includes(currentTab.collectionId);
+            });
+            localStorage.setItem("current_tabs", JSON.stringify(result));
+            appRuntime.invoke("window-channel", "loadTab", { needLoad: true, fromEvent: "delete_folders" });
+        });
     }
 
     async componentDidUpdate() {
@@ -143,7 +152,7 @@ class StoreProvider extends Component {
     };
 
     deleteCollection = (collectionId) => {
-        appRuntime.invoke("home-channel", "deleteCollection", collectionId);
+        appRuntime.invoke("home-channel", "deleteCollection", { collectionId });
         this.setState({ changed: true });
     };
 
@@ -198,32 +207,6 @@ class StoreProvider extends Component {
     deletFolder = (folderId) => {
         appRuntime.invoke("home-channel", "deleteFolder", { folderId });
         this.setState({ changed: true });
-        // const { data } = this.state;
-        // const newState = {
-        //     collections: { ...data.collections },
-        //     folderIds: [...data.folderIds],
-        //     folders: { ...data.folders },
-        // };
-        // newState.folderIds.map((id, index) => {
-        //     if (id === folderId) {
-        //         newState.folderIds.splice(index, 1);
-        //     }
-        //     return newState;
-        // });
-        // Object.values(newState.folders).map((folder) => {
-        //     if (folder.id === folderId) {
-        //         delete newState.folders[folderId];
-        //         folder.cs.map((collection) => {
-        //             delete newState.collections[collection];
-        //             return folder;
-        //         });
-        //     }
-        //     return newState;
-        // });
-
-        // this.setState({
-        //     data: newState,
-        // });
     };
 
     render() {
