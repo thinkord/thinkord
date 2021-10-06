@@ -47,17 +47,8 @@ const startDragsnip = (currentWork) => {
         };
         capture.on("end-dragging", onDragEnd);
 
-        // ipcRenderer.on("capture-screen", (e, { type, screenId }) => {
-        //     if (type === "select") {
-        //         if (screenId && screenId !== currentScreen.id) {
-        //             capture.disable();
-        //         }
-        //     }
-        // });
-
         capture.on("reset", () => {
             $toolbar.style.display = "none";
-            // $sizeInfo.style.display = 'none'
         });
 
         $btnClose.addEventListener("click", () => {
@@ -76,7 +67,6 @@ const startDragsnip = (currentWork) => {
             const dragsnipName = `${uuidv4()}.png`;
             const dragsnipPath =
                 env === "development" ? `media/${dragsnipName}` : path.join(userPath, "blob_storage", dragsnipName);
-            // const dragsnipPath = path.join(userPath, "blob_storage", dragsnipName);
 
             try {
                 await fs.writeFile(
@@ -84,14 +74,18 @@ const startDragsnip = (currentWork) => {
                     new Buffer.from(url.replace("data:image/png;base64,", ""), "base64"),
                     () => {
                         log.info("Dragsnip has been saved!");
-                        ipcRenderer.invoke("media-channel", "save", {
-                            name: dragsnipName,
-                            path: dragsnipPath,
-                            type: "image",
-                            current: currentWork,
-                        });
-                        ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
-                        ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                        ipcRenderer
+                            .invoke("media-channel", "save", {
+                                name: dragsnipName,
+                                path: dragsnipPath,
+                                type: "image",
+                                current: currentWork,
+                            })
+                            .then(() => {
+                                ipcRenderer.invoke("window-channel", "close", { win: "maskWin" });
+                                ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                            });
+
                         log.info("Screenshot has been saved successfully");
                     }
                 );

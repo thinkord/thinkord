@@ -30,13 +30,17 @@ const takeScreenshot = async (userPath, thumbSize, currentWork) => {
                     env === "development" ? `public/${screenshotPath}` : `${screenshotPath}`,
                     source.thumbnail.toPNG()
                 );
-                ipcRenderer.invoke("media-channel", "save", {
-                    name: screenshotName,
-                    path: screenshotPath,
-                    type: "image",
-                    current: currentWork,
-                });
-                ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                ipcRenderer
+                    .invoke("media-channel", "save", {
+                        name: screenshotName,
+                        path: screenshotPath,
+                        type: "image",
+                        current: currentWork,
+                    })
+                    .then(() => {
+                        ipcRenderer.invoke("window-channel", "captureSignal", "data");
+                    });
+
                 log.info("Screenshot has been saved successfully");
             } catch (err) {
                 throw err;

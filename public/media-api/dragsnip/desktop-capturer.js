@@ -47,8 +47,6 @@ const getScreen = async (callback) => {
             if (this.callback) {
                 // Save screenshot to png - base64
                 this.callback(canvas.toDataURL("image/png"));
-            } else {
-                // console.log('Need callback!')
             }
 
             // Remove hidden video tag

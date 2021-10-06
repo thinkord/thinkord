@@ -5,7 +5,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { BlockContext } from "../../context/blockContext";
 import { BlockUpdateContext } from "../../context/blockContext";
 import EditorJs from "react-editor-js";
-// import Image from "@editorjs/image";
 import Attaches from "@editorjs/attaches";
 import "./Block/SimpleImage/simple-image.css";
 import "./Block/Audio/Audio.css";

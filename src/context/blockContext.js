@@ -10,7 +10,7 @@ class BlockProvider extends Component {
         changed: false,
     };
     componentDidMount() {
-        appRuntime.subscribe("capture", (data) => {
+        appRuntime.subscribe("capture", () => {
             this.setState({ changed: true });
         });
         this.loadingData();
@@ -32,6 +32,7 @@ class BlockProvider extends Component {
 
     loadingData = async () => {
         const data = await appRuntime.invoke("home-channel", "getBlocks", { id: this.props.cId });
+
         this.setState({
             collectionInfo: JSON.parse(data),
         });
@@ -49,9 +50,6 @@ class BlockProvider extends Component {
     };
 
     updateBlock = (blocks, index) => {
-        // console.log("Editor blocks: ", blocks.data.text);
-        // console.log("maping index: ", index)
-        // console.log("Collection Info: ", this.state.collectionInfo.blocks);
         const changedBlock = {
             title: "",
             type: "text",
