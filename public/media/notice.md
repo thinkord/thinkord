@@ -1,0 +1,1 @@
+Keep this file in case GitHub drops media folder.
