@@ -1,7 +1,7 @@
 #titlebar {
   color: #FFF;
   background-color: #35C189;
-  height: 30px;
+  height: 40px;
 }
 
 #titlebar #drag-region {
@@ -67,13 +67,13 @@
   align-items: center;
   margin-left: 8px;
   font-family: "Segoe UI", sans-serif;
-  font-size: 12px;
+  font-size: 20px;
 }
 
 #window-title span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
   line-height: 1.5;
 }
 
@@ -89,12 +89,4 @@
 
 .maximized #window-title {
   margin-left: 12px;
-}
-
-.maximized #restore-button {
-  display: flex !important;
-}
-
-.maximized #max-button {
-  display: none;
 }
