@@ -13,6 +13,10 @@ import { StoreContext, StoreUpdateContext } from "../../../context/homeContext";
 
 import "./Home.scss";
 
+// Notification
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App({ match }) {
     const { data } = useContext(StoreContext);
     const { getFolder, getCollections } = useContext(StoreUpdateContext);
@@ -72,6 +76,7 @@ function App({ match }) {
                     />
                 </>
             )}
+            <ToastContainer pauseOnFocusLoss={false} />
         </React.Fragment>
     );
 }

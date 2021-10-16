@@ -34,6 +34,10 @@ class AudioRecorder {
             };
             this.mediaRecorder.start();
             log.info("Start audio recording");
+            ipcRenderer.invoke("media-channel", "notify", {
+                media: "audio",
+                state: "on",
+            });
         };
 
         const handleError = (err) => {
@@ -97,6 +101,10 @@ class AudioRecorder {
         };
         try {
             this.mediaRecorder.stop();
+            ipcRenderer.invoke("media-channel", "notify", {
+                media: "audio",
+                state: "off",
+            });
             log.info("stop audio recording");
         } catch (err) {
             log.error(err);

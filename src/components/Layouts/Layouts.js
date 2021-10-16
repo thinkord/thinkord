@@ -12,7 +12,7 @@ const Layout = (props) => {
     });
     return (
         <React.Fragment>
-            <WindowTitleBar docTitle="Home" />
+            <WindowTitleBar />
             <TabBar />
             <main className={classes.Content}>{props.children}</main>
         </React.Fragment>

@@ -2,6 +2,8 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import appRuntime from "../appRuntime";
+import { toast } from "react-toastify";
+
 const StoreContext = React.createContext(null);
 const StoreUpdateContext = React.createContext(null);
 
@@ -31,6 +33,18 @@ class StoreProvider extends Component {
             });
             localStorage.setItem("current_tabs", JSON.stringify(result));
             appRuntime.invoke("window-channel", "loadTab", { needLoad: true, fromEvent: "delete_folders" });
+        });
+
+        appRuntime.subscribe("notify", (args) => {
+            if (args.media === "audio" && args.state === "on") {
+                toast.info(`Audio starts recording`);
+            } else if (args.media === "audio" && args.state === "off") {
+                toast.info(`Audio stops recording`);
+            } else if (args.media === "video" && args.state === "on") {
+                toast.info(`Video starts recording`);
+            } else {
+                toast.info(`Video stops recording`);
+            }
         });
     }
 
