@@ -8,14 +8,8 @@ import { StoreUpdateContext } from "../../context/homeContext";
 
 export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const {
-        addCollection,
-        addFolder,
-        deleteFolder,
-        updateFolderTitle,
-        updateCollectionTitle,
-        deleteCollection,
-    } = useContext(StoreUpdateContext);
+    const { addCollection, addFolder, deleteFolder, updateFolderTitle, updateCollectionTitle, deleteCollection } =
+        useContext(StoreUpdateContext);
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value);

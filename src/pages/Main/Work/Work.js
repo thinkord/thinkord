@@ -6,6 +6,10 @@ import { BlockProvider } from "../../../context/blockContext";
 // import { StoreUpdateContext } from "../context/homeContext";
 import { withRouter } from "react-router-dom";
 
+// Notification
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Work = ({ match }) => {
     // const { saveCollection } = useContext(StoreUpdateContext);
 
@@ -15,6 +19,7 @@ const Work = ({ match }) => {
                 <Collection />
             </BlockProvider>
             {/* <button onClick={() => saveCollection()}>Save File</button> */}
+            <ToastContainer pauseOnFocusLoss={false} />
         </div>
     );
 };

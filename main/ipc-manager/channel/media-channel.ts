@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Block } from "../../models";
+import { HomeWindow } from "../../windows/home-window";
 
 log.setLevel("info");
 
@@ -11,6 +12,9 @@ export class MediaChannel extends BaseChannel {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
                 case "save":
+                    await this[command](event, args);
+                    break;
+                case "notify":
                     await this[command](event, args);
                     break;
                 default:
@@ -61,5 +65,9 @@ export class MediaChannel extends BaseChannel {
         }
 
         return isSave;
+    }
+
+    private async notify(event: IpcMainInvokeEvent, args: any): Promise<void> {
+        HomeWindow.sendMessage("notify", args);
     }
 }
