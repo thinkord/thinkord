@@ -49,20 +49,44 @@ class BlockProvider extends Component {
         this.setState({ changed: true });
     };
 
-    updateBlock = (blocks, index) => {
-        const changedBlock = {
-            title: "",
-            type: "text",
-            description: blocks.data.text,
-            id: this.state.collectionInfo.id,
-        };
-        if (index > this.state.collectionInfo.blocks.length - 1) {
-            // Add the new block
-            appRuntime.invoke("home-channel", "addBlock", changedBlock);
-            // this.setState({ changed: true });
-        } else {
-            // Update the new block
+    updateBlock = (blocks) => {
+        if (blocks.type === "image") {
+            let files;
+            let data;
+            if (process.env.NODE_ENV === "development") {
+                files = blocks.data.url.split("/");
+
+                files.splice(0, 3);
+                data = {
+                    url: files.join("/"),
+                    description: blocks.data.caption,
+                };
+            }
+            if (process.env.NODE_ENV === "production") {
+                data = {
+                    url: blocks.data.url,
+                    description: blocks.data.caption,
+                };
+            }
+
+            appRuntime.invoke("home-channel", "updateBlock", data);
         }
+
+        if (blocks.type === "paragraph") {
+        }
+        // const changedBlock = {
+        //     title: "",
+        //     type: "text",
+        //     description: blocks.data.text,
+        //     id: this.state.collectionInfo.id,
+        // };
+        // if (index > this.state.collectionInfo.blocks.length - 1) {
+        //     // Add the new block
+        //     appRuntime.invoke("home-channel", "addBlock", changedBlock);
+        //     // this.setState({ changed: true });
+        // } else {
+        //     // Update the new block
+        // }
     };
 
     deleteBlock = (collectionId, blockId) => {

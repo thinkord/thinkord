@@ -19,7 +19,8 @@ export class HomeWindow extends BaseWindow {
                 devTools: isDev ? true : false,
             },
         });
-        isDev && HomeWindow.win.webContents.openDevTools();
+        // isDev && HomeWindow.win.webContents.openDevTools();
+        HomeWindow.win.webContents.openDevTools();
         HomeWindow.win.loadURL(
             isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
         );

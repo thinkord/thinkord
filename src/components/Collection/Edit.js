@@ -26,11 +26,9 @@ export default function Edit() {
     async function handleEditorChange() {
         if (editor) {
             let savedData = await editor.save();
-            if (savedData.blocks[editor.blocks.getCurrentBlockIndex()])
-                updateBlock(
-                    savedData.blocks[editor.blocks.getCurrentBlockIndex()],
-                    editor.blocks.getCurrentBlockIndex()
-                );
+            if (savedData.blocks[editor.blocks.getCurrentBlockIndex()]) {
+                updateBlock(savedData.blocks[editor.blocks.getCurrentBlockIndex()]);
+            }
         }
     }
 
@@ -125,12 +123,12 @@ export default function Edit() {
                     video: {
                         class: Video,
                     },
-                    attaches: {
-                        class: Attaches,
-                        config: {
-                            endpoint: "http://localhost:8008/uploadFile",
-                        },
-                    },
+                    // attaches: {
+                    //     class: Attaches,
+                    //     config: {
+                    //         endpoint: "http://localhost:8008/uploadFile",
+                    //     },
+                    // },
                 }}
                 instanceRef={(instance) => setEditor(instance)}
                 onChange={handleEditorChange}

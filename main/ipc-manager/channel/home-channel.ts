@@ -3,9 +3,10 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
-import { Folder, Collection, Block } from "../../models";
+import { Folder, Collection, Block, File } from "../../models";
 import { IpcRequest } from "../../shared/IpcRequest";
 import { HomeWindow } from "../../windows/home-window";
+import { BlockFile } from "../../models/blockfile";
 
 export class HomeChannel extends BaseChannel {
     private collectionId: string | undefined;
@@ -14,6 +15,7 @@ export class HomeChannel extends BaseChannel {
             switch (command) {
                 case "addFolder":
                 case "addBlock":
+                case "updateBlock":
                 case "addCollection":
                 case "orderCollection":
                 case "updateFolder":
@@ -97,6 +99,14 @@ export class HomeChannel extends BaseChannel {
     private async deleteBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
         const { blockId } = args;
         await Block.destroy({ where: { id: blockId } });
+    }
+
+    private async updateBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { url, description } = args;
+        const file = await File.findOne({ where: { path: url } });
+        const blockFile = await BlockFile.findOne({ where: { fileId: file?.id } });
+
+        await Block.update({ description: description }, { where: { id: blockFile?.blockId } });
     }
 
     private async addCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {

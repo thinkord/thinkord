@@ -37,9 +37,10 @@ Navigate to our <a href="https://thinkord.github.io/thinkord/">official website<
 If you are interested in reporting/fixing issues and contributing directly to the code base, please see <a href="docs/contributing.md">contribution guideline</a> for more information on how to get started.
 
 ## Resources
-Thinkord was originally developed by 6 college students in National Central University, Taiwan.  
+Thinkord was originally developed by 5 college students in National Central University, Taiwan.  
 We believe capturing thoughts should not be that cumbersome, but simple and fast. 
 
+<a href="https://thinkord.github.io/thinkord/">Official website</a>
 
 
 ## License
