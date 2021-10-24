@@ -1,10 +1,10 @@
 {
   "name": "thinkord",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Electron application dedicated to helping people comveniently capture their thoughts.",
   "contributors": [
     "Tingyi Lo",
-    "Qi Xuan Lu",
+    "Qi-Xuan Lu",
     "Shihchuan Chiu"
   ],
   "private": true,

@@ -23,15 +23,14 @@ Start the application.
 npm run start
 ```
 
-Test the change
+Build and pack the application
 ```
-dev: npm run start - you can test when developing
-prod: npm run build && npm run pack
+npm run build && npm run pack
 ```
 And you should be good to go.
 
-### Installation
-Navigate to our <a href="https://thinkord.github.io/thinkord/">official website</a> to download Thinkord specific to your platforms (Windows, Linux etc.).
+<!-- ### Installation
+Navigate to our <a href="https://thinkord.github.io/thinkord/">official website</a> to download Thinkord specific to your platforms (Windows, Linux etc.). -->
 
 ## Contributing
 If you are interested in reporting/fixing issues and contributing directly to the code base, please see <a href="docs/contributing.md">contribution guideline</a> for more information on how to get started.
@@ -40,8 +39,19 @@ If you are interested in reporting/fixing issues and contributing directly to th
 Thinkord was originally developed by 5 college students in National Central University, Taiwan.  
 We believe capturing thoughts should not be that cumbersome, but simple and fast. 
 
-<a href="https://thinkord.github.io/thinkord/">Official website</a>
+## Scenario
+You can enhance your productivity through Thinkord in following scenarios: 
+- Application development
+- Online/in-class learning
+- Learning foreign language
+<!-- <a href="https://thinkord.github.io/thinkord/">Official website</a> -->
 
+## To-do features
+- [ ] media hotkey tool tip
+- [ ] tutorial
+- [ ] integration with Notion
+- [ ] user management
+- [ ] installer setup
 
 ## License
 <a href="https://github.com/thinkord/thinkord/blob/master/LICENSE">GNU GPLv3 License</a>
