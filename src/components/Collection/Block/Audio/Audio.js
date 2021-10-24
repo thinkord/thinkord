@@ -58,7 +58,6 @@ export default class Audio {
     }
 
     handleFileUpload(event) {
-        console.log(this.file.files[0]);
         fs.copyFile(this.file.files[0].path, "../../../../../public/media/audio", (err) => {
             console.log(err);
         });

@@ -62,7 +62,7 @@ const getScreen = async (callback) => {
     };
 
     this.handleError = (e) => {
-        // console.log(e)
+        return;
     };
 
     if (require("os").platform() === "win32" || require("os").platform() === "win64") {

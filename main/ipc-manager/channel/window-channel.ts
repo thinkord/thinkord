@@ -27,6 +27,7 @@ export class WindowChannel extends BaseChannel {
                 case "load":
                 case "loadTab":
                 case "jump":
+                case "changeSize":
                     this[command](event, args);
                     break;
                 case "getCurrentWork":
@@ -112,5 +113,9 @@ export class WindowChannel extends BaseChannel {
     public captureSignal(event: IpcMainInvokeEvent, args: IpcRequest): void {
         // Transfer information to different frame
         HomeWindow.sendMessage("capture", "");
+    }
+
+    public changeSize(event: IpcMainInvokeEvent, args: IpcRequest): void {
+        this.wins.controlWindow?.changeSize();
     }
 }

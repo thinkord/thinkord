@@ -8,6 +8,7 @@ const ControlContext = React.createContext({
     path: "",
     audioState: false,
     videoState: false,
+    textState: false,
 });
 
 class ControlProvider extends Component {
@@ -74,7 +75,6 @@ class ControlProvider extends Component {
         } else {
             appRuntime.invoke("media-channel", "save", { type: "text", text: text, current: mapCId });
             appRuntime.invoke("window-channel", "captureSignal", "data");
-            appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
         }
 
         this.handleTextState();

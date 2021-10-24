@@ -6,11 +6,8 @@ import { ControlContext } from "../../context/controlContext";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import classes from "./ConrolBar.module.sass";
 import Controls from "./Controls/Controls";
-import Text from "./Text/Text";
 import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
 import appRuntime from "../../appRuntime";
-// import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
-// import RoomIcon from '@material-ui/icons/Room';
 
 export default function ControlBar() {
     const { mapCId } = useContext(ControlContext);
@@ -29,15 +26,12 @@ export default function ControlBar() {
                         appRuntime.unsubscribe("system-channel");
                     }}
                 >
-                    {/* <RoomIcon className={classes.winControl}/>
-                    <RoomOutlinedIcon className={classes.winControl}/> */}
                     <ClearOutlinedIcon className={classes.winControl} />
                 </div>
             </div>
             <HashRouter>
                 <Switch>
                     <Route exact path="/controlbar" component={Controls} />
-                    <Route path="/controlbar/text" component={Text} />
                 </Switch>
             </HashRouter>
         </div>

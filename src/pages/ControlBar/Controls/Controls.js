@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ControlContext } from "../../../context/controlContext";
 import IconButton from "@material-ui/core/IconButton";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
@@ -10,64 +10,74 @@ import HomeIcon from "@material-ui/icons/Home";
 import Divider from "@material-ui/core/Divider";
 import classes from "../ConrolBar.module.sass";
 import appRuntime from "../../../appRuntime";
+import Text from "../Text/Text";
 
-export default function Text() {
-    const { handleText, handleFullsnip, handleDragsnip, handleAudio, handleVideo } = useContext(ControlContext);
+export default function Controls() {
+    const { textState, handleText, handleFullsnip, handleDragsnip, handleAudio, handleVideo } =
+        useContext(ControlContext);
     return (
-        <div className={classes.Controls}>
-            <IconButton
-                disable
-                id="textButton"
-                onClick={() => {
-                    handleText();
-                }}
-            >
-                <TextFieldsIcon className={classes.Control} />
-            </IconButton>
-            <IconButton
-                id="fullsnipButton"
-                onClick={() => {
-                    handleFullsnip();
-                }}
-            >
-                <CropFreeIcon className={classes.Control} />
-            </IconButton>
-            <IconButton
-                id="dragsnipButton"
-                onClick={() => {
-                    handleDragsnip();
-                }}
-            >
-                <CropIcon className={classes.Control} />
-            </IconButton>
-            <IconButton
-                id="audioButton"
-                onClick={() => {
-                    handleAudio();
-                }}
-            >
-                <MicIcon className={classes.Control} />
-            </IconButton>
-            <IconButton
-                id="videoButton"
-                onClick={() => {
-                    handleVideo();
-                }}
-            >
-                <FiberManualRecordIcon className={classes.Control} />
-            </IconButton>
-            <Divider orientation="vertical" flexItem />
-            <IconButton
-                id="homeButton"
-                onClick={() => {
-                    appRuntime.invoke("window-channel", "jump", { path: "/" });
-                    appRuntime.invoke("window-channel", "close", { win: "controlWin" });
-                    appRuntime.unsubscribe("capture");
-                    appRuntime.unsubscribe("system-channel");
-                }}
-            >
-                <HomeIcon className={classes.Control} />
-            </IconButton>
-        </div>
+        <>
+            {textState === false ? (
+                <div className={classes.Controls}>
+                    <IconButton
+                        disable
+                        id="textButton"
+                        onClick={() => {
+                            handleText();
+                        }}
+                    >
+                        <TextFieldsIcon className={classes.Control} />
+                    </IconButton>
+                    <IconButton
+                        id="fullsnipButton"
+                        onClick={() => {
+                            handleFullsnip();
+                        }}
+                    >
+                        <CropFreeIcon className={classes.Control} />
+                    </IconButton>
+                    <IconButton
+                        id="dragsnipButton"
+                        onClick={() => {
+                            handleDragsnip();
+                        }}
+                    >
+                        <CropIcon className={classes.Control} />
+                    </IconButton>
+                    <IconButton
+                        id="audioButton"
+                        onClick={() => {
+                            handleAudio();
+                        }}
+                    >
+                        <MicIcon className={classes.Control} />
+                    </IconButton>
+                    <IconButton
+                        id="videoButton"
+                        onClick={() => {
+                            handleVideo();
+                        }}
+                    >
+                        <FiberManualRecordIcon className={classes.Control} />
+                    </IconButton>
+                    <Divider orientation="vertical" flexItem />
+                    <IconButton
+                        id="homeButton"
+                        onClick={() => {
+                            appRuntime.invoke("window-channel", "jump", { path: "/" });
+                            appRuntime.invoke("window-channel", "close", { win: "controlWin" });
+                            appRuntime.unsubscribe("capture");
+                            appRuntime.unsubscribe("system-channel");
+                        }}
+                    >
+                        <HomeIcon className={classes.Control} />
+                    </IconButton>
+                </div>
+            ) : (
+                <div>
+                    <Text />
+                </div>
+            )}
+        </>
     );
 }

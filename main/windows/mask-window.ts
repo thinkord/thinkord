@@ -83,4 +83,8 @@ export class MaskWindow extends BaseWindow {
     public loadPage(): void {
         return;
     }
+
+    public changeSize(): void {
+        return;
+    }
 }

@@ -56,6 +56,11 @@ export class ControlWindow extends BaseWindow {
             return obj;
         });
     }
+    public changeSize(): void {
+        if (ControlWindow.win) {
+            ControlWindow.win.setBounds({ height: 84 });
+        }
+    }
 
     public loadPage(page: string): void {
         if (page === "control") {
@@ -72,11 +77,11 @@ export class ControlWindow extends BaseWindow {
                 const { height } = ControlWindow.win.getBounds();
                 const newHeight = height * 2;
                 ControlWindow.win.setBounds({ height: newHeight });
-                ControlWindow.win.loadURL(
-                    isDev
-                        ? "http://localhost:3000/#/controlbar/text"
-                        : `file://${path.join(__dirname, "../build/index.html#/controlbar#/text")}`
-                );
+                // ControlWindow.win.loadURL(
+                //     isDev
+                //         ? "http://localhost:3000/#/controlbar/text"
+                //         : `file://${path.join(__dirname, "../build/index.html#/controlbar#/text")}`
+                // );
             }
         }
     }
