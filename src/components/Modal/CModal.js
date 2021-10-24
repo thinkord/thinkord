@@ -1,19 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React, { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 import { StoreUpdateContext } from "../../context/homeContext";
 
 export default function CModal({ id, folderId, title, modalShow, modalFunc, handleModalToggle }) {
     const [newTitle, setNewTitle] = useState(title);
-    const {
-        addCollection,
-        addFolder,
-        deleteFolder,
-        updateFolderTitle,
-        updateCollectionTitle,
-        deleteCollection,
-    } = useContext(StoreUpdateContext);
+    const { addCollection, addFolder, deleteFolder, updateFolderTitle, updateCollectionTitle, deleteCollection } =
+        useContext(StoreUpdateContext);
 
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value);
@@ -104,12 +100,13 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                     <Modal.Header className="modal_header">
                         <Modal.Title>Delete Folder</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Do you really want to delete folder {title} ?</Modal.Body>
+                    <Modal.Body>Do you really want to delete folder "{title}" ?</Modal.Body>
                     <Modal.Footer className="modal_footer">
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleFolderDelete(id);
+                                toast.warn(`Folder "${title}" is deleted`);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
@@ -136,6 +133,7 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleFolderRename(newTitle, id);
+                                toast.success(`Folder "${title}" has been renamed to "${newTitle}"`);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
@@ -188,6 +186,7 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleNoteRename(newTitle, id);
+                                toast.success(`Note "${title}" has been renamed to "${newTitle}"`);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>
@@ -201,12 +200,13 @@ export default function CModal({ id, folderId, title, modalShow, modalFunc, hand
                     <Modal.Header className="modal_header">
                         <Modal.Title>Delete</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Do you really want to delete file $`{title}` ?</Modal.Body>
+                    <Modal.Body>Do you really want to delete file "{title}" ?</Modal.Body>
                     <Modal.Footer className="modal_footer">
                         <i
                             className="modal_icon fas fa-check-circle"
                             onClick={() => {
                                 handleNoteDelete(id);
+                                toast.warn(`Note "${title}" is deleted`);
                             }}
                         ></i>
                         <i className="modal_icon fas fa-times-circle" onClick={handleModalToggle}></i>

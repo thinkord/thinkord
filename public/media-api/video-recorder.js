@@ -35,6 +35,10 @@ class VideoRecorder {
             };
             this.mediaRecorder.start();
             log.info("Start video recording");
+            ipcRenderer.invoke("media-channel", "notify", {
+                media: "video",
+                state: "on",
+            });
         };
 
         const handleError = (err) => {
@@ -108,6 +112,10 @@ class VideoRecorder {
         try {
             this.mediaRecorder.stop();
             log.info("stop video recording");
+            ipcRenderer.invoke("media-channel", "notify", {
+                media: "video",
+                state: "off",
+            });
         } catch (err) {
             log.error(err);
         }

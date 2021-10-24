@@ -5,7 +5,9 @@ import TextFieldsIcon from "@material-ui/icons/TextFields";
 import CropIcon from "@material-ui/icons/Crop";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import MicIcon from "@material-ui/icons/Mic";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import MicOffIcon from "@material-ui/icons/MicOff";
+import VideoIcon from "@material-ui/icons/VideocamRounded";
+import VideoOffIcon from "@material-ui/icons/VideocamOffRounded";
 import HomeIcon from "@material-ui/icons/Home";
 import Divider from "@material-ui/core/Divider";
 import classes from "../ConrolBar.module.sass";
@@ -13,6 +15,7 @@ import appRuntime from "../../../appRuntime";
 import Text from "../Text/Text";
 
 export default function Controls() {
+    const { audioState, videoState } = useContext(ControlContext);
     const { textState, handleText, handleFullsnip, handleDragsnip, handleAudio, handleVideo } =
         useContext(ControlContext);
     return (
@@ -50,7 +53,11 @@ export default function Controls() {
                             handleAudio();
                         }}
                     >
-                        <MicIcon className={classes.Control} />
+                        {audioState === false ? (
+                            <MicIcon className={classes.Control} />
+                        ) : (
+                            <MicOffIcon className={classes.Control} />
+                        )}
                     </IconButton>
                     <IconButton
                         id="videoButton"
@@ -58,7 +65,11 @@ export default function Controls() {
                             handleVideo();
                         }}
                     >
-                        <FiberManualRecordIcon className={classes.Control} />
+                        {videoState === false ? (
+                            <VideoIcon className={classes.Control} />
+                        ) : (
+                            <VideoOffIcon className={classes.Control} />
+                        )}
                     </IconButton>
                     <Divider orientation="vertical" flexItem />
                     <IconButton

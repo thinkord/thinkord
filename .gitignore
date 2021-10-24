@@ -146,6 +146,7 @@ sketch
 /public/electron.js.map
 /public/electron.js
 /public/media/*
+!/public/media/*.md
 
 npm-debug.log*
 yarn-debug.log*
