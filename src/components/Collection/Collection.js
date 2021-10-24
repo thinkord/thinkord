@@ -14,7 +14,7 @@ import Edit from "./Edit";
 import Overview from "./Overview";
 import appRuntime from "../../appRuntime";
 
-function Collection(props) {
+function Collection() {
     const history = useHistory();
     const { collectionInfo } = useContext(BlockContext);
     const { updatePage } = useContext(BlockUpdateContext);

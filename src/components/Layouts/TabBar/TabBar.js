@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from "react";
 import Tab from "./Tab/Tab";
 import { NavLink } from "react-router-dom";

@@ -5,7 +5,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { BlockContext } from "../../context/blockContext";
 import { BlockUpdateContext } from "../../context/blockContext";
 import EditorJs from "react-editor-js";
-import Attaches from "@editorjs/attaches";
 import "./Block/SimpleImage/simple-image.css";
 import "./Block/Audio/Audio.css";
 import "./Block/Video/Video.css";
@@ -46,7 +45,7 @@ export default function Edit() {
 
     useEffect(() => {
         if (collectionInfo !== undefined) {
-            collectionInfo.blocks.map((block, index) => {
+            collectionInfo.blocks.map((block) => {
                 const path = block.files !== undefined && block.files.length > 0 ? block.files[0].path : null;
                 let blockData = null;
                 switch (block.type) {

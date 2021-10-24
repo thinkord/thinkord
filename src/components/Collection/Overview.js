@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import { Container } from "@material-ui/core";
 

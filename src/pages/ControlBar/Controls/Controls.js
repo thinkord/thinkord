@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
+import React, { useContext } from "react";
 import { ControlContext } from "../../../context/controlContext";
 import IconButton from "@material-ui/core/IconButton";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
