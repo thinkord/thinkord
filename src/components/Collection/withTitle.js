@@ -11,7 +11,7 @@ import { StoreContext } from "../../context/homeContext";
  * https://zh-hant.reactjs.org/docs/higher-order-components.html
  */
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     editableTitle: {
         flexGrow: 1,
         fontSize: "1.2rem",

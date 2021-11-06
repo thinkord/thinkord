@@ -10,7 +10,7 @@ export const TabsContext = React.createContext({
 });
 
 const TabsContextProvider = (props) => {
-    const [tabsList, setTabsList] = useState([]);
+    let [tabsList, setTabsList] = useState([]);
 
     const tabExisted = (collectionId) => {
         const targetIndex = tabsList.findIndex((tab) => {
@@ -23,6 +23,12 @@ const TabsContextProvider = (props) => {
         if (tabExisted(collectionId)) {
             props.history.push(`/work/${collectionId}`);
         }
+    };
+
+    const loadTab = () => {
+        let currentTabs = localStorage.getItem("current_tabs");
+        let tabs = JSON.parse(currentTabs);
+        setTabsList(tabs);
     };
 
     const addTab = (title, collectionId) => {
@@ -38,6 +44,8 @@ const TabsContextProvider = (props) => {
                 };
                 updatedTabs = [...currentTabList, newTab];
             }
+
+            localStorage.setItem("current_tabs", JSON.stringify(updatedTabs));
             return updatedTabs;
         });
     };
@@ -49,6 +57,7 @@ const TabsContextProvider = (props) => {
                 return tab.id === tabId;
             });
             updatedTabs.splice(targetIndex, 1);
+            localStorage.setItem("current_tabs", JSON.stringify(updatedTabs));
             return updatedTabs;
         });
         appRuntime.invoke("window-channel", "close", { win: "controlWin" });
@@ -56,7 +65,14 @@ const TabsContextProvider = (props) => {
 
     return (
         <TabsContext.Provider
-            value={{ test: "test", tabs: tabsList, addTab: addTab, closeTab: closeTab, changeTab: changeTab }}
+            value={{
+                test: "test",
+                tabs: tabsList,
+                addTab: addTab,
+                closeTab: closeTab,
+                changeTab: changeTab,
+                loadTab: loadTab,
+            }}
         >
             {props.children}
         </TabsContext.Provider>

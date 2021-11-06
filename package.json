@@ -1,11 +1,11 @@
 {
   "name": "thinkord",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Electron application dedicated to helping people comveniently capture their thoughts.",
   "contributors": [
-    "Lo Tingyi",
-    "Lu Jiaqi",
-    "Chiu Shihchuan"
+    "Tingyi Lo",
+    "Qi-Xuan Lu",
+    "Shihchuan Chiu"
   ],
   "private": true,
   "homepage": "./",
@@ -21,11 +21,13 @@
     "react-build": "react-scripts build",
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
-    "electron-build": "webpack --config ./webpack.config.js",
-    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-build && electron .\"",
+    "electron-start": "webpack --config ./webpack.config.js --mode=development",
+    "electron-build": "webpack --config ./webpack.config.js --mode=production",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && npm run electron-start && electron .\"",
     "lint": "eslint **/*.{js,ts,jsx} --quiet --fix ",
     "build": "npm run electron-build && npm run react-build",
-    "pack": "electron-builder --config electron-builder.json"
+    "pack": "electron-builder --windows --config electron-builder.json",
+    "prod": "npm run build && npm run pack"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,7 +45,8 @@
     ]
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
+    "@editorjs/attaches": "^1.0.1",
+    "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -66,6 +69,7 @@
     "react-is-dev": "^1.0.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-toastify": "^8.0.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.5",
     "sequelize-typescript": "^1.1.0",
@@ -77,22 +81,27 @@
     "@babel/polyfill": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
+    "@editorjs/editorjs": "^2.19.1",
+    "@editorjs/image": "^2.6.0",
+    "@editorjs/paragraph": "^2.8.0",
+    "@editorjs/simple-image": "^1.4.0",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-loader": "^8.1.0",
     "concurrently": "^5.2.0",
-    "electron": "^11.0.3",
-    "electron-builder": "^22.8.0",
+    "electron": "^11.4.1",
+    "electron-builder": "^22.13.1",
     "electron-rebuild": "^2.2.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "prettier": "^2.1.2",
+    "react-editor-js": "^1.7.0",
     "ts-loader": "^8.0.4",
     "typescript": "^4.0.3",
-    "wait-on": "^5.1.0",
+    "wait-on": "^5.2.1",
     "webpack-cli": "^3.3.12"
   }
 }

@@ -2,6 +2,8 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import appRuntime from "../appRuntime";
+import { toast } from "react-toastify";
+
 const StoreContext = React.createContext(null);
 const StoreUpdateContext = React.createContext(null);
 
@@ -23,6 +25,27 @@ class StoreProvider extends Component {
         receiveData.folders = JSON.parse(data.data);
         receiveData.orderCollections = JSON.parse(data.data2);
         this.loadData(receiveData);
+
+        appRuntime.subscribe("delete_tabs", (needDeleteCollectionIDs) => {
+            let currentTabs = JSON.parse(localStorage.getItem("current_tabs"));
+            const result = currentTabs.filter((currentTab) => {
+                return !needDeleteCollectionIDs.includes(currentTab.collectionId);
+            });
+            localStorage.setItem("current_tabs", JSON.stringify(result));
+            appRuntime.invoke("window-channel", "loadTab", { needLoad: true, fromEvent: "delete_folders" });
+        });
+
+        appRuntime.subscribe("notify", (args) => {
+            if (args.media === "audio" && args.state === "on") {
+                toast.info(`Audio starts recording`);
+            } else if (args.media === "audio" && args.state === "off") {
+                toast.info(`Audio stops recording`);
+            } else if (args.media === "video" && args.state === "on") {
+                toast.info(`Video starts recording`);
+            } else {
+                toast.info(`Video stops recording`);
+            }
+        });
     }
 
     async componentDidUpdate() {
@@ -143,7 +166,7 @@ class StoreProvider extends Component {
     };
 
     deleteCollection = (collectionId) => {
-        appRuntime.invoke("home-channel", "deleteCollection", collectionId);
+        appRuntime.invoke("home-channel", "deleteCollection", { collectionId });
         this.setState({ changed: true });
     };
 
@@ -185,33 +208,19 @@ class StoreProvider extends Component {
         this.setState({ changed: true });
     };
 
-    deletFolder = (folderId) => {
-        const { data } = this.state;
-        const newState = {
-            collections: { ...data.collections },
-            folderIds: [...data.folderIds],
-            folders: { ...data.folders },
-        };
-        newState.folderIds.map((id, index) => {
-            if (id === folderId) {
-                newState.folderIds.splice(index, 1);
-            }
-            return newState;
-        });
-        Object.values(newState.folders).map((folder) => {
-            if (folder.id === folderId) {
-                delete newState.folders[folderId];
-                folder.cs.map((collection) => {
-                    delete newState.collections[collection];
-                    return folder;
-                });
-            }
-            return newState;
-        });
+    /**
+     *
+     * @param {string} title
+     * @param {number} folderId
+     */
+    updateFolderTitle = (title, folderId) => {
+        appRuntime.invoke("home-channel", "updateFolder", { title, folderId });
+        this.setState({ changed: true });
+    };
 
-        this.setState({
-            data: newState,
-        });
+    deletFolder = (folderId) => {
+        appRuntime.invoke("home-channel", "deleteFolder", { folderId });
+        this.setState({ changed: true });
     };
 
     render() {
@@ -227,6 +236,7 @@ class StoreProvider extends Component {
                             value={{
                                 updateBlockTitle: this.updateBlockTitle,
                                 addFolder: this.addFolder,
+                                updateFolderTitle: this.updateFolderTitle,
                                 getFolder: this.getFolder,
                                 deleteFolder: this.deletFolder,
                                 addCollection: this.addCollection,
@@ -240,8 +250,8 @@ class StoreProvider extends Component {
                         </StoreUpdateContext.Provider>
                     </StoreContext.Provider>
                 ) : (
-                        <h1>Loading</h1>
-                    )}
+                    <h1>Loading</h1>
+                )}
             </>
         );
     }

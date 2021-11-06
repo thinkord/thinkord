@@ -38,13 +38,13 @@ export default function InputText() {
     const handleBtnConfirm = () => {
         setContent("");
         handleText(content);
-        appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
+        appRuntime.invoke("window-channel", "changeSize", {});
         handleTextState();
     };
     const handleCancelConfirm = () => {
-        appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
+        appRuntime.invoke("window-channel", "changeSize", {});
         handleTextState();
-    }
+    };
     return (
         <div>
             <div>

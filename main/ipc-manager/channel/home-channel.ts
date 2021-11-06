@@ -3,8 +3,10 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
-import { Folder, Collection, Block } from "../../models";
+import { Folder, Collection, Block, File } from "../../models";
 import { IpcRequest } from "../../shared/IpcRequest";
+import { HomeWindow } from "../../windows/home-window";
+import { BlockFile } from "../../models/blockfile";
 
 export class HomeChannel extends BaseChannel {
     private collectionId: string | undefined;
@@ -13,9 +15,12 @@ export class HomeChannel extends BaseChannel {
             switch (command) {
                 case "addFolder":
                 case "addBlock":
+                case "updateBlock":
                 case "addCollection":
                 case "orderCollection":
+                case "updateFolder":
                 case "updateCollection":
+                case "deleteFolder":
                 case "deleteCollection":
                 case "deleteBlock":
                 case "getHomeData":
@@ -57,7 +62,7 @@ export class HomeChannel extends BaseChannel {
         this.collectionId = args.id;
         const query = await Collection.findOne({
             where: { id: args.id },
-            include: [Collection.associations.blocks],
+            include: { all: true, nested: true },
         });
         const data = JSON.stringify(query, null, 2);
         return data;
@@ -78,9 +83,30 @@ export class HomeChannel extends BaseChannel {
         await Block.create({ title, type, description, collectionId });
     }
 
+    private async deleteFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { folderId } = args;
+
+        const allCollections = await Collection.findAll({ where: { folderId: folderId } });
+        const ids = new Array<number>();
+        allCollections.forEach((data) => {
+            ids.push(data.id);
+        });
+        HomeWindow.sendMessage("delete_tabs", JSON.stringify(ids));
+        await Collection.destroy({ where: { folderId: folderId } });
+        await Folder.destroy({ where: { id: folderId } });
+    }
+
     private async deleteBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
         const { blockId } = args;
         await Block.destroy({ where: { id: blockId } });
+    }
+
+    private async updateBlock(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { url, description } = args;
+        const file = await File.findOne({ where: { path: url } });
+        const blockFile = await BlockFile.findOne({ where: { fileId: file?.id } });
+
+        await Block.update({ description: description }, { where: { id: blockFile?.blockId } });
     }
 
     private async addCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
@@ -90,15 +116,25 @@ export class HomeChannel extends BaseChannel {
     }
 
     private async deleteCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        const { collectionId } = args;
+        const ids = new Array<number>();
+        ids.push(parseInt(collectionId));
+        HomeWindow.sendMessage("delete_tabs", JSON.stringify(ids));
         await Collection.destroy({
             where: {
-                id: args,
+                id: collectionId,
             },
         });
     }
 
     private async orderCollection(event: IpcMainInvokeEvent): Promise<void> {
         await Collection.findAll({ order: [["updatedAt", "DESC"]] });
+    }
+
+    private async updateFolder(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {
+        log.info("frontend update folder: ", args);
+        const { title, folderId } = args;
+        Folder.update({ name: title }, { where: { id: folderId } });
     }
 
     private async updateCollection(event: IpcMainInvokeEvent, args: IpcRequest): Promise<void> {

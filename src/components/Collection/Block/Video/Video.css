@@ -1,0 +1,8 @@
+.video-block {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.video-block:focus{
+    outline: 0;
+}

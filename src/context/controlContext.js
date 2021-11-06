@@ -2,18 +2,21 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import appRuntime from "../appRuntime";
+import log from "loglevel";
 
 const ControlContext = React.createContext({
     mapCId: "",
     path: "",
     audioState: false,
     videoState: false,
+    textState: false,
 });
 
 class ControlProvider extends Component {
     async componentDidMount() {
         const data = await appRuntime.invoke("home-channel", "getCID");
         const path = await appRuntime.invoke("system-channel", "getUserPath");
+
         this.setState({
             mapCId: data,
             path,
@@ -73,7 +76,6 @@ class ControlProvider extends Component {
         } else {
             appRuntime.invoke("media-channel", "save", { type: "text", text: text, current: mapCId });
             appRuntime.invoke("window-channel", "captureSignal", "data");
-            appRuntime.invoke("window-channel", "load", { win: "controlWin", page: "control" });
         }
 
         this.handleTextState();
@@ -94,23 +96,27 @@ class ControlProvider extends Component {
     };
 
     handleAudio = async () => {
-        const { audioState, path, mapCId } = this.state;
-        if (audioState === false) {
+        const { audioState, videoState, path, mapCId } = this.state;
+        if (audioState === false && videoState === false) {
             appRuntime.handleAudio(audioState);
-        } else {
+            this.setState({ audioState: !audioState });
+        } else if (audioState === true && videoState === false) {
             appRuntime.handleAudio(audioState, path, mapCId);
+            this.setState({ audioState: !audioState });
         }
-        this.setState({ audioState: !audioState });
+        log.error("Something wrong with audio function");
     };
 
     handleVideo = async () => {
-        const { videoState, path, mapCId } = this.state;
-        if (videoState === false) {
+        const { audioState, videoState, path, mapCId } = this.state;
+        if (videoState === false && audioState === false) {
             appRuntime.handleVideo(videoState);
-        } else {
+            this.setState({ videoState: !videoState });
+        } else if (videoState === true && audioState === false) {
             appRuntime.handleVideo(videoState, path, mapCId);
+            this.setState({ videoState: !videoState });
         }
-        this.setState({ videoState: !videoState });
+        log.error("Something wrong with video function");
     };
 
     render() {

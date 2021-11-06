@@ -47,8 +47,6 @@ const getScreen = async (callback) => {
             if (this.callback) {
                 // Save screenshot to png - base64
                 this.callback(canvas.toDataURL("image/png"));
-            } else {
-                // console.log('Need callback!')
             }
 
             // Remove hidden video tag
@@ -64,17 +62,19 @@ const getScreen = async (callback) => {
     };
 
     this.handleError = (e) => {
-        // console.log(e)
+        return;
     };
 
-    if (require("os").platform() === "win32") {
+    if (require("os").platform() === "win32" || require("os").platform() === "win64") {
         desktopCapturer
             .getSources({
-                types: ["screen"],
+                types: ["window", "screen"],
                 thumbnailSize: { width: 1, height: 1 },
             })
             .then(async (sources) => {
-                let selectSource = sources.filter((source) => source.display_id + "" === curScreen.id + "")[0];
+                let selectSource = sources.filter((source) => {
+                    return source.display_id + "" === curScreen.id + "";
+                })[0];
                 navigator.getUserMedia(
                     {
                         audio: false,
@@ -96,25 +96,33 @@ const getScreen = async (callback) => {
                 );
             });
     } else {
-        navigator.getUserMedia(
-            {
-                audio: false,
-                video: {
-                    mandatory: {
-                        chromeMediaSource: "desktop",
-                        chromeMediaSourceId: `screen:${curScreen.id}`,
-                        minWidth: 1280,
-                        minHeight: 720,
-                        maxWidth: 8000,
-                        maxHeight: 8000,
+        desktopCapturer
+            .getSources({
+                types: ["screen"],
+                thumbnailSize: { width: 1, height: 1 },
+            })
+            .then(async (sources) => {
+                let selectSource = sources.filter((source) => source.name === "Entire Screen")[0];
+                navigator.getUserMedia(
+                    {
+                        audio: false,
+                        video: {
+                            mandatory: {
+                                chromeMediaSource: "desktop",
+                                chromeMediaSourceId: selectSource.id + "",
+                                minWidth: 1280,
+                                minHeight: 720,
+                                maxWidth: 8000,
+                                maxHeight: 8000,
+                            },
+                        },
                     },
-                },
-            },
-            (e) => {
-                this.handleStream(e);
-            },
-            this.handleError
-        );
+                    (e) => {
+                        this.handleStream(e);
+                    },
+                    this.handleError
+                );
+            });
     }
 };
 

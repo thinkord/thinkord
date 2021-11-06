@@ -29,6 +29,7 @@ export class MaskWindow extends BaseWindow {
             webPreferences: {
                 contextIsolation: true,
                 preload: path.resolve(__dirname, "preload.js"),
+                devTools: isDev ? true : false,
             },
             show: false,
         });
@@ -80,6 +81,10 @@ export class MaskWindow extends BaseWindow {
     }
 
     public loadPage(): void {
+        return;
+    }
+
+    public changeSize(): void {
         return;
     }
 }

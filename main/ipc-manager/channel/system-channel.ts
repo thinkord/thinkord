@@ -9,6 +9,7 @@ export class SystemChannel extends BaseChannel {
     public handleRequest(): void {
         ipcMain.handle(this.channelName!, async (event: IpcMainInvokeEvent, command: string, args: any) => {
             switch (command) {
+                case "getNodeEnv":
                 case "getUserPath":
                 case "getScreenshotSize":
                 case "getCurrentScreen":
@@ -24,6 +25,10 @@ export class SystemChannel extends BaseChannel {
                     break;
             }
         });
+    }
+
+    private getNodeEnv(): string | undefined {
+        return process.env.NODE_ENV;
     }
 
     private getUserPath(): string {
@@ -42,10 +47,7 @@ export class SystemChannel extends BaseChannel {
     }
 
     private getCurrentScreen(): any {
-        // // eslint-disable-next-line @typescript-eslint/no-var-requires
-        // const currentWindow = require("electron").getCurrentWindow();
-        // const { x, y } = currentWindow.getBounds();
-        // const currentScreen = screen.getAllDisplays().filter((d) => d.bounds.x === x && d.bounds.y === y)[0];
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const currentScreen = screen.getPrimaryDisplay();
         return currentScreen;
     }
@@ -54,11 +56,11 @@ export class SystemChannel extends BaseChannel {
         globalShortcut.unregisterAll();
 
         globalShortcut.register("Shift+F1", () => {
-            event.sender.send(this.channelName!, "fullsnip");
+            event.sender.send(this.channelName!, "text");
         });
 
         globalShortcut.register("Shift+F2", () => {
-            event.sender.send(this.channelName!, "text");
+            event.sender.send(this.channelName!, "fullsnip");
         });
 
         globalShortcut.register("Shift+F3", () => {

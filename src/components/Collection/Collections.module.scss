@@ -15,7 +15,7 @@
         border-radius: 50%;
         object-fit: cover;
     }
-    i{
+    .EditorSwitch{
         font-size: 25px;
         margin-right: 15px;
         cursor: pointer;
@@ -23,7 +23,7 @@
 }
 .Content{
     padding: 40px 0;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 110px);
     overflow: auto;
 }
 .Info{

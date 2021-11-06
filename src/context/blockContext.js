@@ -10,7 +10,7 @@ class BlockProvider extends Component {
         changed: false,
     };
     componentDidMount() {
-        appRuntime.subscribe("capture", (data) => {
+        appRuntime.subscribe("capture", () => {
             this.setState({ changed: true });
         });
         this.loadingData();
@@ -26,8 +26,13 @@ class BlockProvider extends Component {
         }
     }
 
+    updatePage = () => {
+        this.setState({ changed: !this.state.changed });
+    };
+
     loadingData = async () => {
         const data = await appRuntime.invoke("home-channel", "getBlocks", { id: this.props.cId });
+
         this.setState({
             collectionInfo: JSON.parse(data),
         });
@@ -42,6 +47,46 @@ class BlockProvider extends Component {
         };
         appRuntime.invoke("home-channel", "addBlock", newBlock);
         this.setState({ changed: true });
+    };
+
+    updateBlock = (blocks) => {
+        if (blocks.type === "image") {
+            let files;
+            let data;
+            if (process.env.NODE_ENV === "development") {
+                files = blocks.data.url.split("/");
+
+                files.splice(0, 3);
+                data = {
+                    url: files.join("/"),
+                    description: blocks.data.caption,
+                };
+            }
+            if (process.env.NODE_ENV === "production") {
+                data = {
+                    url: blocks.data.url,
+                    description: blocks.data.caption,
+                };
+            }
+
+            appRuntime.invoke("home-channel", "updateBlock", data);
+        }
+
+        if (blocks.type === "paragraph") {
+        }
+        // const changedBlock = {
+        //     title: "",
+        //     type: "text",
+        //     description: blocks.data.text,
+        //     id: this.state.collectionInfo.id,
+        // };
+        // if (index > this.state.collectionInfo.blocks.length - 1) {
+        //     // Add the new block
+        //     appRuntime.invoke("home-channel", "addBlock", changedBlock);
+        //     // this.setState({ changed: true });
+        // } else {
+        //     // Update the new block
+        // }
     };
 
     deleteBlock = (collectionId, blockId) => {
@@ -63,6 +108,8 @@ class BlockProvider extends Component {
                             getBlocks: this.getBlocks,
                             addBlock: this.addBlock,
                             deleteBlock: this.deleteBlock,
+                            updateBlock: this.updateBlock,
+                            updatePage: this.updatePage,
                         }}
                     >
                         {this.props.children}

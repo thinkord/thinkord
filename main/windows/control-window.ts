@@ -10,17 +10,20 @@ export class ControlWindow extends BaseWindow {
     private static count = 0;
     public createWindow(): void {
         ControlWindow.win = new BrowserWindow({
-            // frame: false,
-            width: 700,
-            height: 400,
+            frame: false,
+            transparent: true,
+            width: 325,
+            height: 84,
+            // alwaysOnTop: true,
             webPreferences: {
                 contextIsolation: true,
                 // nodeIntegration: false,
                 preload: path.resolve(__dirname, "preload.js"),
+                devTools: isDev ? true : false,
             },
         });
 
-        ControlWindow.win.webContents.openDevTools();
+        // ControlWindow.win.webContents.openDevTools();
 
         ControlWindow.win.loadURL(
             isDev
@@ -53,27 +56,32 @@ export class ControlWindow extends BaseWindow {
             return obj;
         });
     }
+    public changeSize(): void {
+        if (ControlWindow.win) {
+            ControlWindow.win.setBounds({ height: 84 });
+        }
+    }
 
     public loadPage(page: string): void {
         if (page === "control") {
             if (ControlWindow.win) {
-                ControlWindow.win.setBounds({ height: 400 });
+                ControlWindow.win.setBounds({ height: 84 });
                 ControlWindow.win.loadURL(
                     isDev
                         ? "http://localhost:3000/#/controlbar/"
-                        : `file://${path.join(__dirname, "../build/index.html#controlbar")}`
+                        : `file://${path.join(__dirname, "../build/index.html#/controlbar")}`
                 );
             }
         } else if (page === "text") {
             if (ControlWindow.win) {
-                // const { height } = ControlWindow.win.getBounds();
-                // const newHeight = height * 2;
-                // ControlWindow.win.setBounds({ height: newHeight });
-                ControlWindow.win.loadURL(
-                    isDev
-                        ? "http://localhost:3000/#/controlbar/text"
-                        : `file://${path.join(__dirname, "../build/index.html#controlbar#text")}`
-                );
+                const { height } = ControlWindow.win.getBounds();
+                const newHeight = height * 2;
+                ControlWindow.win.setBounds({ height: newHeight });
+                // ControlWindow.win.loadURL(
+                //     isDev
+                //         ? "http://localhost:3000/#/controlbar/text"
+                //         : `file://${path.join(__dirname, "../build/index.html#/controlbar#/text")}`
+                // );
             }
         }
     }

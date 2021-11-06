@@ -1,15 +1,31 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Container } from "@material-ui/core";
 import { CollectionTitle } from "./Title";
-import Block from "./Block/Block";
-import InputContainer from "../Elements/Input/InputContainer";
+import { useHistory } from "react-router-dom";
+
 import classes from "./Collections.module.scss";
-import { BlockContext } from "../../context/blockContext";
+import { BlockContext, BlockUpdateContext } from "../../context/blockContext";
 import { withRouter } from "react-router-dom";
+import EditorIcon from "@material-ui/icons/Subject";
+import ListIcon from "@material-ui/icons/FormatListBulleted";
+import Edit from "./Edit";
+import Overview from "./Overview";
+import appRuntime from "../../appRuntime";
+
 function Collection() {
+    const history = useHistory();
     const { collectionInfo } = useContext(BlockContext);
+    const { updatePage } = useContext(BlockUpdateContext);
+    const [editorView, setEditorView] = useState(false);
+
+    useEffect(() => {
+        appRuntime.subscribe("jump", (data) => {
+            history.push(data);
+        });
+        appRuntime.invoke("window-channel", "loadTab", { needLoad: true });
+    });
     return (
         <>
             {collectionInfo !== undefined ? (
@@ -17,32 +33,30 @@ function Collection() {
                     <div className={classes.Header}>
                         <div className={classes.Info}>
                             <CollectionTitle title={collectionInfo.name} collectionId={collectionInfo.id} />
-                            <i className={(collectionInfo.bookmarked ? "fas" : "far") + " fa-bookmark"}></i>
                         </div>
                         <div className={classes.Controls}>
-                            <i id="clock" className="fas fa-clock"></i>
+                            {editorView ? (
+                                <ListIcon
+                                    className={classes.EditorSwitch}
+                                    onClick={() => {
+                                        updatePage();
+                                        setEditorView(!editorView);
+                                    }}
+                                />
+                            ) : (
+                                <EditorIcon
+                                    className={classes.EditorSwitch}
+                                    onClick={() => {
+                                        setEditorView(!editorView);
+                                    }}
+                                />
+                            )}
                             <i className="fas fa-ellipsis-h"></i>
-                            <img
-                                className={classes.user}
-                                alt="user"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ3f_mCLpkLWSbUPVBMkI1-ZUUFP-dqFeFGUCDOc1lzuWUQxROe&usqp=CAU"
-                            />
                         </div>
                     </div>
                     <div className={classes.Content}>
                         <Container className={classes.BlockContainer} maxWidth="md">
-                            {collectionInfo.blocks.map((block, index) => {
-                                return (
-                                    <Block
-                                        key={block.id}
-                                        collectionId={collectionInfo.id}
-                                        block={block}
-                                        index={index}
-                                    />
-                                );
-                            })}
-
-                            <InputContainer collectionId={collectionInfo.id} type="block" />
+                            {editorView ? <Edit /> : <Overview />}
                         </Container>
                     </div>
                 </>

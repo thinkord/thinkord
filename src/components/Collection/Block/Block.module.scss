@@ -7,7 +7,7 @@
     border-radius: 15px;
     margin-bottom: 20px;
     box-shadow: 0 0 6px rgba(black, 0.16);
-    .Icon{
+    .TypeIcon{
         font-size: 45px;
         color: #35C189;
         margin-right: 10px;
@@ -29,5 +29,10 @@
             margin-right: 5px;
             margin-top: 2px;
         }
+    }
+}
+.BlockControls{
+    .DelIcon{
+        cursor: pointer;
     }
 }
