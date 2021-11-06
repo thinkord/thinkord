@@ -10,12 +10,16 @@ import appRuntime from "../../../appRuntime";
 const TabBar = () => {
     let { tabs, loadTab } = useContext(TabsContext);
     useEffect(() => {
+        let tabs2;
+        if (tabs.length < 1) {
+            tabs2 = tabs;
+        }
         // listen loadTab events when needs to reload tabs from the localStorage
         appRuntime.subscribe("loadTab", (data) => {
             let currentTabs = localStorage.getItem("current_tabs");
-            if (tabs.length < 1 && currentTabs != null && currentTabs.length > 0) {
+            if (tabs2.length < 1 && currentTabs != null && currentTabs.length > 0) {
                 loadTab();
-                tabs = JSON.parse(currentTabs);
+                tabs2 = JSON.parse(currentTabs);
                 return;
             }
             if (data.fromEvent === "delete_folders") {
