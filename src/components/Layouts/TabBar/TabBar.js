@@ -22,7 +22,7 @@ const TabBar = () => {
                 loadTab();
             }
         });
-    }, [tabs]);
+    });
     return (
         <div className={classes.TabBar}>
             <NavLink
