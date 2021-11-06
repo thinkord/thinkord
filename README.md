@@ -7,6 +7,8 @@ We believe Thinkord can transform how people do note-taking by **focusing on cap
 
 Hope you find this application helpful. If you are interested in developing Thinkord with us, please follow this [contribution guideline](#contributing).
 
+You can download beta version from this link https://github.com/thinkord/thinkord/releases
+
 ## Quick Start
 
 ### Development
