@@ -31,19 +31,18 @@ export default function Edit() {
         }
     }
 
-    async function handleEditorRender(data) {
-        if (editor) {
-            try {
-                await editor.isReady;
-                editor.render(data);
-            } catch (reason) {
-                // eslint-disable-next-line no-console
-                console.log(`Editor.js initialization failed because of ${reason}`);
+    useEffect(() => {
+        async function handleEditorRender(data) {
+            if (editor) {
+                try {
+                    await editor.isReady;
+                    editor.render(data);
+                } catch (reason) {
+                    // eslint-disable-next-line no-console
+                    console.log(`Editor.js initialization failed because of ${reason}`);
+                }
             }
         }
-    }
-
-    useEffect(() => {
         if (collectionInfo !== undefined) {
             collectionInfo.blocks.map((block) => {
                 const path = block.files !== undefined && block.files.length > 0 ? block.files[0].path : null;
@@ -103,7 +102,7 @@ export default function Edit() {
 
             handleEditorRender(data);
         }
-    }, [data]);
+    });
     return (
         <>
             <EditorJs
