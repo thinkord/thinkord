@@ -56,11 +56,11 @@ export class SystemChannel extends BaseChannel {
         globalShortcut.unregisterAll();
 
         globalShortcut.register("Shift+F1", () => {
-            event.sender.send(this.channelName!, "fullsnip");
+            event.sender.send(this.channelName!, "text");
         });
 
         globalShortcut.register("Shift+F2", () => {
-            event.sender.send(this.channelName!, "text");
+            event.sender.send(this.channelName!, "fullsnip");
         });
 
         globalShortcut.register("Shift+F3", () => {
