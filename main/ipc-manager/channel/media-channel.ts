@@ -4,6 +4,7 @@ import log from "loglevel";
 import { BaseChannel } from "./base-channel";
 import { Block } from "../../models";
 import { HomeWindow } from "../../windows/home-window";
+import { ControlWindow } from "../../windows/control-window";
 
 log.setLevel("info");
 
@@ -60,6 +61,7 @@ export class MediaChannel extends BaseChannel {
         let isSave = false;
         if (type === "text") {
             isSave = await this.createTextBlock(type, args.text, collectionId);
+            ControlWindow.moveTop(false);
         } else {
             isSave = await this.createBlockAndFile(args.name, args.path, type, collectionId);
         }

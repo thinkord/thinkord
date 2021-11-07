@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { Collapse, Paper, Typography } from "@material-ui/core";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import InputBlock from "./InputBlock";
 
 const useStyle = makeStyles((theme) => ({
@@ -16,7 +16,7 @@ const useStyle = makeStyles((theme) => ({
         margin: theme.spacing(0, 1, 1, 1),
         background: "#EBECF0",
         "&:hover": {
-            backgroundColor: fade("#000", 0.25),
+            backgroundColor: alpha("#000", 0.25),
         },
     },
 }));

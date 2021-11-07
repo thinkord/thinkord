@@ -2,6 +2,7 @@
 import { app, globalShortcut, ipcMain, IpcMainInvokeEvent, screen } from "electron";
 import log from "loglevel";
 import { BaseChannel } from "./base-channel";
+import { ControlWindow } from "../../windows/control-window";
 
 log.setLevel("info");
 
@@ -57,6 +58,7 @@ export class SystemChannel extends BaseChannel {
 
         globalShortcut.register("Shift+F1", () => {
             event.sender.send(this.channelName!, "text");
+            ControlWindow.moveTop(true);
         });
 
         globalShortcut.register("Shift+F2", () => {

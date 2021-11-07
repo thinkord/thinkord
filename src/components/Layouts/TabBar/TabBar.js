@@ -12,7 +12,7 @@ const TabBar = () => {
     useEffect(() => {
         let tabs2;
         let loadTab2;
-        if (tabs.length < 1) {
+        if (tabs !== null && tabs.length < 1) {
             tabs2 = tabs;
             loadTab2 = loadTab;
         }

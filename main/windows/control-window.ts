@@ -62,6 +62,11 @@ export class ControlWindow extends BaseWindow {
         }
     }
 
+    public static moveTop(flag: boolean): void {
+        // ControlWindow.win?.moveTop();
+        ControlWindow.win?.setAlwaysOnTop(flag);
+    }
+
     public loadPage(page: string): void {
         if (page === "control") {
             if (ControlWindow.win) {
