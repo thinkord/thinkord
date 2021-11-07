@@ -4,7 +4,7 @@ import React, { useState, useContext } from "react";
 import { ControlContext } from "../../context/controlContext";
 import { Paper, InputBase, Button, IconButton } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
-import { fade, makeStyles } from "@material-ui/core";
+import { alpha, makeStyles } from "@material-ui/core";
 import appRuntime from "../../appRuntime";
 const useStyle = makeStyles((theme) => ({
     block: {
@@ -21,7 +21,7 @@ const useStyle = makeStyles((theme) => ({
         background: "#5AAC44",
         color: "#fff",
         "&:hover": {
-            background: fade("#5AAC44", 0.75),
+            background: alpha("#5AAC44", 0.75),
         },
     },
 }));
